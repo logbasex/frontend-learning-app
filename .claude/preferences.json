@@ -1,0 +1,26 @@
+{
+  "language": "en",
+  "codeStyle": {
+    "comments": "english-only",
+    "documentation": "english-only",
+    "userFacingText": "english-only"
+  },
+  "implementation": {
+    "referenceModule": "lib/modules/1-1-html-css.tsx",
+    "styleGuide": "IMPLEMENTATION_GUIDE.md",
+    "projectDocs": "CLAUDE.md"
+  },
+  "rules": [
+    "All code must be in English",
+    "All comments must be in English",
+    "All user-facing text must be in English",
+    "All documentation must be in English",
+    "No Vietnamese or mixed language content",
+    "Follow the pattern in lib/modules/1-1-html-css.tsx",
+    "Use story-driven approach: Problem → Solution → Practice",
+    "Include detailed step-by-step explanations",
+    "Provide interactive demos with CodePlayground",
+    "Add challenges with comprehensive explanations",
+    "End with Key Takeaways and Mental Model"
+  ]
+}
