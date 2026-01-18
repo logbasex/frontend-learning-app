@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Frontend Learning App - From Fundamentals to Modern Stack",
-  description: "Learn Frontend with a Story-driven approach. Understand the THINKING and PHILOSOPHY behind each technology: HTML/CSS → JavaScript → React → Next.js → RSC",
+  title: "JavaFX Learning App - From Fundamentals to Advanced Desktop GUI",
+  description: "Learn JavaFX with a Story-driven approach. Understand the THINKING and PHILOSOPHY behind desktop GUI development: Swing → JavaFX → FXML → MVP → Spring Boot integration",
 };
 
 export default function RootLayout({

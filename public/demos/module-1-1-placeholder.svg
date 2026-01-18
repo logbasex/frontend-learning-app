@@ -1,0 +1,37 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="400" fill="#f9fafb"/>
+
+  <!-- Window Title Bar -->
+  <rect width="600" height="30" fill="#e5e7eb"/>
+  <circle cx="15" cy="15" r="6" fill="#ef4444"/>
+  <circle cx="35" cy="15" r="6" fill="#f59e0b"/>
+  <circle cx="55" cy="15" r="6" fill="#10b981"/>
+  <text x="300" y="20" text-anchor="middle" font-family="Arial" font-size="12" fill="#374151">
+    JavaFX Hello World - Module 1.1
+  </text>
+
+  <!-- Main Content -->
+  <text x="300" y="120" text-anchor="middle" font-family="Arial" font-size="32" font-weight="bold" fill="#3b82f6">
+    Welcome to JavaFX!
+  </text>
+
+  <text x="300" y="160" text-anchor="middle" font-family="Arial" font-size="16" fill="#6b7280">
+    This is your first JavaFX application
+  </text>
+
+  <text x="300" y="200" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#1f2937">
+    Click count: 0
+  </text>
+
+  <!-- Button -->
+  <rect x="250" y="220" width="100" height="40" rx="5" fill="#3b82f6"/>
+  <text x="300" y="245" text-anchor="middle" font-family="Arial" font-size="14" fill="white">
+    Click Me!
+  </text>
+
+  <!-- Footer note -->
+  <text x="300" y="360" text-anchor="middle" font-family="Arial" font-size="11" fill="#9ca3af">
+    Run this example: cd module-1-1-hello-world && mvn javafx:run
+  </text>
+</svg>

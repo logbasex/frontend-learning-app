@@ -12,6 +12,7 @@ export interface Module {
   hasDiagram: boolean;
   hasChallenge: boolean;
   hasCodeComparison: boolean;
+  hasHeroDesktop2Context: boolean; // NEW: Link to hero-desktop-2 project
 }
 
 export interface Phase {
@@ -21,388 +22,628 @@ export interface Phase {
   icon: string;
   modules: Module[];
 }
-
 export const curriculum: Phase[] = [
   {
     id: 1,
-    title: "Web Fundamentals",
-    description: "Understand how the first web worked (The Origins)",
-    icon: "Globe",
+    title: "JavaFX Fundamentals",
+    description: "The Desktop Renaissance - From Swing to JavaFX",
+    icon: "Monitor",
     modules: [
       {
-        id: "1-1-html-css",
-        title: "Static HTML/CSS Era (1990s)",
-        description: "How to display information on the internet? Understanding HTML structure and CSS presentation.",
+        id: "1-1-why-javafx",
+        title: "Why JavaFX? (History & Architecture)",
+        description: "Swing is outdated (1998) → JavaFX brings modern desktop GUI with hardware acceleration and CSS styling",
         phase: 1,
         order: 1,
         duration: "25 mins",
         prerequisites: [],
         learningObjectives: [
-          "Understand the roles of HTML (structure) and CSS (presentation)",
-          "Master the browser rendering pipeline (HTML → DOM → CSSOM → Render Tree)",
-          "Practice creating simple static web pages"
+          "Understand the limitations of Swing and why JavaFX was created",
+          "Master the Scene Graph architecture fundamentals",
+          "Compare JavaFX vs Web vs Mobile for application development"
         ],
         mentalModels: [
-          "Separation of Concerns (separating structure vs style)",
-          "Declarative markup language"
+          "Scene Graph architecture (hierarchical UI tree)",
+          "Hardware acceleration for modern UIs",
+          "Separation of concerns: FXML (UI) + Java (logic)"
         ],
         hasInteractiveDemo: true,
         hasDiagram: true,
         hasChallenge: true,
-        hasCodeComparison: true
+        hasCodeComparison: true,
+        hasHeroDesktop2Context: false
       },
       {
-        id: "1-2-javascript",
-        title: "Dynamic Web with JavaScript (2000s)",
-        description: "Static web → Dynamic web. Users can interact with web pages through JavaScript.",
+        id: "1-2-stage-scene-nodes",
+        title: "Stage, Scene, Nodes - Core Concepts",
+        description: "Understanding JavaFX's theater metaphor: Stage (window) → Scene (canvas) → Nodes (UI elements)",
         phase: 1,
         order: 2,
         duration: "30 mins",
-        prerequisites: ["1-1-html-css"],
+        prerequisites: ["1-1-why-javafx"],
         learningObjectives: [
-          "Understand JavaScript DOM manipulation",
-          "Master Event loop and asynchronous programming",
-          "Practice building form validation with vanilla JS"
+          "Master the Stage-Scene-Node hierarchy",
+          "Build a simple JavaFX application from Application.start()",
+          "Understand the JavaFX Application lifecycle"
         ],
         mentalModels: [
-          "Imperative programming (tell browser HOW to do)",
-          "Event-driven architecture",
-          "Callback pattern"
+          "Theater metaphor (Stage, Scene, Actors/Nodes)",
+          "Scene Graph traversal and rendering",
+          "Lifecycle: init() → start() → stop()"
         ],
         hasInteractiveDemo: true,
         hasDiagram: true,
         hasChallenge: true,
-        hasCodeComparison: true
+        hasCodeComparison: true,
+        hasHeroDesktop2Context: true
       },
       {
-        id: "1-3-jquery",
-        title: "jQuery Era (2006-2015)",
-        description: "Complex DOM API + browser inconsistency → jQuery simplified syntax",
+        id: "1-3-layouts",
+        title: "Layouts - Organizing UI Components",
+        description: "How to arrange components? Layout panes (HBox, VBox, BorderPane, GridPane, StackPane, FlowPane, AnchorPane)",
         phase: 1,
         order: 3,
-        duration: "20 mins",
-        prerequisites: ["1-2-javascript"],
+        duration: "35 mins",
+        prerequisites: ["1-2-stage-scene-nodes"],
         learningObjectives: [
-          "Understand why jQuery was created (browser compatibility)",
-          "Compare vanilla JS vs jQuery syntax",
-          "Recognize jQuery's limitations → lead to React"
+          "Understand each layout pane's use case",
+          "Build a dashboard with complex nested layouts",
+          "Make layout decisions based on requirements"
         ],
         mentalModels: [
-          "Library abstraction layer",
-          "API design for developer experience"
+          "Layout decision tree (which pane for which use case?)",
+          "Nested layouts for complex UIs",
+          "Responsive design with layout constraints"
+        ],
+        hasInteractiveDemo: true,
+        hasDiagram: true,
+        hasChallenge: true,
+        hasCodeComparison: false,
+        hasHeroDesktop2Context: true
+      },
+      {
+        id: "1-4-css-styling",
+        title: "CSS Styling - Making it Beautiful",
+        description: "JavaFX default UI looks plain → CSS styling (similar to Web CSS but JavaFX-specific)",
+        phase: 1,
+        order: 4,
+        duration: "30 mins",
+        prerequisites: ["1-3-layouts"],
+        learningObjectives: [
+          "Master JavaFX CSS selectors and pseudo-classes",
+          "Implement theme switching (Light/Dark mode)",
+          "Compare inline styles vs external CSS vs JavaFX CSS API"
+        ],
+        mentalModels: [
+          "CSS cascading and specificity in JavaFX",
+          "Theme architecture with CSS variables",
+          "Skinning vs Styling"
         ],
         hasInteractiveDemo: true,
         hasDiagram: false,
         hasChallenge: true,
-        hasCodeComparison: true
+        hasCodeComparison: true,
+        hasHeroDesktop2Context: true
       }
     ]
   },
   {
     id: 2,
-    title: "Single Page Applications",
-    description: "The Revolution - From multi-page apps to SPAs",
-    icon: "Zap",
+    title: "FXML & MVC Architecture",
+    description: "Declarative UI with FXML and separation of concerns",
+    icon: "FileCode",
     modules: [
       {
-        id: "2-1-why-spas",
-        title: "Why SPAs? (Problem Definition)",
-        description: "Full page reload is slow → SPAs with client-side routing",
+        id: "2-1-fxml-basics",
+        title: "FXML Basics - Declarative UI",
+        description: "Building UI in Java code is verbose → FXML (XML-based UI definition, like HTML for JavaFX)",
         phase: 2,
         order: 1,
-        duration: "20 mins",
-        prerequisites: ["1-3-jquery"],
+        duration: "30 mins",
+        prerequisites: ["1-4-css-styling"],
         learningObjectives: [
-          "Understand problems of traditional multi-page apps",
-          "Grasp the concept of client-side routing",
-          "Compare network waterfall: MPA vs SPA"
+          "Understand FXML structure and FXMLLoader",
+          "Build the same UI in Java code vs FXML",
+          "Connect FXML to Controller classes"
         ],
         mentalModels: [
-          "Client-side routing",
-          "State as single source of truth",
-          "Application shell architecture"
+          "Declarative UI (FXML) vs Imperative UI (Java code)",
+          "Separation of UI (FXML) vs Logic (Controller)",
+          "XML markup for scene graph definition"
         ],
         hasInteractiveDemo: true,
         hasDiagram: true,
         hasChallenge: true,
-        hasCodeComparison: true
+        hasCodeComparison: true,
+        hasHeroDesktop2Context: true
       },
       {
-        id: "2-2-virtual-dom",
-        title: "Virtual DOM Revolution",
-        description: "React's core innovation: Virtual DOM + Reconciliation algorithm",
+        id: "2-2-controllers",
+        title: "Controllers & fx:id Binding",
+        description: "How to connect FXML elements with Java code? @FXML annotation and fx:id binding",
         phase: 2,
         order: 2,
-        duration: "35 mins",
-        prerequisites: ["2-1-why-spas"],
+        duration: "30 mins",
+        prerequisites: ["2-1-fxml-basics"],
         learningObjectives: [
-          "Understand why DOM manipulation is slow",
-          "Master the Virtual DOM diffing algorithm",
-          "Practice: compare performance DOM vs VDOM"
+          "Master @FXML annotation for field and method injection",
+          "Implement event handlers in Controller",
+          "Build form validation with FXML + Controller"
         ],
         mentalModels: [
-          "Declarative programming (tell WHAT, not HOW)",
-          "Reconciliation algorithm",
-          "Batch updates optimization"
+          "MVC separation: View (FXML) ↔ Controller (Java)",
+          "Event flow: User action → Handler → Model update → View refresh",
+          "Dependency injection via @FXML"
         ],
         hasInteractiveDemo: true,
         hasDiagram: true,
         hasChallenge: true,
-        hasCodeComparison: true
+        hasCodeComparison: false,
+        hasHeroDesktop2Context: true
       },
       {
-        id: "2-3-component-thinking",
-        title: "Component Thinking",
-        description: "UI = f(state) - Thinking with component-based architecture",
+        id: "2-3-scenebuilder",
+        title: "SceneBuilder - Visual FXML Editor",
+        description: "Writing FXML manually is tedious → SceneBuilder (drag-and-drop FXML editor)",
         phase: 2,
         order: 3,
-        duration: "30 mins",
-        prerequisites: ["2-2-virtual-dom"],
+        duration: "25 mins",
+        prerequisites: ["2-2-controllers"],
         learningObjectives: [
-          "Understand philosophy of UI as function of state",
-          "Master unidirectional data flow",
-          "Practice: refactor jQuery spaghetti → React components"
+          "Master SceneBuilder workflow: design → generate FXML → load in app",
+          "Build a login screen with SceneBuilder",
+          "Understand when to use SceneBuilder vs manual FXML"
         ],
         mentalModels: [
-          "UI = f(state)",
-          "Composition over inheritance",
-          "Props down, events up (unidirectional flow)"
+          "Visual design tools for developer productivity",
+          "Round-trip engineering (SceneBuilder ↔ FXML)",
+          "Component library and custom controls"
+        ],
+        hasInteractiveDemo: true,
+        hasDiagram: false,
+        hasChallenge: true,
+        hasCodeComparison: false,
+        hasHeroDesktop2Context: true
+      },
+      {
+        id: "2-4-mvp-pattern",
+        title: "MVP Pattern in JavaFX",
+        description: "Controller becomes too big (god object) → Model-View-Presenter separation for better architecture",
+        phase: 2,
+        order: 4,
+        duration: "40 mins",
+        prerequisites: ["2-3-scenebuilder"],
+        learningObjectives: [
+          "Understand the problems of fat Controllers",
+          "Master MVP architecture: Model, View, Presenter roles",
+          "Refactor MVC to MVP with clear separation"
+        ],
+        mentalModels: [
+          "MVP: Passive View + Active Presenter",
+          "Testability: Presenter without UI dependencies",
+          "Separation: Business logic (Presenter) vs UI logic (View)"
         ],
         hasInteractiveDemo: true,
         hasDiagram: true,
         hasChallenge: true,
-        hasCodeComparison: true
+        hasCodeComparison: true,
+        hasHeroDesktop2Context: true
       }
     ]
   },
   {
     id: 3,
-    title: "Modern React Patterns",
-    description: "Hooks, State management, Performance optimization",
-    icon: "Sparkles",
+    title: "Properties, Binding & Observables",
+    description: "Reactive programming with JavaFX Properties",
+    icon: "Link",
     modules: [
       {
-        id: "3-1-hooks",
-        title: "Hooks Philosophy (Why & When)",
-        description: "Class components verbose → Hooks for functional components",
+        id: "3-1-properties",
+        title: "JavaFX Properties - The Reactive Foundation",
+        description: "Manual UI updates when data changes → Observable properties (StringProperty, IntegerProperty, etc.)",
         phase: 3,
         order: 1,
         duration: "35 mins",
-        prerequisites: ["2-3-component-thinking"],
+        prerequisites: ["2-4-mvp-pattern"],
         learningObjectives: [
-          "Understand problems of Class components",
-          "Master useState, useEffect, and custom hooks",
-          "Practice: build custom hook for data fetching"
+          "Understand JavaFX Property system and Observables",
+          "Master property listeners and change notifications",
+          "Build reactive UIs with automatic updates"
         ],
         mentalModels: [
-          "Hooks = logic extraction/reuse",
-          "Effect = synchronization with external system",
-          "Dependency array mental model"
+          "Reactive programming with Observable properties",
+          "Property → Listener → UI auto-update",
+          "Binding: source property changes → target updates"
         ],
         hasInteractiveDemo: true,
         hasDiagram: true,
         hasChallenge: true,
-        hasCodeComparison: true
+        hasCodeComparison: true,
+        hasHeroDesktop2Context: true
       },
       {
-        id: "3-2-state-management",
-        title: "State Management Mental Models",
-        description: "Local state, Context, Zustand, React Query - When to use what?",
+        id: "3-2-binding",
+        title: "Bidirectional Binding",
+        description: "Syncing two properties (e.g., Slider ↔ TextField) → Bidirectional binding with bindBidirectional()",
         phase: 3,
         order: 2,
-        duration: "40 mins",
-        prerequisites: ["3-1-hooks"],
+        duration: "30 mins",
+        prerequisites: ["3-1-properties"],
         learningObjectives: [
-          "Understand trade-offs of each state solution",
-          "Distinguish between server state and client state",
-          "Decision tree: Which pattern should app X use?"
+          "Master binding types: unidirectional, bidirectional, computed",
+          "Build settings panel with live preview",
+          "Understand binding lifecycle and unbinding"
         ],
         mentalModels: [
-          "Co-location principle",
-          "Server state vs Client state",
-          "Lift state up (but not too far)"
+          "Unidirectional: source → target (read-only)",
+          "Bidirectional: source ↔ target (two-way sync)",
+          "Computed binding: derived values from multiple sources"
         ],
         hasInteractiveDemo: true,
         hasDiagram: true,
         hasChallenge: true,
-        hasCodeComparison: true
+        hasCodeComparison: true,
+        hasHeroDesktop2Context: true
       },
       {
-        id: "3-3-performance",
-        title: "Performance & Re-rendering",
-        description: "Optimization trade-offs: memo, useMemo, useCallback",
+        id: "3-3-collections",
+        title: "Collections & Observable Lists",
+        description: "TableView data changes don't update UI → ObservableList, ObservableMap for automatic UI refresh",
         phase: 3,
         order: 3,
-        duration: "35 mins",
-        prerequisites: ["3-2-state-management"],
+        duration: "30 mins",
+        prerequisites: ["3-2-binding"],
         learningObjectives: [
-          "Understand when components re-render",
-          "Master React.memo, useMemo, and useCallback",
-          "Profiler: visualize performance bottlenecks"
+          "Master ObservableList and ObservableMap",
+          "Build Todo list with add/remove/update",
+          "Understand collection change listeners"
         ],
         mentalModels: [
-          "Premature optimization is evil",
-          "Measure first, optimize second",
-          "Re-render is cheap (most of the time)"
+          "Observable collections: automatic UI synchronization",
+          "Collection listeners: granular change notifications",
+          "TableView ↔ ObservableList binding"
         ],
         hasInteractiveDemo: true,
         hasDiagram: true,
         hasChallenge: true,
-        hasCodeComparison: true
+        hasCodeComparison: false,
+        hasHeroDesktop2Context: true
       }
     ]
   },
   {
     id: 4,
-    title: "Server-Side Rendering",
-    description: "The Pendulum Swings Back - SSR, SSG, ISR, RSC",
-    icon: "Server",
+    title: "Advanced UI Components",
+    description: "TableView, TreeView, Charts, and complex controls",
+    icon: "Table",
     modules: [
       {
-        id: "4-1-csr-problems",
-        title: "CSR Problems (Why Go Back to Server?)",
-        description: "SEO issues, slow initial load, waterfall requests → SSR",
+        id: "4-1-tableview",
+        title: "TableView - The Workhorse Component",
+        description: "Displaying tabular data → TableView with columns, cells, selection, and editing",
         phase: 4,
         order: 1,
-        duration: "25 mins",
-        prerequisites: ["3-3-performance"],
+        duration: "40 mins",
+        prerequisites: ["3-3-collections"],
         learningObjectives: [
-          "Understand problems of pure Client-Side Rendering",
-          "Compare network timeline: CSR vs SSR",
-          "Lighthouse metrics: TTI vs TTFB"
+          "Master TableView setup: columns, cell factories, selection",
+          "Implement custom cell renderers and editors",
+          "Build employee management table with CRUD operations"
         ],
         mentalModels: [
-          "Time to First Byte vs Time to Interactive",
-          "SEO crawlers limitations",
-          "Initial payload size matters"
+          "TableView architecture: TableColumn → CellFactory → Cell",
+          "Observable backing: model changes → view updates",
+          "Selection models: single vs multiple selection"
         ],
         hasInteractiveDemo: true,
         hasDiagram: true,
         hasChallenge: true,
-        hasCodeComparison: true
+        hasCodeComparison: false,
+        hasHeroDesktop2Context: true
       },
       {
-        id: "4-2-rendering-spectrum",
-        title: "SSR, SSG, ISR - Rendering Spectrum",
-        description: "Not just CSR or SSR - also SSG, ISR and hybrid approaches",
+        id: "4-2-treeview",
+        title: "TreeView & TreeTableView",
+        description: "Hierarchical data display → TreeView (folders) and TreeTableView (hybrid table + tree)",
         phase: 4,
         order: 2,
-        duration: "40 mins",
-        prerequisites: ["4-1-csr-problems"],
+        duration: "35 mins",
+        prerequisites: ["4-1-tableview"],
         learningObjectives: [
-          "Understand trade-offs of SSR, SSG, and ISR",
-          "Decision tree: use case X → which rendering pattern?",
-          "Practice: implement each pattern with Next.js"
+          "Understand TreeItem and tree structure",
+          "Build file explorer with TreeView",
+          "Compare TreeView vs TreeTableView use cases"
         ],
         mentalModels: [
-          "Spectrum: Static ← → Dynamic",
-          "Trade-offs: Freshness vs Speed vs Cost",
-          "Stale-while-revalidate pattern"
+          "Tree structure: root → branches → leaves",
+          "Lazy loading for large trees",
+          "TreeTableView: combine hierarchy with columns"
         ],
         hasInteractiveDemo: true,
         hasDiagram: true,
         hasChallenge: true,
-        hasCodeComparison: true
+        hasCodeComparison: false,
+        hasHeroDesktop2Context: true
       },
       {
-        id: "4-3-server-components",
-        title: "React Server Components (The Future)",
-        description: "Zero JS to client - Server Components architecture",
+        id: "4-3-charts",
+        title: "Charts - Visualizing Data",
+        description: "Data visualization → Built-in charts (LineChart, BarChart, PieChart, ScatterChart, AreaChart)",
         phase: 4,
         order: 3,
-        duration: "45 mins",
-        prerequisites: ["4-2-rendering-spectrum"],
+        duration: "35 mins",
+        prerequisites: ["4-2-treeview"],
         learningObjectives: [
-          "Understand Server Components vs Client Components",
-          "Master RSC wire format and streaming",
-          "Practice: refactor Client → Server Component"
+          "Master JavaFX chart types and their use cases",
+          "Build live stock chart with animations",
+          "Customize chart styling and behavior"
         ],
         mentalModels: [
-          "Progressive enhancement",
-          "Hybrid architecture (Server + Client)",
-          "Component boundary decisions"
+          "Chart architecture: Data → Series → Chart → Styling",
+          "Animated data updates for live charts",
+          "Custom charts: when to extend vs build from scratch"
         ],
         hasInteractiveDemo: true,
-        hasDiagram: true,
+        hasDiagram: false,
         hasChallenge: true,
-        hasCodeComparison: true
+        hasCodeComparison: false,
+        hasHeroDesktop2Context: true
+      },
+      {
+        id: "4-4-listview-combobox",
+        title: "ListView, ComboBox, ChoiceBox",
+        description: "Selecting from lists → ListView (scrollable), ComboBox (dropdown), ChoiceBox (simple dropdown)",
+        phase: 4,
+        order: 4,
+        duration: "25 mins",
+        prerequisites: ["4-3-charts"],
+        learningObjectives: [
+          "Compare ListView, ComboBox, and ChoiceBox use cases",
+          "Implement custom cell factories with icons + text",
+          "Build settings panel with various pickers"
+        ],
+        mentalModels: [
+          "Decision tree: which component for which selection?",
+          "Cell factory pattern: custom rendering",
+          "Selection models and change listeners"
+        ],
+        hasInteractiveDemo: true,
+        hasDiagram: false,
+        hasChallenge: true,
+        hasCodeComparison: true,
+        hasHeroDesktop2Context: false
       }
     ]
   },
   {
     id: 5,
-    title: "Advanced Architecture",
-    description: "Real-world decisions: Data fetching, Routing, Monorepos",
-    icon: "Layers",
+    title: "Custom Controls & Advanced Topics",
+    description: "Building custom controls, 2D/3D graphics, and advanced features",
+    icon: "Paintbrush",
     modules: [
       {
-        id: "5-1-data-fetching",
-        title: "Data Fetching Patterns",
-        description: "Evolution: useEffect+fetch → React Query → Server fetching",
+        id: "5-1-custom-controls",
+        title: "Custom Control Development",
+        description: "Built-in controls aren't enough → Extend Control class or Region for custom components",
         phase: 5,
         order: 1,
-        duration: "40 mins",
-        prerequisites: ["4-3-server-components"],
+        duration: "45 mins",
+        prerequisites: ["4-4-listview-combobox"],
         learningObjectives: [
-          "Understand evolution of data fetching patterns",
-          "Compare: client fetch vs server fetch",
-          "Decision: which pattern for real-time dashboard?"
+          "Master custom control architecture: Control → Skin → Behavior",
+          "Build toggle switch control from scratch",
+          "Understand CSS styling for custom controls"
         ],
         mentalModels: [
-          "Colocation (fetch where you need data)",
-          "Fetch-on-render vs Fetch-then-render",
-          "Waterfall vs Parallel fetching"
+          "Separation: Control (API) vs Skin (rendering) vs Behavior (interaction)",
+          "Reusable controls as libraries",
+          "CSS styling integration"
         ],
         hasInteractiveDemo: true,
         hasDiagram: true,
         hasChallenge: true,
-        hasCodeComparison: true
+        hasCodeComparison: false,
+        hasHeroDesktop2Context: true
       },
       {
-        id: "5-2-routing",
-        title: "Routing & Navigation",
-        description: "React Router vs Next.js App Router, Parallel routes, Intercepting routes",
+        id: "5-2-skinning",
+        title: "Control Skinning & CSS",
+        description: "Customize existing control appearance → Custom Skin classes and advanced CSS",
         phase: 5,
         order: 2,
         duration: "35 mins",
-        prerequisites: ["5-1-data-fetching"],
+        prerequisites: ["5-1-custom-controls"],
         learningObjectives: [
-          "Understand file-system routing philosophy",
-          "Master nested layouts and parallel routes",
-          "Practice: build complex routing with Next.js"
+          "Understand Skin architecture and lifecycle",
+          "Create custom Button skin with animations",
+          "Master CSS variables and pseudo-classes"
         ],
         mentalModels: [
-          "File-system routing",
-          "Convention over configuration",
-          "Route lifecycle (loading, error states)"
+          "Skin: rendering strategy for controls",
+          "CSS theming: variables for consistent design",
+          "Skin selection: default vs custom skins"
         ],
         hasInteractiveDemo: true,
         hasDiagram: true,
         hasChallenge: true,
-        hasCodeComparison: true
+        hasCodeComparison: true,
+        hasHeroDesktop2Context: false
       },
       {
-        id: "5-3-architecture-decisions",
-        title: "Real-World Architecture Decisions",
-        description: "Monorepo, Styling, TypeScript, Testing - Trade-offs matrix",
+        id: "5-3-canvas-2d",
+        title: "Canvas & 2D Graphics",
+        description: "Custom drawing (charts, diagrams, games) → Canvas API (like HTML Canvas)",
         phase: 5,
         order: 3,
-        duration: "50 mins",
-        prerequisites: ["5-2-routing"],
+        duration: "30 mins",
+        prerequisites: ["5-2-skinning"],
         learningObjectives: [
-          "Decision matrix: Tailwind vs CSS-in-JS",
-          "Monorepo trade-offs: Turborepo vs Nx",
-          "Testing strategy: Unit vs Integration vs E2E"
+          "Master GraphicsContext API for 2D drawing",
+          "Draw flowchart on Canvas with animations",
+          "Understand Canvas vs Node-based rendering"
         ],
         mentalModels: [
-          "No silver bullet - only trade-offs",
-          "Architecture decisions are reversible",
-          "Start simple, scale when needed"
+          "Immediate mode (Canvas) vs Retained mode (Scene Graph)",
+          "GraphicsContext: drawing primitives and state",
+          "Canvas for performance-critical rendering"
+        ],
+        hasInteractiveDemo: true,
+        hasDiagram: false,
+        hasChallenge: true,
+        hasCodeComparison: false,
+        hasHeroDesktop2Context: true
+      },
+      {
+        id: "5-4-3d-graphics",
+        title: "3D Graphics with JavaFX",
+        description: "3D visualization → JavaFX 3D API (Camera, SubScene, 3D shapes, lighting, materials)",
+        phase: 5,
+        order: 4,
+        duration: "40 mins",
+        prerequisites: ["5-3-canvas-2d"],
+        learningObjectives: [
+          "Master 3D basics: PerspectiveCamera, SubScene, 3D shapes",
+          "Build rotating 3D cube with lighting",
+          "Understand transformations and materials"
+        ],
+        mentalModels: [
+          "3D Scene Graph: Camera → SubScene → 3D Nodes",
+          "Transformations: translate, rotate, scale",
+          "Lighting: ambient, point, directional"
         ],
         hasInteractiveDemo: true,
         hasDiagram: true,
         hasChallenge: true,
-        hasCodeComparison: false
+        hasCodeComparison: false,
+        hasHeroDesktop2Context: true
+      }
+    ]
+  },
+  {
+    id: 6,
+    title: "Integration & Production Patterns",
+    description: "Spring Boot, Concurrency, Command Pattern, and Deployment",
+    icon: "Rocket",
+    modules: [
+      {
+        id: "6-1-spring-boot",
+        title: "Spring Boot + JavaFX",
+        description: "JavaFX with dependency injection → Spring Boot integration for enterprise apps",
+        phase: 6,
+        order: 1,
+        duration: "40 mins",
+        prerequisites: ["5-4-3d-graphics"],
+        learningObjectives: [
+          "Integrate Spring Boot with JavaFX Application",
+          "Master dependency injection in Controllers",
+          "Build enterprise JavaFX app with Spring services"
+        ],
+        mentalModels: [
+          "Dependency injection: loose coupling and testability",
+          "SpringBootApplication + JavaFX Application lifecycle",
+          "Event publishing across application layers"
+        ],
+        hasInteractiveDemo: true,
+        hasDiagram: true,
+        hasChallenge: true,
+        hasCodeComparison: true,
+        hasHeroDesktop2Context: true
+      },
+      {
+        id: "6-2-multithreading",
+        title: "Multithreading & Concurrency",
+        description: "Long operations freeze UI → Background tasks with Task, Service, Platform.runLater()",
+        phase: 6,
+        order: 2,
+        duration: "40 mins",
+        prerequisites: ["6-1-spring-boot"],
+        learningObjectives: [
+          "Master JavaFX Task and Service for background work",
+          "Implement progress tracking and cancellation",
+          "Understand JavaFX Application Thread vs background threads"
+        ],
+        mentalModels: [
+          "JavaFX Application Thread: UI updates only",
+          "Task: one-time background work with progress",
+          "Service: reusable background tasks"
+        ],
+        hasInteractiveDemo: true,
+        hasDiagram: true,
+        hasChallenge: true,
+        hasCodeComparison: false,
+        hasHeroDesktop2Context: true
+      },
+      {
+        id: "6-3-command-pattern",
+        title: "Command Pattern & Undo/Redo",
+        description: "Implementing undo/redo → Command pattern with command stack",
+        phase: 6,
+        order: 3,
+        duration: "35 mins",
+        prerequisites: ["6-2-multithreading"],
+        learningObjectives: [
+          "Master Command pattern for encapsulating operations",
+          "Build text editor with undo/redo functionality",
+          "Understand command stack and history management"
+        ],
+        mentalModels: [
+          "Command: encapsulate action as object",
+          "Undo/Redo: command stack (history)",
+          "Macro commands: composite pattern"
+        ],
+        hasInteractiveDemo: true,
+        hasDiagram: true,
+        hasChallenge: true,
+        hasCodeComparison: false,
+        hasHeroDesktop2Context: true
+      },
+      {
+        id: "6-4-jxbrowser",
+        title: "JXBrowser Integration",
+        description: "Display web content in desktop app → Embedded Chromium browser (JXBrowser)",
+        phase: 6,
+        order: 4,
+        duration: "30 mins",
+        prerequisites: ["6-3-command-pattern"],
+        learningObjectives: [
+          "Setup JXBrowser in JavaFX application",
+          "Load web content and handle navigation",
+          "Implement JavaScript bridge for Java ↔ JS communication"
+        ],
+        mentalModels: [
+          "Embedded browser: full web stack in desktop app",
+          "JavaScript bridge: bidirectional communication",
+          "Hybrid apps: JavaFX UI + Web content"
+        ],
+        hasInteractiveDemo: true,
+        hasDiagram: false,
+        hasChallenge: true,
+        hasCodeComparison: false,
+        hasHeroDesktop2Context: true
+      },
+      {
+        id: "6-5-packaging",
+        title: "Packaging & Distribution",
+        description: "Deploy JavaFX app to users → jpackage, native installers, code obfuscation",
+        phase: 6,
+        order: 5,
+        duration: "35 mins",
+        prerequisites: ["6-4-jxbrowser"],
+        learningObjectives: [
+          "Master jpackage for creating native installers",
+          "Build platform-specific packages (Windows/macOS/Linux)",
+          "Implement code obfuscation with ProGuard"
+        ],
+        mentalModels: [
+          "Self-contained application: JVM + app bundled",
+          "Platform-specific packaging: MSI, DMG, DEB/RPM",
+          "Code obfuscation: protecting intellectual property"
+        ],
+        hasInteractiveDemo: true,
+        hasDiagram: true,
+        hasChallenge: true,
+        hasCodeComparison: false,
+        hasHeroDesktop2Context: true
       }
     ]
   }

@@ -3,6 +3,8 @@
 import { Sandpack, SandpackTheme } from "@codesandbox/sandpack-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { CodeBlock } from "./CodeBlock";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export interface CodePlaygroundProps {
   files: Record<string, string>;
@@ -165,5 +167,97 @@ export function ReactPlayground({
       title={title}
       description={description}
     />
+  );
+}
+
+// NEW: JavaFX Code Display (syntax highlighting only, not executable)
+export interface JavaCodePlaygroundProps {
+  javaCode?: string;
+  fxmlCode?: string;
+  cssCode?: string;
+  title?: string;
+  description?: string;
+  fileName?: string;
+  fxmlFileName?: string;
+  cssFileName?: string;
+}
+
+export function JavaCodePlayground({
+  javaCode,
+  fxmlCode,
+  cssCode,
+  title,
+  description,
+  fileName = "HelloWorld.java",
+  fxmlFileName = "layout.fxml",
+  cssFileName = "styles.css",
+}: JavaCodePlaygroundProps) {
+  const hasMultipleFiles = [javaCode, fxmlCode, cssCode].filter(Boolean).length > 1;
+
+  if (!hasMultipleFiles && javaCode) {
+    // Single Java file
+    return (
+      <Card className="overflow-hidden">
+        {(title || description) && (
+          <div className="bg-slate-100 dark:bg-slate-800 px-4 py-3 border-b">
+            {title && (
+              <div className="flex items-center gap-2 mb-1">
+                <Badge variant="secondary" className="text-xs">Java Code</Badge>
+                <h3 className="font-semibold">{title}</h3>
+              </div>
+            )}
+            {description && (
+              <p className="text-sm text-slate-600 dark:text-slate-400">{description}</p>
+            )}
+          </div>
+        )}
+        <CardContent className="p-4">
+          <CodeBlock language="java" code={javaCode} fileName={fileName} />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Multiple files - use tabs
+  return (
+    <Card className="overflow-hidden">
+      {(title || description) && (
+        <div className="bg-slate-100 dark:bg-slate-800 px-4 py-3 border-b">
+          {title && (
+            <div className="flex items-center gap-2 mb-1">
+              <Badge variant="secondary" className="text-xs">JavaFX Code</Badge>
+              <h3 className="font-semibold">{title}</h3>
+            </div>
+          )}
+          {description && (
+            <p className="text-sm text-slate-600 dark:text-slate-400">{description}</p>
+          )}
+        </div>
+      )}
+      <CardContent className="p-4">
+        <Tabs defaultValue="java" className="w-full">
+          <TabsList className="grid w-full" style={{ gridTemplateColumns: `repeat(${[javaCode, fxmlCode, cssCode].filter(Boolean).length}, 1fr)` }}>
+            {javaCode && <TabsTrigger value="java">Java</TabsTrigger>}
+            {fxmlCode && <TabsTrigger value="fxml">FXML</TabsTrigger>}
+            {cssCode && <TabsTrigger value="css">CSS</TabsTrigger>}
+          </TabsList>
+          {javaCode && (
+            <TabsContent value="java" className="mt-4">
+              <CodeBlock language="java" code={javaCode} fileName={fileName} />
+            </TabsContent>
+          )}
+          {fxmlCode && (
+            <TabsContent value="fxml" className="mt-4">
+              <CodeBlock language="xml" code={fxmlCode} fileName={fxmlFileName} />
+            </TabsContent>
+          )}
+          {cssCode && (
+            <TabsContent value="css" className="mt-4">
+              <CodeBlock language="css" code={cssCode} fileName={cssFileName} />
+            </TabsContent>
+          )}
+        </Tabs>
+      </CardContent>
+    </Card>
   );
 }

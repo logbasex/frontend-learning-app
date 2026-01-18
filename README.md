@@ -1,108 +1,178 @@
-# Frontend Learning App 🚀
+# JavaFX Learning App 🖥️
 
-**Learn Frontend from Fundamentals to Modern Stack** - Understand the THINKING and PHILOSOPHY behind each technology.
-
-## ⚠️ Language Standard
-
-This project uses **ENGLISH ONLY** for all code, documentation, and user-facing content. See `.claude/instructions.md` for implementation guidelines.
+**Learn JavaFX from Fundamentals to Advanced** - Master desktop GUI development with understanding of WHY and HOW.
 
 ## 📖 Introduction
 
-A Frontend learning app with a **Story-driven** approach (evolution history), focusing on explaining **WHY** each technology was created, **WHAT PROBLEM** it solves, and **WHEN** to use it.
+An interactive **JavaFX learning platform** with a **story-driven approach**, focusing on explaining **WHY** JavaFX was created, **WHAT PROBLEMS** it solves, and **WHEN** to use specific patterns.
 
 ### Key Features
 
-- ✅ **Story-driven Curriculum**: Learn through the evolution path HTML → CSS → JS → jQuery → React → Next.js → RSC
-- ✅ **Interactive Demos**: Live code editor, visual diagrams, side-by-side comparisons
-- ✅ **Mental Models**: Focus on architectural thinking, not just syntax
-- ✅ **Progress Tracking**: Track your learning progress with localStorage
-- ✅ **Responsive Design**: Works well on all devices
+- ✅ **Story-driven Curriculum**: Learn through evolution from Swing → JavaFX → Modern Patterns
+- ✅ **Interactive Code Examples**: Syntax-highlighted Java/FXML code with runnable examples
+- ✅ **Mental Models**: Focus on architectural thinking and design patterns
+- ✅ **hero-desktop-2 Integration**: Real-world code examples from enterprise JavaFX project
+- ✅ **Progress Tracking**: Track your learning journey with localStorage
+- ✅ **Responsive Design**: Modern web interface for learning desktop development
 
 ## 🎯 Learning Goals
 
 After completing this app, you will:
 
-1. **Understand the THINKING** behind each technology (not just syntax)
-2. **Know WHEN** to use which pattern/tool (decision-making)
-3. **Practice** through interactive examples
-4. **Have mental models** to learn new technologies faster
+1. **Understand JavaFX Architecture** - Scene Graph, Properties, Binding, FXML
+2. **Master Design Patterns** - MVP, Command Pattern, Observable patterns
+3. **Build Complex UIs** - TableView, TreeView, Charts, Custom Controls
+4. **Production-Ready Skills** - Spring Boot integration, Concurrency, Packaging
+5. **Work with hero-desktop-2** - Understand and modify enterprise JavaFX codebase
 
-## 📚 Curriculum (5 Phases, 15 Modules)
+## 📚 Curriculum (6 Phases, 18 Modules)
 
-### Phase 1: Web Fundamentals (The Origins)
-1. **Static HTML/CSS Era (1990s)** - 25 mins
-   - Separation of Concerns (structure vs style)
-   - Browser rendering pipeline
+### Phase 1: JavaFX Fundamentals (The Desktop Renaissance)
 
-2. **Dynamic Web with JavaScript (2000s)** - 30 mins
-   - Imperative programming
-   - Event-driven architecture
+1. **Why JavaFX? (History & Architecture)** - 25 mins ✅ COMPLETE
+   - Swing limitations and JavaFX solutions
+   - Scene Graph architecture fundamentals
+   - Hardware acceleration and CSS styling
 
-3. **jQuery Era (2006-2015)** - 20 mins
-   - Library abstraction layer
-   - Why jQuery is deprecated
+2. **Stage, Scene, Nodes - Core Concepts** - 30 mins
+   - Theater metaphor (Stage, Scene, Actors)
+   - Application lifecycle
+   - Basic node types
 
-### Phase 2: Single Page Applications (The Revolution)
-4. **Why SPAs?** - 20 mins
-   - Client-side routing
-   - State as source of truth
+3. **Layouts - Organizing UI Components** - 35 mins
+   - HBox, VBox, BorderPane, GridPane, StackPane
+   - Layout decision tree
+   - hero-desktop-2 dashboard layout analysis
 
-5. **Virtual DOM Revolution** - 35 mins
-   - Declarative programming
-   - Reconciliation algorithm
+4. **CSS Styling - Making it Beautiful** - 30 mins
+   - JavaFX CSS selectors and pseudo-classes
+   - Theme switching (Light/Dark mode)
+   - JMetro and Transit themes from hero-desktop-2
 
-6. **Component Thinking** - 30 mins
-   - UI = f(state)
-   - Composition over inheritance
+### Phase 2: FXML & MVC Architecture
 
-### Phase 3: Modern React Patterns
-7. **Hooks Philosophy** - 35 mins
-   - Hooks = logic extraction
-   - Effect = synchronization
+5. **FXML Basics - Declarative UI** - 30 mins
+   - XML-based UI definition
+   - FXMLLoader and Controllers
+   - Programmatic UI vs FXML comparison
 
-8. **State Management Mental Models** - 40 mins
-   - Server state vs Client state
-   - Co-location principle
+6. **Controllers & fx:id Binding** - 30 mins
+   - @FXML annotation
+   - Event handlers and form validation
+   - hero-desktop-2 controller patterns
 
-9. **Performance & Re-rendering** - 35 mins
-   - Premature optimization is evil
-   - Measure first, optimize second
+7. **SceneBuilder - Visual FXML Editor** - 25 mins
+   - Drag-and-drop UI design
+   - FXML generation workflow
+   - 330+ FXML files in hero-desktop-2
 
-### Phase 4: Server-Side Rendering (The Pendulum Swings Back)
-10. **CSR Problems** - 25 mins
-    - TTFB vs TTI
-    - SEO limitations
+8. **MVP Pattern in JavaFX** - 40 mins
+   - Model-View-Presenter separation
+   - Testability without UI dependencies
+   - DashboardPresenter and RootPresenter analysis
 
-11. **SSR, SSG, ISR** - 40 mins
-    - Rendering spectrum
-    - Trade-offs: Freshness vs Speed
+### Phase 3: Properties, Binding & Observables
 
-12. **React Server Components** - 45 mins
-    - Progressive enhancement
-    - Hybrid architecture
+9. **JavaFX Properties - The Reactive Foundation** - 35 mins
+   - Observable properties (StringProperty, IntegerProperty)
+   - Property listeners and change notifications
+   - Reactive UI updates
 
-### Phase 5: Advanced Architecture
-13. **Data Fetching Patterns** - 40 mins
-    - Colocation
-    - Fetch-on-render vs Fetch-then-render
+10. **Bidirectional Binding** - 30 mins
+    - Unidirectional vs bidirectional binding
+    - Computed bindings from multiple sources
+    - Settings panel with live preview
 
-14. **Routing & Navigation** - 35 mins
-    - File-system routing
-    - Convention over configuration
+11. **Collections & Observable Lists** - 30 mins
+    - ObservableList and ObservableMap
+    - TableView data binding
+    - Collection change listeners
 
-15. **Real-World Architecture Decisions** - 50 mins
-    - No silver bullet - only trade-offs
-    - Start simple, scale when needed
+### Phase 4: Advanced UI Components
+
+12. **TableView - The Workhorse Component** - 40 mins
+    - Columns, cell factories, selection models
+    - Custom cell renderers and editors
+    - hero-desktop-2 WallBuilder tables
+
+13. **TreeView & TreeTableView** - 35 mins
+    - Hierarchical data display
+    - Lazy loading for large trees
+    - File explorer example
+
+14. **Charts - Visualizing Data** - 35 mins
+    - LineChart, BarChart, PieChart, ScatterChart
+    - Animated data updates
+    - Custom HeroBarChart and HeroPieChart
+
+15. **ListView, ComboBox, ChoiceBox** - 25 mins
+    - Selection component decision tree
+    - Custom cell factories with icons
+    - Settings panels
+
+### Phase 5: Custom Controls & Advanced Topics
+
+16. **Custom Control Development** - 45 mins
+    - Extend Control class or Region
+    - Control → Skin → Behavior architecture
+    - hero-library custom controls (DockPane, CircleProgress)
+
+17. **Control Skinning & CSS** - 35 mins
+    - Custom Skin classes
+    - CSS variables and theming
+    - Button skin with animations
+
+18. **Canvas & 2D Graphics** - 30 mins
+    - GraphicsContext API
+    - Immediate mode vs Retained mode
+    - Custom rendering in hero-desktop-2
+
+19. **3D Graphics with JavaFX** - 40 mins
+    - PerspectiveCamera, SubScene, 3D shapes
+    - Lighting and materials
+    - FXYZ3D library usage in hero-desktop-2
+
+### Phase 6: Integration & Production Patterns
+
+20. **Spring Boot + JavaFX** - 40 mins
+    - Dependency injection integration
+    - @Component controllers
+    - HeroBooter + HeroLauncher pattern
+
+21. **Multithreading & Concurrency** - 40 mins
+    - Task, Service, Platform.runLater()
+    - Progress tracking and cancellation
+    - JavaFX Application Thread
+
+22. **Command Pattern & Undo/Redo** - 35 mins
+    - Encapsulating operations as objects
+    - Command stack implementation
+    - UndoableCommand in hero-desktop-2
+
+23. **JXBrowser Integration** - 30 mins
+    - Embedded Chromium browser
+    - JavaScript bridge (Java ↔ JS)
+    - Hybrid desktop apps
+
+24. **Packaging & Distribution** - 35 mins
+    - jpackage for native installers
+    - Platform-specific builds (Windows/macOS/Linux)
+    - Code obfuscation with ProGuard
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 15+ (App Router)
+### Learning Platform (This Web App)
+- **Framework**: Next.js 16.1.1 (App Router)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS + shadcn/ui
-- **Code Editor**: Sandpack (CodeSandbox)
-- **Diagrams**: React Flow + Framer Motion
+- **Styling**: Tailwind CSS v4 + shadcn/ui
 - **State Management**: Zustand (progress tracking)
-- **Syntax Highlighting**: Prism React Renderer
+- **Components**: Custom JavaFX demo viewers, code playgrounds
+
+### JavaFX Examples (Companion Repo)
+- **JavaFX**: 21.0.1
+- **Java**: 17 (LTS)
+- **Build Tool**: Maven
+- **Plugin**: javafx-maven-plugin
 
 ## 🚀 Getting Started
 
@@ -114,8 +184,8 @@ After completing this app, you will:
 ### Installation
 
 ```bash
-# Navigate to project directory
-cd /home/logbasex/IdeaProjects/frontend-learning-app
+# Clone repository
+cd /home/logbasex/IdeaProjects/javafx-learning-app
 
 # Install dependencies
 npm install
@@ -124,191 +194,149 @@ npm install
 npm run dev
 
 # Open browser
-# http://localhost:3000 (or 3001 if port 3000 is in use)
+# http://localhost:3001 (or 3000)
 ```
 
-### Build for Production
+### Running JavaFX Examples
+
+See the companion repository: `/home/logbasex/IdeaProjects/javafx-examples/`
 
 ```bash
-npm run build
-npm start
+cd /home/logbasex/IdeaProjects/javafx-examples
+
+# Run Module 1.1 - Hello World
+cd module-1-1-hello-world
+mvn javafx:run
 ```
 
 ## 📁 Project Structure
 
 ```
-frontend-learning-app/
+javafx-learning-app/
 ├── app/
-│   ├── layout.tsx                 # Root layout
-│   ├── page.tsx                   # Dashboard
-│   ├── lesson/
-│   │   └── [moduleId]/
-│   │       └── page.tsx           # Lesson viewer
-│   └── globals.css                # Global styles
+│   ├── layout.tsx                   # Root layout
+│   ├── page.tsx                     # Dashboard (18 modules, 6 phases)
+│   └── lesson/[moduleId]/page.tsx   # Lesson viewer
 ├── components/
-│   ├── CodePlayground.tsx         # Sandpack wrapper
-│   ├── InteractiveDiagram.tsx     # React Flow diagrams
-│   ├── CodeComparison.tsx         # Side-by-side code view
-│   ├── Challenge.tsx              # Quiz component
-│   ├── CodeBlock.tsx              # Syntax highlighting
-│   └── ui/                        # shadcn components
+│   ├── CodePlayground.tsx           # Java/FXML syntax highlighting
+│   ├── JavaFXDemoViewer.tsx         # Screenshots/GIFs/Videos viewer
+│   ├── StepByStepExplanation.tsx    # Animated step-through
+│   ├── CodeComparison.tsx           # Swing vs JavaFX comparisons
+│   ├── Challenge.tsx                # Quiz component
+│   └── ui/                          # shadcn components
 ├── lib/
-│   ├── curriculum.ts              # Module configuration
-│   ├── progress.ts                # Progress tracking (Zustand)
-│   ├── modules/                   # Module content files
-│   │   ├── index.ts               # Module registry
-│   │   ├── 1-1-html-css.tsx       # Module 1.1 content
-│   │   └── types.ts               # Module types
-│   └── utils.ts                   # Utility functions
+│   ├── curriculum.ts                # 18 JavaFX modules metadata
+│   ├── progress.ts                  # Progress tracking (Zustand)
+│   └── modules/
+│       ├── index.ts                 # Module registry
+│       ├── 1-1-why-javafx.tsx       # Module 1.1 content (✅ COMPLETE)
+│       └── ...                      # 17 more modules (TODO)
 ├── public/
-│   └── examples/                  # Code examples
+│   └── demos/                       # Screenshots and GIFs
 └── package.json
 ```
 
 ## 🎨 Features
 
 ### 1. Dashboard
-- Learning progress overview
-- Unlock system (must complete previous module)
-- Visual progress bars
-- Module cards with badges
+- 18 modules across 6 phases
+- Progress tracking per phase
+- Unlock system (complete prerequisites first)
+- Visual progress indicators
 
 ### 2. Lesson Viewer
-- Full content with interactive demos
-- Navigation (previous/next module)
-- Bookmark system
-- Progress tracking
+- Comprehensive module content (~800+ lines per module)
+- Java/FXML code examples with syntax highlighting
+- Step-by-step explanations with auto-play
+- Code comparisons (Swing vs JavaFX)
+- Interactive challenges with detailed explanations
+- hero-desktop-2 code analysis sections
+- Links to runnable examples
 
 ### 3. Interactive Components
 
-#### CodePlayground
-- Live code editor with Sandpack
-- Real-time preview
-- Supports HTML/CSS/JS and React
-- Reset and fork functionality
+#### JavaCodePlayground
+- Tabbed view (Java | FXML | CSS)
+- Syntax highlighting with Prism
+- Copy-paste ready code
 
-#### InteractiveDiagram
-- Visual flowcharts with React Flow
-- Animated transitions
-- Pre-built diagrams:
-  - Browser Rendering Pipeline
-  - Virtual DOM Reconciliation
-  - Component Tree
+#### JavaFXDemoViewer
+- Screenshots of JavaFX apps
+- Animated GIFs of demos
+- Video demos
+- Links to GitHub repo for running locally
 
-#### CodeComparison
-- Split view: Old way vs New way
-- Pros/Cons tables
-- Syntax highlighting
-- Tab switching
+#### StepByStepExplanation
+- Auto-play mode
+- Progress indicators
+- Detailed code snippets with explanations
 
-#### Challenge
-- Multiple choice questions
-- Instant feedback
-- Detailed explanations
-- Reset functionality
-
-## 🧠 Mental Models Covered
-
-- Separation of Concerns
-- Declarative vs Imperative
-- UI = f(state)
-- Composition over Inheritance
-- Unidirectional Data Flow
-- Virtual DOM Reconciliation
-- Server State vs Client State
-- Progressive Enhancement
-- Fetch-on-render vs Fetch-then-render
-- Trade-offs Decision Matrix
-
-## 🎓 Learning Philosophy
-
-### Problem → Solution Approach
-Each module starts with a **real-world problem**, then introduces the **solution** (technology/pattern), and finally explains the **trade-offs**.
-
-### No Silver Bullet
-The app emphasizes that there's no perfect solution - only trade-offs. This helps you make the right architectural decisions.
-
-### Learn by Doing
-Interactive demos help you **get familiar** with code immediately, not just read theory.
-
-## 🔧 Development
-
-### Adding New Modules
-
-1. Create content file: `lib/modules/[moduleId].tsx`
-2. Export component: `export function Module_X_Y_Content() { ... }`
-3. Register in `lib/modules/index.ts`
-4. Test in local environment
-
-See `IMPLEMENTATION_GUIDE.md` for detailed patterns and examples.
-
-### Customizing Components
-
-All components in the `components/` folder can be customized as needed.
-
-## 📝 Current Status & TODO
+## 📚 Current Status
 
 ### ✅ Completed (Detailed Implementation)
 
-**Module 1.1 - Static HTML/CSS Era** (~800 lines of detailed content):
-- ✅ 7-step Browser Rendering Pipeline explanation
-- ✅ 3-step Semantic HTML deep dive
-- ✅ 2-step CSS Cascade & Specificity explanation
-- ✅ Interactive HTMLPlayground with full styling
-- ✅ Browser Rendering Diagram (React Flow)
-- ✅ Code Comparison (<font> vs CSS)
-- ✅ 2x Challenges with detailed explanations
-- ✅ Key Takeaways summary
+**Module 1.1 - Why JavaFX?** (~1050 lines):
+- ✅ 7-step evolution history (Swing → JavaFX)
+- ✅ 3-step Scene Graph architecture explanation
+- ✅ Java code examples (Hello World)
+- ✅ Code comparison (Swing vs JavaFX with pros/cons)
+- ✅ 2 challenges with detailed explanations
+- ✅ Key takeaways and mental models
+- ✅ Runnable example (module-1-1-hello-world)
 
 **Infrastructure**:
-- ✅ StepByStepExplanation component (animated step-through)
-- ✅ Dynamic module content loading system
-- ✅ All interactive components (CodePlayground, Diagrams, Comparisons, Challenges)
+- ✅ JavaCodePlayground component (Java/FXML/CSS syntax highlighting)
+- ✅ JavaFXDemoViewer component (screenshots/GIFs/videos)
+- ✅ Module content loading system
 - ✅ Progress tracking with localStorage
-- ✅ Comprehensive implementation guide (`IMPLEMENTATION_GUIDE.md`)
+- ✅ 18-module curriculum structure
+- ✅ javafx-examples companion repo setup
 
-### 🔜 TODO - Remaining Modules (14 modules)
+### 🔜 TODO - Remaining Modules (17 modules)
 
-**See `IMPLEMENTATION_GUIDE.md` for detailed templates and patterns!**
+**Priority modules**:
+- [ ] Module 1.2: Stage, Scene, Nodes
+- [ ] Module 2.4: MVP Pattern (with hero-desktop-2 analysis)
+- [ ] Module 3.1: JavaFX Properties
+- [ ] Module 6.1: Spring Boot + JavaFX
+- [ ] Module 6.2: Multithreading & Concurrency
 
-Priority modules to implement next:
-- [ ] Module 1.2: JavaScript (Event Loop, DOM manipulation, Form validation)
-- [ ] Module 2.2: Virtual DOM Revolution (Diffing algorithm, Performance comparison)
-- [ ] Module 3.1: Hooks Philosophy (useState/useEffect lifecycle, Custom hooks)
-- [ ] Module 3.2: State Management (Local vs Context vs Zustand vs React Query)
-- [ ] Module 4.3: React Server Components (RSC architecture, Streaming SSR)
+All other modules (12 remaining)
 
-All other modules:
-- [ ] Module 1.3: jQuery Era
-- [ ] Module 2.1: Why SPAs?
-- [ ] Module 2.3: Component Thinking
-- [ ] Module 3.3: Performance & Re-rendering
-- [ ] Module 4.1: CSR Problems
-- [ ] Module 4.2: SSR/SSG/ISR
-- [ ] Module 5.1: Data Fetching Patterns
-- [ ] Module 5.2: Routing & Navigation
-- [ ] Module 5.3: Architecture Decisions
+## 🔗 Related Projects
 
-### Future Enhancements
-- [ ] Add search functionality
-- [ ] Add notes system (users can take notes)
-- [ ] Export progress to JSON
-- [ ] Dark mode toggle (currently supports via system preference)
-- [ ] Add video embeds
-- [ ] Deploy to Vercel
+- **hero-desktop-2**: Enterprise JavaFX application (521 Java files, 330+ FXML files)
+- **javafx-examples**: Companion repo with runnable examples for all 18 modules
+- **Frontend Learning App**: Sister project for web frontend learning (HTML/CSS/React/Next.js)
+
+## 🧠 Mental Models Covered
+
+- Scene Graph architecture (hierarchical UI tree)
+- Theater metaphor (Stage, Scene, Actors)
+- Separation of concerns (FXML vs Java vs CSS)
+- Reactive programming with Properties and Binding
+- MVP pattern (Passive View + Active Presenter)
+- Observable patterns (properties, collections)
+- Command pattern (undo/redo)
+- Hardware acceleration vs software rendering
+- Declarative UI (FXML) vs Imperative UI (Java code)
 
 ## 🤝 Contributing
 
-Contributions are welcome! If you want to add more modules or improve existing content, feel free to submit a PR.
+This is a learning project. Contributions welcome for:
+- Implementing remaining 17 modules
+- Adding more hero-desktop-2 code examples
+- Creating demo GIFs/videos
+- Improving explanations
 
 ## 📄 License
 
-MIT License - Feel free to use this for learning purposes.
+MIT License - Free for learning purposes
 
 ## 👤 Author
 
-Built with ❤️ for developers who want to understand the "why" behind frontend technologies.
+Built with ❤️ for Java developers learning JavaFX desktop GUI development.
 
 ---
 
-**🚀 Happy Learning!** Remember: *Learn to understand, not just to do.*
+**🚀 Happy Learning!** Remember: *Understand WHY, not just HOW.*
