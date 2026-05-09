@@ -549,7 +549,7 @@ deps.forEach(function(dep) {
           },
           {
             title:
-              "npm ci and pnpm install --frozen-lockfile ignore the manifest if it conflicts with the lockfile — that&apos;s the point in CI",
+              "npm ci and pnpm install --frozen-lockfile ignore the manifest if it conflicts with the lockfile — that's the point in CI",
             body: (
               <>
                 <code>pnpm install --frozen-lockfile</code> (and <code>npm ci</code>) will
@@ -561,7 +561,7 @@ deps.forEach(function(dep) {
           },
           {
             title:
-              "Phantom dependencies (using a transitive without declaring it) work in npm/yarn but fail with pnpm — that&apos;s a feature, not a bug",
+              "Phantom dependencies (using a transitive without declaring it) work in npm/yarn but fail with pnpm — that's a feature, not a bug",
             body: (
               <>
                 In npm and yarn, <code>node_modules</code> is a flat directory. You can{" "}
@@ -574,7 +574,7 @@ deps.forEach(function(dep) {
           },
           {
             title:
-              "peerDependencies aren&apos;t auto-installed; they let you say what&apos;s compatible — the consumer installs the actual version",
+              "peerDependencies aren't auto-installed; they let you say what's compatible — the consumer installs the actual version",
             body: (
               <>
                 When you publish a library with <code>&quot;react&quot;: &quot;^19.0.0&quot;</code>{" "}
