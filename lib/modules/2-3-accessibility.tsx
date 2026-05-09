@@ -9,7 +9,8 @@ import { KeyTakeaways } from "@/components/KeyTakeaways";
 import { RoadmapLink } from "@/components/RoadmapLink";
 
 export function Module_2_3_Content() {
-  const steps: Step[] = [
+  // Data blocks hoisted out of JSX for readability — listed in render order.
+  const accessibilitySteps: Step[] = [
     {
       title: "Step 1: Tab through and listen",
       description: (
@@ -403,7 +404,7 @@ function fire(which) {
       <StepByStepExplanation
         title="From keyboard-broken to keyboard-first"
         description="Six steps that cover the most common accessibility failures on the modern web"
-        steps={steps}
+        steps={accessibilitySteps}
       />
 
       {/* ──────────────────────────────────────────────────────────────────── */}

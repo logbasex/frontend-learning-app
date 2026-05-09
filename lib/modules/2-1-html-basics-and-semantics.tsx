@@ -396,7 +396,6 @@ export function Module_2_1_Content() {
       <Card>
         <CardContent className="pt-6">
           <div className="prose dark:prose-invert max-w-none">
-            <h2>🧱 HTML Basics and Semantics</h2>
             <p>
               Open the average legacy site&apos;s DOM and you find 200 nested{" "}
               <code>&lt;div&gt;</code>s. To a screen reader, they all read as
@@ -429,7 +428,6 @@ export function Module_2_1_Content() {
       <Card>
         <CardContent className="pt-6">
           <div className="prose dark:prose-invert max-w-none">
-            <h3>The model: HTML is a meaning tree</h3>
             <p>
               Every HTML document is a tree of <em>elements</em> — tag pairs
               with optional content and <em>attributes</em> — and that tree has

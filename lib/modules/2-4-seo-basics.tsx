@@ -9,7 +9,7 @@ import { KeyTakeaways } from "@/components/KeyTakeaways";
 import { RoadmapLink } from "@/components/RoadmapLink";
 
 export function Module_2_4_Content() {
-  // ── Section 3: Step-by-step data ──────────────────────────────────────────
+  // Data blocks hoisted out of JSX for readability — listed in render order.
   const anatomySteps: Step[] = [
     {
       title: "Step 1: <title> and <meta name=\"description\">",

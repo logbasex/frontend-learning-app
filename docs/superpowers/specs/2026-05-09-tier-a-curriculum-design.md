@@ -114,6 +114,16 @@ Every module exports `Module_X_Y_Content()` and renders the **seven sections** o
 
 The existing `_template.tsx` (`ScaffoldModule`) becomes deprecated for new authoring but stays in the file for reference. Tier-A modules render their sections directly without a wrapper component (the structure is rigid enough that a wrapper adds friction).
 
+### 4.1. Structural conventions inferred from the Wave-3 pilot
+
+Codified after the Wave-3 review found drift on these points across 4 parallel-authored modules:
+
+- **No headings inside the Hook or Mental Model `<Card>`s.** Both sections are prose-only (only `<p>` and inline tags). The lesson frame supplies the module title from `curriculum.ts`; section 2's model is the `<blockquote>`, not a heading.
+- **No emojis anywhere in the module file.** The dashboard and lesson frame may use emojis as part of the design system; module content does not.
+- **First line inside the component function must be the comment** `// Data blocks hoisted out of JSX for readability — listed in render order.` followed by hoisted const declarations (step arrays, playground HTML strings, etc.).
+- **Step arrays must have descriptive names** — `urlToPixelsSteps`, `semanticSteps`, `cascadeSteps` — never just `steps`.
+- **Section comments in the JSX render are numbered 1–7** matching the seven mandatory sections (Hook, Mental model, Step-by-step, Playground, Challenges, GotchaList, KeyTakeaways). Optional sections (sequence diagram, code comparison) get a non-numbered comment like `{/* Optional: Sequence diagram (DNS resolution) */}`.
+
 ## 5. New primitive components
 
 Two categories: **general-purpose** primitives (reusable across many modules) and **module-specific** demos (one-offs that live in their module file).

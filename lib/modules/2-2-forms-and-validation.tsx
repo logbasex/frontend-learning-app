@@ -9,6 +9,7 @@ import { KeyTakeaways } from "@/components/KeyTakeaways";
 import { RoadmapLink } from "@/components/RoadmapLink";
 
 export function Module_2_2_Content() {
+  // Data blocks hoisted out of JSX for readability — listed in render order.
   const nativeValidationSteps: Step[] = [
     {
       title: "Step 1: Three ways to associate a label",
@@ -432,7 +433,7 @@ document.getElementById('signup-form').addEventListener('submit', (e) => {
         css={playgroundCss}
         js={playgroundJs}
         title="Signup form with native + custom validation"
-        description="Submit with empty fields to see native errors. Then try mismatched passwords — that is the one place we reach for JavaScript."
+        description="Submit with empty fields to see native errors. Then try mismatched passwords — that is the one place you reach for JavaScript."
       />
 
       {/* ──────────────────────────────────────────────────────────────────── */}
