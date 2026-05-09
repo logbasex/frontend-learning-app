@@ -1,438 +1,132 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file is guidance for Claude Code (claude.ai/code) working in this repo.
 
-## Project Overview
+## What this is
 
-This is a **JavaFX Learning App** - an interactive, story-driven educational platform teaching JavaFX desktop GUI development from fundamentals to advanced patterns (Swing → JavaFX → MVP → Spring Boot integration). The app focuses on teaching **mental models and architectural thinking** rather than just syntax.
+A **Frontend Learning App** following [roadmap.sh/frontend](https://roadmap.sh/frontend). Story-driven curriculum: each module names the problem first, then teaches the mental model, then drops the learner into live code.
 
-**Target Audience**: Java backend developers learning JavaFX for desktop application development, specifically to work with the **hero-desktop-2** enterprise project.
+**Audience:** developers learning the frontend stack from first principles.
 
-**Key Philosophy**: Problem → Solution approach. Each module explains WHY JavaFX was created, WHAT problems it solves, and WHEN to use specific patterns.
+**Curriculum:** 7 phases, 30 modules, mapping every yellow node in the official roadmap PDF.
 
-## Development Commands
+## Dev commands
 
 ```bash
-# Start development server (runs on port 3001 if 3000 is occupied)
-npm run dev
-
-# Build for production
-npm run build
-
-# Run production server
-npm start
-
-# Lint code
-npm run lint
+npm run dev      # Next.js dev server (port 3000, falls back to 3001)
+npm run build    # Production build (Turbopack)
+npm run lint     # ESLint
+npm start        # Run production build
 ```
-
-**Dev Server**: Accessible at `http://localhost:3001` (or 3000)
-**Key Routes**:
-- `/` - Dashboard with curriculum overview (18 modules, 6 phases)
-- `/lesson/[moduleId]` - Individual lesson page (e.g., `/lesson/1-1-why-javafx`)
 
 ## Architecture
 
-### Module Content System
-
-**Critical Pattern**: The app uses a **dynamic module loading system** where each lesson's content is a separate React component.
-
-**Module Registration Flow**:
-1. Create module content component: `lib/modules/[moduleId].tsx`
-2. Export as `Module_X_Y_Content()` function
-3. Register in `lib/modules/index.ts`:
-   ```tsx
-   import { Module_1_1_Content } from "./1-1-why-javafx";
-
-   export const MODULE_CONTENTS: Record<string, React.ComponentType> = {
-     "1-1-why-javafx": Module_1_1_Content,
-     // Add new modules here
-   };
-   ```
-4. Lesson page (`app/lesson/[moduleId]/page.tsx`) dynamically loads and renders the component
-
-**Module ID Convention**: `{phase}-{order}-{slug}` (e.g., `1-1-why-javafx`, `2-4-mvp-pattern`, `6-1-spring-boot`)
-
-### Data Flow Architecture
-
 ```
-curriculum.ts (metadata)
-    ↓
-Dashboard (app/page.tsx) → renders all 6 phases/18 modules
-    ↓
-Lesson Page (app/lesson/[moduleId]/page.tsx)
-    ↓
-getModuleContent(moduleId) → loads Module_X_Y_Content component
-    ↓
-Renders interactive content (JavaCodePlayground, Diagrams, Challenges, hero-desktop-2 code analysis)
-    ↓
-progress.ts (Zustand store) → tracks completion in localStorage
+app/
+  page.tsx                        # Dashboard: 7 phase cards, 30 module tiles
+  lesson/[moduleId]/page.tsx      # Lesson viewer: dynamically loads module content
+  layout.tsx                      # Root metadata
+
+lib/
+  curriculum.ts                   # All 30 modules' metadata + helpers (single source of truth)
+  progress.ts                     # Zustand store; localStorage key 'frontend-learning-progress'
+  modules/
+    _template.tsx                 # ScaffoldModule helper (used by Tier-B modules)
+    index.ts                      # Module-id → component registry
+    <module-id>.tsx               # One file per module (e.g. 1-1-how-the-internet-works.tsx)
+
+components/
+  Challenge.tsx                   # Multiple-choice with feedback
+  CodeBlock.tsx                   # Prism static syntax highlighting
+  CodePlayground.tsx              # Sandpack live HTML/CSS/JS + ReactPlayground
+  CodeComparison.tsx              # Side-by-side old vs new
+  InteractiveDiagram.tsx          # ReactFlow diagrams (incl. BrowserRenderingPipeline)
+  KeyTakeaways.tsx                # Bulleted takeaways + "mental model" pull-quote
+  RoadmapLink.tsx                 # Inline link back to the roadmap.sh node
+  StepByStepExplanation.tsx       # Animated step-through with progress bar
+  ui/                             # shadcn/ui primitives
+
+docs/superpowers/
+  specs/2026-05-09-...-design.md  # Design spec (the WHY)
+  plans/2026-05-09-...-app.md     # Implementation plan (the HOW)
 ```
 
-### State Management
+## Module content pattern — two tiers
 
-**Global State (Zustand)**: `lib/progress.ts`
-- `completedModules: string[]` - IDs of finished lessons
-- `bookmarkedModules: string[]` - User bookmarks
-- `notes: Record<string, string>` - User notes per module
-- `currentModule: string | null` - Currently viewing
-- Persisted to `localStorage` key: `javafx-learning-progress`
+**Tier A (deep, 1 module):** `lib/modules/1-1-how-the-internet-works.tsx`. ~570 lines. Full template:
+problem statement → 6-step `StepByStepExplanation` → live `HTMLPlayground` → `InteractiveDiagram` → 2 `Challenge`s → `KeyTakeaways` with mental model.
 
-**Curriculum State**: `lib/curriculum.ts`
-- Static configuration for all 18 modules (6 phases)
-- Helper functions: `getModuleById()`, `getNextModule()`, `getPreviousModule()`, `isModuleUnlocked()`
-- **Unlock System**: Modules unlock only when prerequisites are completed
-- **NEW Field**: `hasHeroDesktop2Context: boolean` - indicates if module includes hero-desktop-2 code analysis
+**Tier B (scaffold, 29 modules):** All other modules use `ScaffoldModule` from `_template.tsx`. ~100–250 lines each:
+problem statement (3 paragraphs) → ONE body primitive (`HTMLPlayground` OR `CodeBlock` OR `BrowserRenderingPipeline`) → 1 `Challenge` → `KeyTakeaways`. Consistent shape, fast to add.
 
-### Component Architecture
-
-**JavaFX-Specific Components** (in `components/`):
-
-1. **JavaCodePlayground** - Syntax-highlighted Java/FXML/CSS code display
-   - Tabbed view (Java | FXML | CSS)
-   - No live execution (JavaFX can't run in browser)
-   - Copy-paste ready code with file names
-
-2. **JavaFXDemoViewer** - Display JavaFX application demos
-   - Types: `screenshot`, `gif`, `video`
-   - Links to runnable examples in javafx-examples repo
-   - GitHub repo integration
-
-3. **StepByStepExplanation** - Animated step-through explanations
-   - Auto-play mode, progress bar, step indicators
-   - Used for complex concepts (e.g., 7-step Swing → JavaFX evolution)
-
-4. **CodeComparison** - Side-by-side code comparison (Swing vs JavaFX)
-   - Tabbed view (Split | Old Only | New Only)
-   - Pros/Cons lists
-   - Used to show evolution and improvements
-
-5. **Challenge** - Quiz component
-   - Multiple choice with detailed explanations
-   - Instant feedback, reset capability
-
-6. **CodeBlock** - Syntax highlighted code display (using Prism)
-   - Supports: `java`, `xml` (FXML), `css` (JavaFX CSS)
-
-**UI Components** (shadcn/ui in `components/ui/`):
-- Standard shadcn components: Button, Card, Badge, Progress, Tabs, etc.
-
-## Module Content Pattern
-
-**Reference Implementation**: `lib/modules/1-1-why-javafx.tsx` (~1050 lines)
-
-Core structure:
+### `ScaffoldModule` prop shape
 
 ```tsx
-export function Module_X_Y_Content() {
-  // Define step-by-step explanations
-  const historySteps: Step[] = [
-    { title: "Step 1: ...", description: "...", code: "..." },
-    // Minimum 5-7 steps for complex concepts
-  ];
-
-  return (
-    <div className="space-y-8">
-      {/* 1. Problem Statement - WHY this tech/pattern exists */}
-      <Card>
-        <CardContent className="prose">
-          <h2>🖥️ The Problem: ...</h2>
-          <p>Historical context, problem description...</p>
-        </CardContent>
-      </Card>
-
-      {/* 2. Step-by-step explanation */}
-      <StepByStepExplanation
-        title="..."
-        steps={historySteps}
-        autoPlay={false}
-      />
-
-      {/* 3. Java/FXML Code Examples */}
-      <JavaCodePlayground
-        javaCode="..."
-        fxmlCode="..."
-        cssCode="..."
-        title="..."
-      />
-
-      {/* 4. Code Comparison (Swing vs JavaFX) */}
-      <CodeComparison
-        oldCode={{ title: "Swing", code: "...", pros: [...], cons: [...] }}
-        newCode={{ title: "JavaFX", code: "...", pros: [...], cons: [...] }}
-      />
-
-      {/* 5. JavaFX Demo Viewer */}
-      <JavaFXScreenshot
-        src="/demos/module-x-y.svg"
-        alt="..."
-        title="..."
-        repoUrl="https://github.com/.../javafx-examples/tree/main/module-x-y"
-      />
-
-      {/* 6. hero-desktop-2 Context (if applicable) */}
-      <Card className="border-purple-200">
-        <h3>🔗 In hero-desktop-2 Project</h3>
-        <p>This pattern is used in:</p>
-        <CodeBlock language="java" code="..." fileName="DashboardPresenter.java" />
-      </Card>
-
-      {/* 7. Challenges (minimum 2) */}
-      <Challenge question="..." correctAnswerId="..." explanation="..." />
-
-      {/* 8. Key Takeaways */}
-      <Card className="border-green-200">
-        <h3>🎓 Key Takeaways</h3>
-        <ol>...</ol>
-        <div>💡 Mental Model: "..."</div>
-      </Card>
-    </div>
-  );
-}
+<ScaffoldModule
+  emoji="🌐"
+  problemTitle="..."
+  problem={<><p>...</p><p>...</p></>}
+  body={<HTMLPlayground html={...} css={...} js={...} title="..." />}
+  challenge={{
+    question: "...",
+    options: [{ id: "a", text: "..." }, { id: "b", text: "..." }, ...],
+    correctAnswerId: "b",
+    explanation: <>...</>,
+  }}
+  takeaways={[<>...</>, <>...</>, <>...</>]}
+  mentalModel="..."
+  roadmapUrl="https://roadmap.sh/frontend"
+/>
 ```
 
-**Critical Requirements for Each Module**:
-- Start with a **problem statement** (story-driven, historical context)
-- Include **step-by-step explanations** (5-7+ steps for complex topics)
-- Provide **Java/FXML code examples** (syntax-highlighted, well-commented)
-- Compare **old vs new approaches** (Swing vs JavaFX with pros/cons)
-- Include **JavaFX demo** (screenshot/GIF with link to runnable example)
-- Add **hero-desktop-2 context** (real-world code analysis where applicable)
-- Include **challenges** with detailed explanations (minimum 2)
-- End with **Key Takeaways** and a **Mental Model** quote
+## Adding a new module
 
-**Content Depth**: Aim for ~800-1050 lines per module. Module 1.1 is the gold standard with ~1050 lines.
+1. Add the module's metadata to the right `Phase` in `lib/curriculum.ts`. Pick a stable `id` (e.g. `8-1-graphql-mutations`).
+2. Create `lib/modules/<id>.tsx`. Export `Module_<X>_<Y>_Content` (`X` = phase, `Y` = order).
+3. Register the component in `lib/modules/index.ts`.
+4. `npm run dev` and visit `/lesson/<id>`.
 
-## Curriculum Structure
+## Module content ID convention
 
-**6 Phases, 18 Modules Total**:
+`{phase}-{order}-{slug}` — e.g. `1-1-how-the-internet-works`, `5-3-pick-a-framework`, `7-8-performance`.
 
-**Phase 1: JavaFX Fundamentals**
-- `1-1-why-javafx` - Why JavaFX? History & Architecture (✅ COMPLETE - 1050 lines)
-- `1-2-stage-scene-nodes` - Stage, Scene, Nodes - Core Concepts (⏳ TODO)
-- `1-3-layouts` - Layouts - Organizing UI Components (⏳ TODO)
-- `1-4-css-styling` - CSS Styling - Making it Beautiful (⏳ TODO)
+The corresponding component is `Module_<phase>_<order>_Content` — e.g. `Module_5_3_Content`.
 
-**Phase 2: FXML & MVC Architecture**
-- `2-1-fxml-basics` - FXML Basics - Declarative UI (⏳ TODO)
-- `2-2-controllers` - Controllers & fx:id Binding (⏳ TODO)
-- `2-3-scenebuilder` - SceneBuilder - Visual FXML Editor (⏳ TODO)
-- `2-4-mvp-pattern` - MVP Pattern in JavaFX (⏳ TODO)
+## Progress system
 
-**Phase 3: Properties, Binding & Observables**
-- `3-1-properties` - JavaFX Properties - The Reactive Foundation (⏳ TODO)
-- `3-2-binding` - Bidirectional Binding (⏳ TODO)
-- `3-3-collections` - Collections & Observable Lists (⏳ TODO)
+`lib/progress.ts` is a Zustand store persisted to `localStorage` under the key `frontend-learning-progress`. It tracks:
 
-**Phase 4: Advanced UI Components**
-- `4-1-tableview` - TableView - The Workhorse Component (⏳ TODO)
-- `4-2-treeview` - TreeView & TreeTableView (⏳ TODO)
-- `4-3-charts` - Charts - Visualizing Data (⏳ TODO)
-- `4-4-listview-combobox` - ListView, ComboBox, ChoiceBox (⏳ TODO)
+- `completedModules: string[]`
+- `bookmarkedModules: string[]`
+- `notes: Record<string, string>`
+- `currentModule: string | null`
 
-**Phase 5: Custom Controls & Advanced Topics**
-- `5-1-custom-controls` - Custom Control Development (⏳ TODO)
-- `5-2-skinning` - Control Skinning & CSS (⏳ TODO)
-- `5-3-canvas-2d` - Canvas & 2D Graphics (⏳ TODO)
-- `5-4-3d-graphics` - 3D Graphics with JavaFX (⏳ TODO)
+Modules **unlock** as their prerequisites complete (`isModuleUnlocked` helper in `curriculum.ts`).
 
-**Phase 6: Integration & Production Patterns**
-- `6-1-spring-boot` - Spring Boot + JavaFX (⏳ TODO)
-- `6-2-multithreading` - Multithreading & Concurrency (⏳ TODO)
-- `6-3-command-pattern` - Command Pattern & Undo/Redo (⏳ TODO)
-- `6-4-jxbrowser` - JXBrowser Integration (⏳ TODO)
-- `6-5-packaging` - Packaging & Distribution (⏳ TODO)
+To wipe progress while developing: clear that localStorage key in DevTools.
 
-**Status**: 1/18 modules complete (Module 1.1).
+## Quality gates
 
-## Key Files
-
-**Configuration**:
-- `lib/curriculum.ts` - All 18 modules metadata, learning objectives, mental models
-- `lib/progress.ts` - Zustand store for progress tracking (key: `javafx-learning-progress`)
-
-**Module Content**:
-- `lib/modules/index.ts` - Module registry (add new modules here)
-- `lib/modules/1-1-why-javafx.tsx` - Complete reference implementation (✅ COMPLETE)
-- `lib/modules/types.ts` - TypeScript types for module content
-
-**Pages**:
-- `app/page.tsx` - Dashboard with curriculum tree, progress bars, unlock system
-- `app/lesson/[moduleId]/page.tsx` - Dynamic lesson viewer
-
-**JavaFX-Specific Components**:
-- `components/CodePlayground.tsx` - Java/FXML/CSS syntax highlighting (JavaCodePlayground)
-- `components/JavaFXDemoViewer.tsx` - Screenshot/GIF/Video viewer
-- `components/StepByStepExplanation.tsx` - Animated step-through
-- `components/CodeComparison.tsx` - Swing vs JavaFX comparisons
-- `components/Challenge.tsx` - Quiz component
-- `components/CodeBlock.tsx` - Prism syntax highlighting
-
-**Documentation**:
-- `README.md` - Project overview, setup, features, curriculum
-- `CLAUDE.md` - This file (architecture and development guide)
-
-**Companion Repository**:
-- `/home/logbasex/IdeaProjects/javafx-examples/` - Maven multi-module project with runnable examples
-
-## Common Workflows
-
-### Adding a New Module
-
-1. **Create module file**:
-   ```bash
-   touch lib/modules/[moduleId].tsx
-   ```
-
-2. **Implement content** following the pattern in Module 1.1:
-   - Problem statement (historical context)
-   - 5-7 step explanations
-   - Java/FXML code examples
-   - Swing vs JavaFX comparison
-   - JavaFX demo (screenshot/GIF)
-   - hero-desktop-2 code analysis (if applicable)
-   - Challenges (minimum 2)
-   - Key takeaways
-
-3. **Register module**:
-   ```tsx
-   // lib/modules/index.ts
-   import { Module_X_Y_Content } from "./[moduleId]";
-
-   export const MODULE_CONTENTS = {
-     // ... existing modules
-     "[moduleId]": Module_X_Y_Content,
-   };
-   ```
-
-4. **Create runnable example** in javafx-examples repo:
-   ```bash
-   cd /home/logbasex/IdeaProjects/javafx-examples
-   mkdir module-x-y-name
-   # Create pom.xml and Java source files
-   ```
-
-5. **Test**: Navigate to `http://localhost:3001/lesson/[moduleId]`
-
-### Working with JavaFX Examples Repo
+Every change should keep these green:
 
 ```bash
-cd /home/logbasex/IdeaProjects/javafx-examples
-
-# Create new module directory
-mkdir module-x-y-name
-cd module-x-y-name
-
-# Create pom.xml (inherit from parent POM)
-# Create src/main/java/com/example/ directory
-# Implement Java code
-
-# Test locally
-mvn javafx:run
+npm run lint        # zero errors
+npx tsc --noEmit    # zero errors
+npm run build       # succeeds
 ```
 
-### Working with Progress System
+Lint rules to watch for:
+- `@next/next/no-assign-module-variable` — don't name a local `module` (use `moduleData`, `m`, etc.).
+- `react-hooks/static-components` — when receiving a component from a function, render it via `React.createElement(component)` rather than `<Component />` to avoid the "created during render" warning.
 
-```tsx
-// In any component
-import { useProgress } from "@/lib/progress";
+## Source of truth for the curriculum
 
-const {
-  completedModules,
-  markModuleComplete,
-  toggleBookmark,
-  addNote
-} = useProgress();
+The roadmap PDF was read on 2026-05-09 at `https://roadmap.sh/pdfs/roadmaps/frontend.pdf`. The `§1` coverage table in `docs/superpowers/plans/2026-05-09-frontend-roadmap-learning-app.md` maps every yellow node in the PDF to a module ID. If the user asks to add coverage, check that table first.
 
-// Mark module complete
-markModuleComplete("1-1-why-javafx");
+## Style
 
-// Check if unlocked (all prerequisites completed)
-import { isModuleUnlocked } from "@/lib/curriculum";
-const unlocked = isModuleUnlocked("2-1-fxml-basics", completedModules);
-```
-
-## Design Principles
-
-**Story-Driven Learning**:
-- Always start with historical context (e.g., "In 1998, Sun Microsystems released Swing...")
-- Explain WHY JavaFX was created (Swing's limitations)
-- Show the evolution (e.g., Swing → JavaFX 1.0 → JavaFX 2.0 → Modern JavaFX)
-
-**Mental Models Over Syntax**:
-- Focus on concepts like "Scene Graph architecture", "Reactive Properties", "MVP pattern"
-- Include a "Mental Model" quote in every module's Key Takeaways
-- Explain trade-offs (e.g., JavaFX vs Swing, MVC vs MVP)
-
-**Interactive Over Passive**:
-- Every module must have Java/FXML code examples
-- Step-by-step explanations with detailed code snippets
-- Visual demos (screenshots/GIFs) of running JavaFX apps
-- Links to runnable examples
-- Challenges to test understanding
-
-**Real-World Context**:
-- Include hero-desktop-2 code analysis where applicable
-- Show how patterns are used in production enterprise apps
-- Provide runnable examples that can be cloned and run locally
-
-**Detailed Explanations**:
-- Break complex topics into 5-7+ steps
-- Include code comments explaining each line
-- Compare old vs new approaches with explicit pros/cons
-- Provide measurements and real-world context
-
-## Technical Notes
-
-**Next.js Version**: 16.1.1 (App Router)
-- Uses React Server Components by default
-- File-based routing in `app/` directory
-- All module content components must use `"use client"` directive (they're interactive)
-
-**Styling**: Tailwind CSS v4 + shadcn/ui
-- Utility-first CSS
-- Dark mode support via system preference
-- Custom gradient backgrounds
-
-**State Persistence**: localStorage (key: `javafx-learning-progress`)
-- Automatically synced via Zustand middleware
-- Reset progress: Clear localStorage in browser DevTools
-
-**Port**: Development server runs on port 3001 (3000 often occupied)
-
-**JavaFX Demo Strategy**:
-- JavaFX cannot run in browser (desktop-only)
-- Use screenshots, GIFs, or videos for demos
-- Provide links to javafx-examples repo for runnable code
-- Users clone and run: `cd module-x-y && mvn javafx:run`
-
-**External Dependencies**:
-- Avoid external image URLs (use inline SVG instead for placeholders)
-- Use `/demos/` directory for screenshots/GIFs
-- Link to javafx-examples repo on GitHub
-
-## Debugging
-
-**Module not loading**:
-1. Check if module ID is registered in `lib/modules/index.ts`
-2. Verify module ID matches curriculum in `lib/curriculum.ts`
-3. Check browser console for import errors
-4. Ensure component is exported as `Module_X_Y_Content`
-
-**Progress not saving**:
-1. Check localStorage in browser DevTools
-2. Look for key `javafx-learning-progress` (NOT `frontend-learning-progress`)
-3. Verify Zustand store is properly initialized
-
-**JavaFX code not highlighting**:
-1. Ensure `language="java"` for Java code
-2. Use `language="xml"` for FXML
-3. Use `language="css"` for JavaFX CSS
-4. Check if Prism supports the language
-
-## References
-
-- **Module 1.1**: `lib/modules/1-1-why-javafx.tsx` - Gold standard reference (1050 lines)
-- **README**: Complete project documentation
-- **javafx-examples repo**: `/home/logbasex/IdeaProjects/javafx-examples/`
-- **hero-desktop-2**: Enterprise JavaFX project for real-world code examples
+- All copy in **English**.
+- Use double quotes in JSX attributes.
+- Escape `'`, `<`, `>` in JSX text where needed (`&apos;`, `&lt;`, `&gt;`).
+- Strict TypeScript — no `any`, no unused imports.
+- No comments unless the *why* is non-obvious.
