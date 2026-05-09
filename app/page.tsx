@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Globe, Zap, Sparkles, Server, Layers, Lock, Check, BookMarked, Clock } from "lucide-react";
+import { Globe, Zap, Sparkles, Server, Layers, Lock, Check, BookMarked, Clock, Code2, Palette, Wrench, Boxes, Shield } from "lucide-react";
 
 const ICONS = {
   Globe,
@@ -15,6 +15,11 @@ const ICONS = {
   Sparkles,
   Server,
   Layers,
+  Code2,
+  Palette,
+  Wrench,
+  Boxes,
+  Shield,
 };
 
 export default function DashboardPage() {
@@ -29,10 +34,10 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
-                JavaFX Learning Journey
+                Frontend Learning Journey
               </h1>
               <p className="text-slate-600 dark:text-slate-400 mt-1">
-                From Fundamentals to Advanced Desktop GUI
+                Following <a href="https://roadmap.sh/frontend" target="_blank" rel="noreferrer" className="underline hover:text-blue-600">roadmap.sh/frontend</a> — story-driven, with live code
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -56,10 +61,11 @@ export default function DashboardPage() {
                 <BookMarked className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
-                <h2 className="text-xl font-semibold mb-2">Welcome to the JavaFX Learning Path! 🖥️</h2>
+                <h2 className="text-xl font-semibold mb-2">Welcome to the Frontend Learning Path 🌐</h2>
                 <p className="text-slate-700 dark:text-slate-300 mb-4">
-                  This app is designed to help you understand the <strong>THINKING and PHILOSOPHY</strong> behind each technology.
-                  Not just learning syntax, but understanding <em>why</em> the technology was created and <em>when</em> to use it.
+                  This app walks the <strong>roadmap.sh/frontend</strong> path with a story-driven lens.
+                  Each module starts with the problem the technology solves, then teaches the mental model, then drops you into live code.
+                  The goal: understand <em>why</em>, not just <em>how</em>.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="secondary" className="gap-1">
@@ -199,8 +205,8 @@ export default function DashboardPage() {
       {/* Footer */}
       <footer className="border-t mt-16 py-8 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 text-center text-slate-600 dark:text-slate-400">
-          <p>🖥️ JavaFX Learning App - Learn to understand, not just to do</p>
-          <p className="text-sm mt-2">Built with Next.js, React, Tailwind CSS, and ❤️</p>
+          <p>🌐 Frontend Learning App — learn to understand, not just to do</p>
+          <p className="text-sm mt-2">Following <a href="https://roadmap.sh/frontend" className="underline" target="_blank" rel="noreferrer">roadmap.sh/frontend</a>. Built with Next.js, React, Sandpack, and Tailwind.</p>
         </div>
       </footer>
     </div>

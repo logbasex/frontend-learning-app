@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,23 +11,31 @@ export interface ChallengeOption {
   text: string;
 }
 
-export interface ChallengeProps {
-  question: string;
-  options: ChallengeOption[];
-  correctAnswerId: string;
-  explanation: string;
-  type?: "single" | "multiple";
-  title?: string;
+export interface ChallengeAnswer {
+  id: string;
+  text: string;
+  isCorrect: boolean;
 }
 
-export function Challenge({
-  question,
-  options,
-  correctAnswerId,
-  explanation,
-  type = "single",
-  title,
-}: ChallengeProps) {
+export type ChallengeProps = {
+  question: string;
+  explanation: ReactNode;
+  type?: "single" | "multiple";
+  title?: string;
+} & (
+  | { options: ChallengeOption[]; correctAnswerId: string; answers?: never }
+  | { answers: ChallengeAnswer[]; options?: never; correctAnswerId?: never }
+);
+
+export function Challenge(props: ChallengeProps) {
+  const { question, explanation, type = "single", title } = props;
+
+  const options: ChallengeOption[] = props.answers
+    ? props.answers.map(({ id, text }) => ({ id, text }))
+    : props.options;
+  const correctAnswerId = props.answers
+    ? props.answers.find((a) => a.isCorrect)?.id ?? ""
+    : props.correctAnswerId;
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
 

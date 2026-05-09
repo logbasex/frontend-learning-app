@@ -150,10 +150,10 @@ export default function LessonPage() {
           <Card>
             <CardContent className="pt-6 text-center py-12">
               <p className="text-lg text-slate-600 dark:text-slate-400">
-                Content for module <strong>{module.title}</strong> is being developed.
+                Detailed content for <strong>{module.title}</strong> is on the way.
               </p>
               <p className="text-sm text-slate-500 dark:text-slate-500 mt-2">
-                This module will soon have detailed content like module 1-1-html-css.
+                See the reference module <code>1-1-how-the-internet-works</code> for the full template.
               </p>
             </CardContent>
           </Card>

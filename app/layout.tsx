@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "JavaFX Learning App - From Fundamentals to Advanced Desktop GUI",
-  description: "Learn JavaFX with a Story-driven approach. Understand the THINKING and PHILOSOPHY behind desktop GUI development: Swing → JavaFX → FXML → MVP → Spring Boot integration",
+  title: "Frontend Learning App — Roadmap.sh Frontend, story-driven",
+  description: "Learn frontend the way roadmap.sh lays it out: Internet → HTML/CSS → JavaScript → Tooling → Frameworks → Production. Story-driven, with live code playgrounds, mental models, and challenges.",
 };
 
 export default function RootLayout({

@@ -80,26 +80,16 @@ export const useProgress = create<ProgressState>()(
         }),
     }),
     {
-      name: 'javafx-learning-progress', // localStorage key
+      name: 'frontend-learning-progress',
       storage: createJSONStorage(() => localStorage),
     }
   )
 );
 
-// Hook để get progress statistics
 export function useProgressStats() {
   const completedModules = useProgress((state) => state.completedModules);
-
-  // Import curriculum to calculate stats
-  // (Can move this logic out if optimization is needed)
-  const totalModules = 18; // JavaFX Learning App has 18 modules (6 phases)
-
+  const totalModules = 30;
   const completedCount = completedModules.length;
   const progressPercentage = Math.round((completedCount / totalModules) * 100);
-
-  return {
-    completedCount,
-    totalModules,
-    progressPercentage,
-  };
+  return { completedCount, totalModules, progressPercentage };
 }
