@@ -13,7 +13,7 @@ export function Module_6_2_Content() {
   // Data blocks hoisted out of JSX for readability — listed in render order.
   const vitePipelineSteps: Step[] = [
     {
-      title: "Step 1: What &apos;bundle&apos; means",
+      title: "Step 1: What 'bundle' means",
       description: (
         <>
           Before native ES modules, browsers could not import one JavaScript file from another. The
