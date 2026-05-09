@@ -1,47 +1,37 @@
-# Frontend Learning App 🌐
+# Frontend Learning App
 
-A story-driven, interactive learning app that follows the public [roadmap.sh/frontend](https://roadmap.sh/frontend) curriculum.
+A comprehensive, interactive frontend learning app following the [roadmap.sh/frontend](https://roadmap.sh/frontend) curriculum. Localhost only.
 
-Each module starts with the *problem* a technology solves, walks through the *mental model*, drops you into *live code*, and ends with a *challenge* and a *takeaway*. The goal: understand the **why**, not just the **how**.
+## What this is
 
-## Curriculum
-
-**7 phases, 30 modules**, mapping every yellow node in the official roadmap PDF:
-
-1. **Internet & Web Foundations** — how the internet, HTTP, DNS, hosting, and browsers actually work
-2. **HTML** — semantic markup, forms, accessibility, SEO
-3. **CSS** — fundamentals, Flexbox/Grid, responsive design, modern styling, BEM/preprocessors
-4. **JavaScript** — language fundamentals, DOM/events, fetch & async
-5. **Workflow & Frameworks** — Git, package managers, pick-a-framework, TypeScript
-6. **Build, Test & Secure** — linters, bundlers, testing, auth, web security
-7. **Beyond the Browser & Production** — Web Components, SSR, GraphQL, SSG, PWA, mobile, desktop, performance
-
-Module 1.1 (`/lesson/1-1-how-the-internet-works`) is the gold-standard reference module with the full template; the other 29 are tighter scaffolds with a problem statement, one piece of interactive content, a challenge, and key takeaways.
+30 modules across 7 phases, covering every yellow node in the official roadmap PDF. Each module is a Tier-A lesson built around a concrete tension hook, a one-sentence mental model, step-by-step exposition with live code, a learner-operated playground, active-recall challenges, a gotcha list, and key takeaways. The goal: understand the why before the how.
 
 ## Run it locally
 
 ```bash
 npm install
 npm run dev
+# open http://localhost:3000
 ```
 
-Then open http://localhost:3000 (or 3001 if 3000 is taken).
+## What's inside
 
-## How it's built
+- 7 phases, 30 modules covering every yellow node in roadmap.sh/frontend (read 2026-05-09)
+- 8 reusable interactive primitives: `GotchaList`, `SequenceDiagram`, `LayeredFlow`, `TerminalPlayground`, `LiveCascadeDemo`, `FlexboxControls`, `GridControls`, `EventLoopVisualizer`
+- Sandpack-powered live playgrounds in every module
+- Soft prerequisites — every module is reachable from the start; the dashboard recommends a sequence
 
-- **Next.js 16** (App Router, React 19, TypeScript)
-- **Tailwind CSS v4** + **shadcn/ui** primitives
-- **Sandpack** for live HTML/CSS/JS playgrounds
-- **@xyflow/react** for interactive diagrams
-- **Prism** for static syntax highlighting
-- **Zustand** for progress tracking, persisted to `localStorage` under the key `frontend-learning-progress`
+## Documentation
 
-## Adding a module
+- Design spec: [`docs/superpowers/specs/2026-05-09-tier-a-curriculum-design.md`](docs/superpowers/specs/2026-05-09-tier-a-curriculum-design.md)
+- Concept catalog (canonical term definitions): [`docs/superpowers/specs/2026-05-09-concept-catalog.md`](docs/superpowers/specs/2026-05-09-concept-catalog.md)
+- Per-module learning outcomes: [`docs/superpowers/specs/2026-05-09-learning-outcomes.md`](docs/superpowers/specs/2026-05-09-learning-outcomes.md)
+- Implementation plan (10 waves, 44 tasks, complete): [`docs/superpowers/plans/2026-05-09-tier-a-curriculum-plan.md`](docs/superpowers/plans/2026-05-09-tier-a-curriculum-plan.md)
 
-1. Create `lib/modules/<id>.tsx` exporting `Module_<X>_<Y>_Content`. Use `ScaffoldModule` (from `lib/modules/_template.tsx`) for short modules, or hand-roll like `1-1-how-the-internet-works.tsx` for deep ones.
-2. Register the new component in `lib/modules/index.ts`.
-3. Make sure the `id` is also listed in `lib/curriculum.ts`. The dashboard reads from there.
+## Tech
 
-## Spec & plan
+Next.js 16 / React 19 / TypeScript / Tailwind 4 / shadcn/ui / `@codesandbox/sandpack-react` / `@xyflow/react` / framer-motion / Zustand. Localhost only.
 
-The full design lives at `docs/superpowers/specs/2026-05-09-frontend-roadmap-learning-app-design.md`; the implementation plan lives at `docs/superpowers/plans/2026-05-09-frontend-roadmap-learning-app.md`.
+## Source
+
+Following [roadmap.sh/frontend](https://roadmap.sh/frontend).
