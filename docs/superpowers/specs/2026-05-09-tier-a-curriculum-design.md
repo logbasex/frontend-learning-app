@@ -255,15 +255,14 @@ The plan executes in **waves**, each independently shippable:
 - Strip Vietnamese strings from `components/Challenge.tsx` and `components/InteractiveDiagram.tsx`. Replace with English.
 - Add a `grep` guard to `package.json` lint script that fails if any Vietnamese character appears under `components/` or `lib/`.
 
-**Wave 1 — Primitives + Spec assets** (10 tasks, parallelizable)
+**Wave 1 — Primitives** (8 tasks, parallelizable)
 - Build the 8 general-purpose primitives in §5a (one task each).
 - Each primitive task creates the component + a `_demos/<name>.tsx` smoke-test page.
-- Write the concept catalog (`concept-catalog.md`).
-- Write the learning-outcomes file (`learning-outcomes.md`).
+- (The concept catalog and learning-outcomes file are produced as part of *this* spec, not Wave 1 — see `2026-05-09-concept-catalog.md` and `2026-05-09-learning-outcomes.md`.)
 
 **Wave 2 — Re-author the gold standard, `1-1`** (1 task, blocks Wave 3+)
 - Re-author `1-1-how-the-internet-works` to the new Tier-A template (all 7 sections, using the new `SequenceDiagram` and `LayeredFlow` primitives where they help, plus `GotchaList`).
-- This is the exemplar. Subsequent waves' agents study it.
+- This is the **structural exemplar** for every subsequent module. Wave 3+ tasks reference it explicitly: "match the section ordering, prose density, and code-vs-prose ratio of `lib/modules/1-1-how-the-internet-works.tsx`."
 - **User review gate.** User confirms voice/depth/shape match intent before Wave 3.
 
 **Wave 3 — Phase 2 pilot, 4 modules in parallel** (4 tasks)
@@ -286,7 +285,12 @@ The plan executes in **waves**, each independently shippable:
 - Update `CLAUDE.md` with the new Tier-A authoring guide.
 - Update `README.md`.
 
-**Total: ~46 tasks across 10 waves.**
+**Total: ~44 tasks across 10 waves.**
+
+**Wave-boundary smoke tests** vary by wave content:
+- Wave 0: lint passes (Vietnamese guard active), no behavior change.
+- Wave 1: every primitive's `_demos/<name>.tsx` renders without console errors when manually opened (these aren't routed; the user temporarily imports the demo into a throwaway page or imports it inside the lesson layout to verify).
+- Wave 2+: each authored module's `/lesson/<id>` route renders, all 7 sections appear, playground iframes load, challenges accept answers.
 
 ## 11. Data flow & error handling
 
