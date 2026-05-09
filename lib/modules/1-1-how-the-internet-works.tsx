@@ -3,107 +3,98 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { HTMLPlayground } from "@/components/CodePlayground";
 import { StepByStepExplanation, Step } from "@/components/StepByStepExplanation";
-import { InteractiveDiagram } from "@/components/InteractiveDiagram";
+import { SequenceDiagram } from "@/components/SequenceDiagram";
 import { Challenge } from "@/components/Challenge";
+import { GotchaList } from "@/components/GotchaList";
 import { KeyTakeaways } from "@/components/KeyTakeaways";
 import { RoadmapLink } from "@/components/RoadmapLink";
-import type { Node, Edge } from "@xyflow/react";
 
 export function Module_1_1_Content() {
   // ─────────────────────────────────────────────────────────────────────────────
-  // Section 2: Step-by-step — "From URL to pixels"
+  // Section 3: Step-by-step — "From URL to pixels"
   // ─────────────────────────────────────────────────────────────────────────────
-  const historySteps: Step[] = [
+  const urlToPixelsSteps: Step[] = [
     {
       title: "Step 1: You type a URL",
       description:
-        "Before you even press Enter, the browser is already at work. It autocompletes from history, " +
-        "checks bookmarks, and surfaces suggestions — all from local data, no network request needed yet.\n\n" +
-        "Once you press Enter, the browser parses the raw string into distinct components: scheme (the protocol), " +
-        "host (the domain), pathname, query-string, and hash fragment. Understanding this structure is essential " +
-        "because every subsequent step operates on exactly one of those pieces.",
-      code: `# The URL the browser is about to navigate to
-https://roadmap.sh/frontend
-
+        "Before you even press Enter the browser parses the raw string you typed into distinct components: scheme, host, port, path, query string, and fragment. " +
+        "The scheme tells the browser which protocol to use — <code>https</code> means port 443 and TLS required. " +
+        "The host is the human-readable name the network does not yet understand — that is DNS's job next. " +
+        "The path, query, and fragment travel inside the HTTP request once the connection is open.",
+      code: `# URL: https://roadmap.sh/frontend?tab=links#projects
+#
 # Parsed components:
-#   scheme:   https
-#   host:     roadmap.sh
-#   port:     443  (implied by https)
-#   path:     /frontend
-#   query:    (none)
-#   fragment: (none)`,
+#   scheme:   https          (protocol + implies port 443)
+#   host:     roadmap.sh     (will be resolved to an IP by DNS)
+#   port:     443            (implied by https)
+#   path:     /frontend      (sent to the server in the HTTP request)
+#   query:    tab=links      (also sent in the request line)
+#   fragment: projects       (never sent — handled by the browser only)`,
     },
     {
       title: "Step 2: DNS resolution",
       description:
-        "The host 'roadmap.sh' is a human-readable alias; the network speaks in IP addresses. " +
-        "The browser first checks its own DNS cache, then the OS resolver cache, before forwarding the query " +
-        "to a recursive resolver (your ISP or a public provider like 1.1.1.1 or 8.8.8.8).\n\n" +
-        "The resolver walks the DNS tree: root nameservers delegate to the .sh TLD servers, which delegate " +
-        "to roadmap.sh's authoritative nameservers, which finally return the A record with the IP address. " +
-        "Results are cached at every hop based on their TTL, so most lookups short-circuit early.",
-      code: `# dig roadmap.sh +short
+        "The host <code>roadmap.sh</code> is a human-readable alias; the network speaks only in IP addresses. " +
+        "<em>DNS</em> — a directory that maps human-readable names to IP addresses — walks a tree of servers to find the answer: root nameservers delegate to the <code>.sh</code> TLD, which delegates to roadmap.sh&apos;s authoritative nameservers, which return the A record. " +
+        "Results are cached at every hop for as long as the TTL allows, so most real-world lookups are answered in milliseconds by your ISP&apos;s recursive resolver. " +
+        "The <code>dig +trace</code> output shows every delegation step, letting you pinpoint exactly which level failed if a site won&apos;t load.",
+      code: `# Quick answer
+$ dig roadmap.sh +short
 76.76.21.21
 
-# Full resolution trace (dig +trace):
-.                        518400  IN  NS  a.root-servers.net.
-sh.                      172800  IN  NS  ns1.nic.sh.
-roadmap.sh.              86400   IN  NS  ns1.dnsimple.com.
-roadmap.sh.              60      IN  A   76.76.21.21`,
+# Full delegation trace
+$ dig roadmap.sh +trace
+.                   518400 IN NS a.root-servers.net.
+sh.                 172800 IN NS ns1.nic.sh.
+roadmap.sh.          86400 IN NS ns1.dnsimple.com.
+roadmap.sh.             60 IN A  76.76.21.21
+# ↑ A record: maps the name to an IPv4 address`,
     },
     {
       title: "Step 3: TCP handshake",
       description:
-        "With an IP address in hand, the browser opens a TCP connection to port 443 on that server. " +
-        "TCP is connection-oriented: before any data flows, both sides complete a three-way handshake — " +
-        "SYN, SYN-ACK, ACK — costing exactly one full round-trip time (RTT).\n\n" +
-        "This handshake guarantees that both sides are reachable and that subsequent segments will be " +
-        "delivered in order and without loss. This is why physical distance to servers matters so much: " +
-        "a CDN edge node 10ms away is far cheaper than a datacenter 150ms away, just for the TCP RTT alone.",
-      code: `# Three-way TCP handshake
-
+        "<em>TCP</em> — a reliable, ordered, connection-oriented transport protocol — requires both sides to agree before any data flows. " +
+        "The three-way handshake (SYN, SYN-ACK, ACK) costs exactly one round-trip time (RTT). " +
+        "That RTT is why physical distance to the server matters: a CDN edge 10 ms away is far cheaper for the first byte than a datacenter 150 ms away. " +
+        "HTTP keep-alive and HTTP/2 multiplexing exist precisely to avoid repeating this handshake for every resource.",
+      code: `# TCP three-way handshake
 Client                          Server
   |                               |
   |──── SYN (seq=x) ─────────────►|   "I want to connect"
-  |                               |
-  |◄─── SYN-ACK (seq=y, ack=x+1)─|   "OK, I am ready"
-  |                               |
+  |◄─── SYN-ACK (seq=y, ack=x+1) ─|   "OK, I am ready"
   |──── ACK (ack=y+1) ───────────►|   "Acknowledged"
   |                               |
-  |   <<< connection established >>>  |`,
+  |  <<< connection established >>>   |
+  |  (costs 1 RTT before any byte)    |`,
     },
     {
       title: "Step 4: TLS handshake (HTTPS only)",
       description:
-        "On top of the TCP connection, TLS negotiates an encrypted channel before a single HTTP byte is sent. " +
-        "The client announces which cipher suites it supports (ClientHello); the server picks one and sends " +
-        "its certificate chain (ServerHello + Certificate + CertificateVerify + Finished).\n\n" +
-        "In TLS 1.3 the key exchange and cipher negotiation are folded into a single round-trip, so the " +
-        "overhead is just one extra RTT on top of TCP. After the handshake, all HTTP traffic is encrypted " +
-        "with a symmetric session key that only these two endpoints know — derived via elliptic-curve Diffie-Hellman.",
-      code: `# TLS 1.3 handshake — openssl s_client sketch
-
-$ openssl s_client -connect roadmap.sh:443
+        "<em>TLS</em> — a protocol layered on top of TCP that encrypts the channel and verifies the server&apos;s identity — adds one more RTT on top of TCP. " +
+        "The client sends a ClientHello listing supported cipher suites; the server replies with a certificate signed by a trusted Certificate Authority. " +
+        "In TLS 1.3 the key exchange is folded into that same round-trip, so the total cost is TCP RTT + TLS RTT before any HTTP byte flows. " +
+        "After the handshake, all traffic is encrypted with a symmetric session key neither side ever transmitted — derived via elliptic-curve Diffie-Hellman.",
+      code: `$ openssl s_client -connect roadmap.sh:443 2>&1 | head -20
 
 Protocol  : TLSv1.3
 Cipher    : TLS_AES_256_GCM_SHA384
 Server Temp Key: X25519, 253 bits
 
 # Certificate chain:
-#   0 s:CN = roadmap.sh
-#     i:C = US, O = Let's Encrypt, CN = R11
-#   1 s:CN = R11
-#     i:C = US, O = Internet Security Research Group, CN = ISRG Root X1`,
+#  0 s:CN = roadmap.sh
+#    i:C = US, O = Let's Encrypt, CN = R11
+#  1 s:CN = R11
+#    i:C = US, O = Internet Security Research Group, CN = ISRG Root X1
+#
+# The CA (Let's Encrypt) signed the cert — your browser trusts it
+# because ISRG Root X1 is in your OS/browser trust store.`,
     },
     {
       title: "Step 5: HTTP request",
       description:
-        "With an encrypted TCP connection established, the browser sends an HTTP request. " +
-        "The request line names the method (GET, POST, PUT, DELETE...), the path, and the HTTP version. " +
-        "Headers carry metadata: the hostname (required in HTTP/1.1), accepted content types, cookies, " +
-        "caching tokens (ETag, If-None-Match), and more.\n\n" +
-        "HTTP/2 and HTTP/3 use binary framing and request multiplexing to eliminate head-of-line blocking, " +
-        "but the semantics — methods, headers, status codes — remain identical to HTTP/1.1.",
+        "<em>HTTP</em> — the application-layer protocol for client-server requests and responses on the web — uses a simple structure: a request line naming the method and path, then headers, then an optional body. " +
+        "The <code>Host</code> header is required in HTTP/1.1 so a single IP can serve many domains (virtual hosting). " +
+        "HTTP/2 and HTTP/3 use binary framing and multiplexing under the hood, but the semantics — methods, headers, status codes — are identical to HTTP/1.1, so what you read below applies to all three.",
       code: `GET /frontend HTTP/1.1
 Host: roadmap.sh
 Accept: text/html,application/xhtml+xml;q=0.9,*/*;q=0.8
@@ -116,19 +107,15 @@ Cache-Control: max-age=0`,
     {
       title: "Step 6: Server response and render",
       description:
-        "The server processes the request and returns a response: a status line (e.g. 200 OK), " +
-        "response headers (Content-Type, Cache-Control, ETag, Set-Cookie...), and a body. " +
-        "The browser starts parsing the HTML as bytes arrive — it does not wait for the full document.\n\n" +
-        "Each external resource (CSS, JS, fonts, images) discovered while parsing triggers a new " +
-        "DNS/TCP/TLS/HTTP cycle (though connections are reused via Keep-Alive and DNS is cached). " +
-        "Once the render tree is assembled from the DOM and CSSOM, the browser lays out and paints pixels — " +
-        "your 200ms is complete.",
+        "The server returns a status line (<code>200 OK</code>), response headers, and a body. " +
+        "The browser starts parsing HTML as bytes arrive — it does not wait for the complete document. " +
+        "Each external resource (CSS, JS, fonts, images) discovered while parsing triggers its own DNS/TCP/TLS/HTTP cycle, though connections are reused via keep-alive and DNS results are cached. " +
+        "Once the render tree is assembled from the DOM and CSSOM, the browser lays out geometry and paints pixels — your 200 ms are complete.",
       code: `HTTP/1.1 200 OK
 Content-Type: text/html; charset=utf-8
 Content-Encoding: gzip
 Cache-Control: public, max-age=3600
 ETag: "xyz789"
-Vary: Accept-Encoding
 
 <!DOCTYPE html>
 <html lang="en">
@@ -146,7 +133,7 @@ Vary: Accept-Encoding
   ];
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // Section 3: HTMLPlayground — Watch a real HTTP exchange
+  // Section 4: HTMLPlayground
   // ─────────────────────────────────────────────────────────────────────────────
   const playgroundHtml = `<!DOCTYPE html>
 <html lang="en">
@@ -159,9 +146,9 @@ Vary: Accept-Encoding
   <h2>Live HTTP requests via <code>fetch()</code></h2>
   <p class="hint">Open DevTools &rarr; Network tab, then click a button below.</p>
   <div class="btn-row">
-    <button id="btn-ip">Get IP</button>
-    <button id="btn-headers">Show headers</button>
-    <button id="btn-json">Get JSON</button>
+    <button id="btn-get">GET /get</button>
+    <button id="btn-headers">GET /headers</button>
+    <button id="btn-ip">GET /ip</button>
   </div>
   <pre id="output" class="output">Response will appear here&hellip;</pre>
   <script src="/script.js"></script>
@@ -177,7 +164,7 @@ Vary: Accept-Encoding
 }
 h2 { margin-bottom: 4px; font-size: 1.1rem; }
 .hint { font-size: 0.82rem; color: #64748b; margin-bottom: 16px; }
-.btn-row { display: flex; gap: 8px; margin-bottom: 16px; }
+.btn-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
 button {
   padding: 8px 16px;
   background: #3b82f6;
@@ -202,7 +189,10 @@ button:disabled { background: #94a3b8; cursor: not-allowed; }
   word-break: break-all;
 }`;
 
-  const playgroundJs = `async function fetchEndpoint(url) {
+  const playgroundJs = `// Try this: open DevTools → Network, click a button, then change the URL to
+// httpbin.org/status/418 and watch the response come back as 418 I'm a teapot.
+
+async function fetchEndpoint(url) {
   const out = document.getElementById('output');
   out.textContent = 'Fetching ' + url + ' ...';
 
@@ -217,250 +207,48 @@ button:disabled { background: #94a3b8; cursor: not-allowed; }
   }
 }
 
-document.getElementById('btn-ip').addEventListener('click', () => {
-  fetchEndpoint('https://httpbin.org/ip');
+document.getElementById('btn-get').addEventListener('click', () => {
+  fetchEndpoint('https://httpbin.org/get');
 });
 
 document.getElementById('btn-headers').addEventListener('click', () => {
   fetchEndpoint('https://httpbin.org/headers');
 });
 
-document.getElementById('btn-json').addEventListener('click', () => {
-  fetchEndpoint('https://httpbin.org/get');
+document.getElementById('btn-ip').addEventListener('click', () => {
+  fetchEndpoint('https://httpbin.org/ip');
 });`;
-
-  // ─────────────────────────────────────────────────────────────────────────────
-  // Section 4: DNS resolution diagram — 9-node left-to-right flow
-  // ─────────────────────────────────────────────────────────────────────────────
-  const dnsNodes: Node[] = [
-    {
-      id: "browser",
-      type: "input",
-      data: { label: "Browser" },
-      position: { x: 50, y: 100 },
-      style: {
-        background: "#3b82f6",
-        color: "white",
-        padding: "10px 14px",
-        borderRadius: "8px",
-        fontWeight: "bold",
-        fontSize: "12px",
-      },
-    },
-    {
-      id: "os-resolver",
-      data: { label: "OS Resolver" },
-      position: { x: 200, y: 100 },
-      style: {
-        background: "#8b5cf6",
-        color: "white",
-        padding: "10px 14px",
-        borderRadius: "8px",
-        fontSize: "12px",
-      },
-    },
-    {
-      id: "recursive-resolver",
-      data: { label: "Recursive Resolver" },
-      position: { x: 360, y: 100 },
-      style: {
-        background: "#8b5cf6",
-        color: "white",
-        padding: "10px 14px",
-        borderRadius: "8px",
-        fontSize: "12px",
-      },
-    },
-    {
-      id: "root-ns",
-      data: { label: "Root Nameserver" },
-      position: { x: 540, y: 100 },
-      style: {
-        background: "#f59e0b",
-        color: "white",
-        padding: "10px 14px",
-        borderRadius: "8px",
-        fontSize: "12px",
-      },
-    },
-    {
-      id: "tld-ns",
-      data: { label: "TLD Nameserver (.sh)" },
-      position: { x: 720, y: 100 },
-      style: {
-        background: "#f59e0b",
-        color: "white",
-        padding: "10px 14px",
-        borderRadius: "8px",
-        fontSize: "12px",
-      },
-    },
-    {
-      id: "auth-ns",
-      data: { label: "Authoritative (roadmap.sh)" },
-      position: { x: 900, y: 100 },
-      style: {
-        background: "#f59e0b",
-        color: "white",
-        padding: "10px 14px",
-        borderRadius: "8px",
-        fontSize: "12px",
-      },
-    },
-    {
-      id: "recursive-return",
-      data: { label: "Recursive Resolver" },
-      position: { x: 1080, y: 100 },
-      style: {
-        background: "#8b5cf6",
-        color: "white",
-        padding: "10px 14px",
-        borderRadius: "8px",
-        fontSize: "12px",
-      },
-    },
-    {
-      id: "browser-return",
-      data: { label: "Browser" },
-      position: { x: 1240, y: 100 },
-      style: {
-        background: "#3b82f6",
-        color: "white",
-        padding: "10px 14px",
-        borderRadius: "8px",
-        fontWeight: "bold",
-        fontSize: "12px",
-      },
-    },
-    {
-      id: "web-server",
-      type: "output",
-      data: { label: "Web Server" },
-      position: { x: 1420, y: 100 },
-      style: {
-        background: "#3b82f6",
-        color: "white",
-        padding: "10px 14px",
-        borderRadius: "8px",
-        fontWeight: "bold",
-        fontSize: "12px",
-      },
-    },
-  ];
-
-  const dnsEdges: Edge[] = [
-    {
-      id: "e1",
-      source: "browser",
-      target: "os-resolver",
-      animated: true,
-      label: "1. query",
-    },
-    {
-      id: "e2",
-      source: "os-resolver",
-      target: "recursive-resolver",
-      animated: true,
-      label: "2. forward",
-    },
-    {
-      id: "e3",
-      source: "recursive-resolver",
-      target: "root-ns",
-      animated: true,
-      label: "3. ask root",
-    },
-    {
-      id: "e4",
-      source: "root-ns",
-      target: "tld-ns",
-      animated: true,
-      label: "4. refer .sh",
-    },
-    {
-      id: "e5",
-      source: "tld-ns",
-      target: "auth-ns",
-      animated: true,
-      label: "5. refer auth",
-    },
-    {
-      id: "e6",
-      source: "auth-ns",
-      target: "recursive-return",
-      animated: true,
-      label: "6. A record",
-    },
-    {
-      id: "e7",
-      source: "recursive-return",
-      target: "browser-return",
-      animated: true,
-      label: "7. IP address",
-    },
-    {
-      id: "e8",
-      source: "browser-return",
-      target: "web-server",
-      animated: true,
-      label: "8. connect",
-    },
-  ];
-
-  // ─────────────────────────────────────────────────────────────────────────────
-  // Section 6: Key takeaways
-  // ─────────────────────────────────────────────────────────────────────────────
-  const takeawayPoints = [
-    <>DNS is the phonebook of the internet: it translates human-readable names like <code>roadmap.sh</code> into IP addresses the network can route to.</>,
-    <>TCP guarantees ordered, reliable delivery via a three-way handshake — every connection costs at least one round-trip before data flows.</>,
-    <>TLS sits between TCP and HTTP: it both encrypts the payload and verifies the server&apos;s identity via a CA-signed certificate, adding one extra RTT.</>,
-    <>HTTP is the application-layer &quot;letter&quot; — methods, headers, and bodies — and its semantics are the same whether you are using HTTP/1.1, HTTP/2, or HTTP/3.</>,
-    <>Knowing which layer is misbehaving turns a vague &quot;it&apos;s broken&quot; into a specific, fixable diagnosis: DNS timeout, TLS certificate expired, or HTTP 502.</>,
-  ];
-
-  const mentalModel =
-    "The internet is a layered postal service: DNS finds the address, TCP delivers reliably, HTTPS seals the envelope, HTTP is the letter inside.";
 
   // ─────────────────────────────────────────────────────────────────────────────
   // Render
   // ─────────────────────────────────────────────────────────────────────────────
   return (
     <div className="space-y-8">
-      {/* ─────────────────────────────────────────────────────────────────────── */}
-      {/* Section 1: Problem statement                                            */}
-      {/* ─────────────────────────────────────────────────────────────────────── */}
+
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 1: Hook                                                       */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
       <Card>
         <CardContent className="pt-6">
           <div className="prose dark:prose-invert max-w-none">
-            <h2>🌍 The Problem: 200ms of magic</h2>
-
             <p>
               You type <code>roadmap.sh</code>, hit Enter, and the page appears. Looks instant. It
               isn&apos;t.
             </p>
-
             <p>
-              In those 200 milliseconds your browser performed a <strong>DNS lookup</strong> to
-              translate <code>roadmap.sh</code> into an IP address, a <strong>TCP handshake</strong>{" "}
-              to establish a reliable connection, a <strong>TLS handshake</strong> to negotiate
-              encryption and verify the server&apos;s identity, an <strong>HTTP request</strong> to
-              ask for the page, a <strong>server response</strong> carrying the HTML bytes, and
-              finally a <strong>render pipeline</strong> to turn those bytes into the visual you see.
+              In those 200 milliseconds your browser ran a <strong>DNS lookup</strong> to translate
+              the hostname into an IP address, a <strong>TCP handshake</strong> to open a reliable
+              connection, a <strong>TLS handshake</strong> to negotiate encryption and verify the
+              server&apos;s identity, an <strong>HTTP request</strong> to ask for the page, and
+              finally a <strong>render pipeline</strong> to turn the bytes into the visual you see.
+              Each layer exists because the one below it couldn&apos;t do the job alone — DNS because
+              humans remember names, not numbers; TCP because real networks drop and reorder packets;
+              TLS because any router in between could read your traffic without it; HTTP because both
+              sides need a common language for &quot;give me this resource.&quot;
             </p>
-
             <p>
-              Why do all these layers exist? Because each one solves a real, distinct problem. DNS
-              solves human memory — no one wants to type <code>76.76.21.21</code> in their address
-              bar. TCP solves unreliable wires — packets get dropped, duplicated, and reordered on
-              real networks. TLS solves snooping — without it, any router between you and the server
-              could read or modify your traffic. HTTP solves &quot;what do you want?&quot; — it gives
-              clients a uniform language to request specific resources from any server.
-            </p>
-
-            <p>
-              This module is a guided tour of those layers, in the exact order they fire. By the end
-              you will be able to look at any network failure and name which layer is responsible —
-              which is the first and most important step to fixing it.
+              This module is the layered map of those 200 milliseconds. By the end, when a site
+              won&apos;t load, you&apos;ll know which layer to interrogate first.
             </p>
           </div>
           <div className="mt-4">
@@ -469,97 +257,194 @@ document.getElementById('btn-json').addEventListener('click', () => {
         </CardContent>
       </Card>
 
-      {/* ─────────────────────────────────────────────────────────────────────── */}
-      {/* Section 2: Step-by-step                                                 */}
-      {/* ─────────────────────────────────────────────────────────────────────── */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 2: Mental model first                                         */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="prose dark:prose-invert max-w-none">
+            <p>
+              Think of the internet as a layered postal service. Each layer solves one real,
+              distinct problem, and they compose: DNS is the address book that looks up where to
+              deliver; TCP is the courier that guarantees the parcel arrives intact and in order;
+              HTTPS is the tamper-evident envelope that prevents anyone else from reading or
+              altering the contents; and HTTP is the letter itself — the actual question you asked
+              and the answer you received. When one layer misbehaves, the others cannot compensate.
+              A DNS failure means no IP, so no TCP connection, so no page. Keeping those four layers
+              distinct in your head is the single most useful mental model for debugging network
+              problems.
+            </p>
+            <blockquote className="border-l-4 border-blue-500 pl-4 italic">
+              &quot;The internet is a layered postal service: DNS finds the address, TCP delivers
+              reliably, HTTPS seals the envelope, HTTP is the letter inside.&quot;
+            </blockquote>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 3: Step-by-step                                               */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
       <StepByStepExplanation
         title="From URL to pixels"
         description="The six layers between your keystroke and the rendered page"
-        steps={historySteps}
+        steps={urlToPixelsSteps}
       />
 
-      {/* ─────────────────────────────────────────────────────────────────────── */}
-      {/* Section 3: HTMLPlayground                                               */}
-      {/* ─────────────────────────────────────────────────────────────────────── */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 4: Live playground                                            */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
       <HTMLPlayground
         html={playgroundHtml}
         css={playgroundCss}
         js={playgroundJs}
         title="Watch a real HTTP exchange"
-        description="Open DevTools → Network and click the buttons. Each button is one HTTP request."
+        description="Open DevTools → Network and click the buttons. Each click is one real HTTP request over DNS + TCP + TLS."
       />
 
-      {/* ─────────────────────────────────────────────────────────────────────── */}
-      {/* Section 4: DNS diagram                                                  */}
-      {/* ─────────────────────────────────────────────────────────────────────── */}
-      <InteractiveDiagram
-        title="DNS resolution flow"
-        description="How a name turns into an IP, hop by hop"
-        initialNodes={dnsNodes}
-        initialEdges={dnsEdges}
-        height={260}
-        interactive={false}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 5: Sequence diagram                                           */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      <SequenceDiagram
+        title="DNS resolution"
+        description="From browser to authoritative nameserver and back"
+        actors={["Browser", "Resolver", "Root", "TLD", "Authoritative", "Server"]}
+        messages={[
+          { from: "Browser", to: "Resolver", label: "query roadmap.sh" },
+          { from: "Resolver", to: "Root", label: "ask .sh nameservers?" },
+          { from: "Root", to: "Resolver", label: "see ns1.nic.sh" },
+          { from: "Resolver", to: "TLD", label: "ask roadmap.sh nameservers?" },
+          { from: "TLD", to: "Resolver", label: "see ns1.dnsimple.com" },
+          { from: "Resolver", to: "Authoritative", label: "A record for roadmap.sh?" },
+          { from: "Authoritative", to: "Resolver", label: "76.76.21.21", note: "cached for TTL seconds" },
+          { from: "Resolver", to: "Browser", label: "76.76.21.21" },
+          { from: "Browser", to: "Server", label: "TCP+TLS+HTTP →" },
+        ]}
       />
 
-      {/* ─────────────────────────────────────────────────────────────────────── */}
-      {/* Section 5: Challenges                                                   */}
-      {/* ─────────────────────────────────────────────────────────────────────── */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 6: Challenges                                                 */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
       <Challenge
-        question="What is DNS' job in one sentence?"
+        question="What is DNS's job in one sentence?"
         options={[
           { id: "a", text: "Encrypt traffic between client and server." },
           { id: "b", text: "Translate human-readable names into IP addresses." },
           { id: "c", text: "Reliably deliver TCP packets in order." },
-          { id: "d", text: "Compress HTTP responses." },
+          { id: "d", text: "Compress HTTP responses to reduce bandwidth." },
         ]}
         correctAnswerId="b"
         explanation={
           <>
-            <p>
-              DNS (Domain Name System) is purely a name-to-IP lookup service — you give it a
-              hostname like <code>roadmap.sh</code> and it returns an IP address like{" "}
-              <code>76.76.21.21</code>. It has nothing to do with encryption (that is TLS), reliable
-              delivery of packets (that is TCP), or compressing HTTP bodies (that is
-              Content-Encoding). DNS can itself be transported over encrypted channels
-              (DNS-over-HTTPS, DNS-over-TLS) to hide which names you are looking up, but its core
-              job remains the same: translate human-friendly names into machine-routable addresses.
-            </p>
+            DNS (Domain Name System) is purely a name-to-IP lookup service — you give it a hostname
+            like <code>roadmap.sh</code> and it returns an IP address like <code>76.76.21.21</code>.
+            It has nothing to do with encryption (that is TLS), ordering packets (that is TCP), or
+            compressing responses (that is <code>Content-Encoding</code>). The A record maps a name
+            to an IPv4 address; the AAAA record maps it to an IPv6 address — choosing between them is
+            the only &quot;decision&quot; DNS makes.
           </>
         }
       />
 
       <Challenge
-        question="Why does HTTPS need a TLS handshake?"
+        question="Why does HTTPS need a TLS handshake before any HTTP byte is sent?"
         options={[
-          { id: "a", text: "To resolve the server's hostname." },
-          { id: "b", text: "To negotiate which HTTP version to use." },
+          { id: "a", text: "To resolve the server's hostname to an IP address." },
+          { id: "b", text: "To negotiate which HTTP version (1.1, 2, or 3) to use." },
           { id: "c", text: "To agree on encryption keys and verify the server's identity." },
-          { id: "d", text: "To skip the TCP handshake." },
+          { id: "d", text: "To replace the TCP handshake with a faster alternative." },
         ]}
         correctAnswerId="c"
         explanation={
           <>
-            <p>
-              TLS sits between TCP and HTTP in the network stack. The handshake serves two critical
-              purposes simultaneously: <strong>key agreement</strong> — using asymmetric
-              cryptography (typically elliptic-curve Diffie-Hellman), both sides independently
-              derive the same symmetric session key without ever transmitting the key itself — and{" "}
-              <strong>identity verification</strong> — the server presents a certificate signed by a
-              trusted Certificate Authority (CA), proving it genuinely owns the domain. Without
-              both, a network-adjacent attacker could read every byte you send or silently replace
-              the page you receive. Note that TLS sits on top of TCP and below HTTP, so the TCP
-              handshake still happens first; TLS cannot skip it.
-            </p>
+            TLS sits between TCP and HTTP. The handshake does two things at once: <strong>key
+            agreement</strong> — both sides derive the same symmetric session key without ever
+            transmitting it, using elliptic-curve Diffie-Hellman — and <strong>identity
+            verification</strong> — the server&apos;s certificate, signed by a trusted Certificate
+            Authority, proves it genuinely owns the domain. TLS cannot skip the TCP handshake; it
+            sits on top of it. In TLS 1.3 the cost is one extra RTT on top of TCP&apos;s RTT.
           </>
         }
       />
 
-      {/* ─────────────────────────────────────────────────────────────────────── */}
-      {/* Section 6: Key takeaways                                                */}
-      {/* ─────────────────────────────────────────────────────────────────────── */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 7: GotchaList                                                 */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      <GotchaList
+        items={[
+          {
+            title: "DNS caches are layered",
+            body: (
+              <>
+                Your browser, your OS, your home router, and your ISP each cache DNS responses. A
+                &quot;wrong&quot; result can be cached at any layer for the full TTL — when you change
+                a record, flush them all and wait, or test from a different network.
+              </>
+            ),
+          },
+          {
+            title: "TCP handshake costs an RTT before any byte of data flows",
+            body: (
+              <>
+                That&apos;s why HTTP keep-alive and HTTP/2 multiplexing exist: avoiding repeated
+                handshakes is one of the cheapest performance wins on the web. A connection reused for
+                ten resources pays the TCP RTT once; ten new connections pay it ten times.
+              </>
+            ),
+          },
+          {
+            title: "TLS doesn't skip TCP",
+            body: (
+              <>
+                TLS sits on top of TCP. The order is always TCP first, then TLS, then HTTP — there is
+                no &quot;HTTPS handshake&quot; that bypasses the TCP one. HTTP/3 replaces TCP with
+                QUIC (UDP-based), which folds the transport and TLS handshakes together — but that is
+                a special case, not the norm you will debug.
+              </>
+            ),
+          },
+          {
+            title: "HTTPS isn't end-to-end secrecy past the load balancer",
+            body: (
+              <>
+                The TLS connection terminates at whatever first server you hit — usually a load
+                balancer or CDN edge. From there, traffic to your application server depends on the
+                operator&apos;s internal-network design. HTTPS doesn&apos;t guarantee anything past
+                that point; end-to-end security is the operator&apos;s responsibility beyond the edge.
+              </>
+            ),
+          },
+        ]}
+      />
+
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 8: KeyTakeaways                                               */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
       <KeyTakeaways
-        points={takeawayPoints}
-        mentalModel={mentalModel}
+        points={[
+          <>
+            DNS is a phonebook: it translates human-readable names like <code>roadmap.sh</code> into
+            IP addresses the network can route. The A record maps to IPv4; the AAAA record maps to
+            IPv6.
+          </>,
+          <>
+            TCP guarantees ordered, reliable delivery via a three-way handshake (SYN, SYN-ACK, ACK)
+            — every connection costs at least one round-trip before any data flows.
+          </>,
+          <>
+            TLS sits between TCP and HTTP: it both encrypts the payload and verifies the server&apos;s
+            identity via a CA-signed certificate, adding one extra RTT on top of the TCP RTT.
+          </>,
+          <>
+            HTTP is the application-layer letter — methods, headers, and bodies — and the same
+            semantics work over HTTP/1.1, HTTP/2, and HTTP/3.
+          </>,
+          <>
+            Knowing which layer is misbehaving turns &quot;it&apos;s broken&quot; into a specific,
+            fixable diagnosis: DNS timeout, TCP connection refused, TLS certificate error, or HTTP 502.
+          </>,
+        ]}
+        mentalModel="The internet is a layered postal service: DNS finds the address, TCP delivers reliably, HTTPS seals the envelope, HTTP is the letter inside."
       />
     </div>
   );
