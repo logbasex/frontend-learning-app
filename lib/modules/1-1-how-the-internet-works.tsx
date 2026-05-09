@@ -239,16 +239,11 @@ document.getElementById('btn-ip').addEventListener('click', () => {
               In those 200 milliseconds your browser ran a <strong>DNS lookup</strong> to translate
               the hostname into an IP address, a <strong>TCP handshake</strong> to open a reliable
               connection, a <strong>TLS handshake</strong> to negotiate encryption and verify the
-              server&apos;s identity, an <strong>HTTP request</strong> to ask for the page, and
-              finally a <strong>render pipeline</strong> to turn the bytes into the visual you see.
-              Each layer exists because the one below it couldn&apos;t do the job alone — DNS because
-              humans remember names, not numbers; TCP because real networks drop and reorder packets;
-              TLS because any router in between could read your traffic without it; HTTP because both
-              sides need a common language for &quot;give me this resource.&quot;
-            </p>
-            <p>
-              This module is the layered map of those 200 milliseconds. By the end, when a site
-              won&apos;t load, you&apos;ll know which layer to interrogate first.
+              server&apos;s identity, an <strong>HTTP request</strong> to ask for the page, and a
+              <strong> render pipeline</strong> to turn the bytes into the visual you see. Each
+              layer exists because the one below it couldn&apos;t do the job alone. This module is
+              the layered map of those 200 milliseconds — by the end, when a site won&apos;t load,
+              you&apos;ll know which layer to interrogate first.
             </p>
           </div>
           <div className="mt-4">
@@ -357,12 +352,11 @@ document.getElementById('btn-ip').addEventListener('click', () => {
         correctAnswerId="c"
         explanation={
           <>
-            TLS sits between TCP and HTTP. The handshake does two things at once: <strong>key
-            agreement</strong> — both sides derive the same symmetric session key without ever
-            transmitting it, using elliptic-curve Diffie-Hellman — and <strong>identity
-            verification</strong> — the server&apos;s certificate, signed by a trusted Certificate
-            Authority, proves it genuinely owns the domain. TLS cannot skip the TCP handshake; it
-            sits on top of it. In TLS 1.3 the cost is one extra RTT on top of TCP&apos;s RTT.
+            TLS sits between TCP and HTTP. The handshake does two things at once:
+            <strong> key agreement</strong> — both sides derive the same symmetric session key
+            without ever transmitting it — and <strong>identity verification</strong>: the
+            server&apos;s certificate, signed by a trusted Certificate Authority, proves it
+            genuinely owns the domain. TLS cannot skip the TCP handshake; it sits on top of it.
           </>
         }
       />
