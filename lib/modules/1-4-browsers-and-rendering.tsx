@@ -297,6 +297,82 @@ document.getElementById('btn-clear').addEventListener('click', () => {
   setLog('Stage cleared.');
 });`;
 
+  // Playground 4a — blocking <script> in <head> (no defer)
+  const blockingHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Blocking script demo</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/script.js"></script>
+</head>
+<body>
+  <h1>Page content</h1>
+  <p>If you see this immediately, parsing was <strong>not</strong> blocked.</p>
+  <p>If there was a ~1.5 s blank iframe before this appeared, parsing <strong>was</strong> blocked by the script in &lt;head&gt;.</p>
+</body>
+</html>`;
+
+  const blockingCss = `body {
+  font-family: system-ui, sans-serif;
+  max-width: 600px;
+  margin: 24px auto;
+  padding: 0 16px;
+  color: #1e293b;
+}
+h1 { font-size: 1.4rem; margin-bottom: 8px; color: #dc2626; }
+p  { font-size: 0.9rem; color: #475569; margin-bottom: 6px; }`;
+
+  const blockingJs = `// Try this: open DevTools → Network. Watch when the <h1> appears relative to
+// when /heavy.js finishes loading. In playground A (no defer), the <h1>
+// only renders after the script completes — that is parsing being blocked.
+// In playground B (defer), the <h1> appears immediately and the script
+// runs after parsing — that is the difference defer makes.
+
+const start = Date.now();
+while (Date.now() - start < 1500) {
+  // synchronous busy-wait; demonstrates how a long-running script blocks parsing
+}
+console.log("heavy.js finished after " + (Date.now() - start) + "ms");`;
+
+  // Playground 4b — deferred <script> in <head> (with defer)
+  const deferHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Deferred script demo</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/script.js" defer></script>
+</head>
+<body>
+  <h1>Page content</h1>
+  <p>If you see this immediately, parsing was <strong>not</strong> blocked.</p>
+  <p>The same busy-wait script runs after parsing finishes — open the console to see when it logs.</p>
+</body>
+</html>`;
+
+  const deferCss = `body {
+  font-family: system-ui, sans-serif;
+  max-width: 600px;
+  margin: 24px auto;
+  padding: 0 16px;
+  color: #1e293b;
+}
+h1 { font-size: 1.4rem; margin-bottom: 8px; color: #16a34a; }
+p  { font-size: 0.9rem; color: #475569; margin-bottom: 6px; }`;
+
+  const deferJs = `// Try this: open DevTools → Network. Watch when the <h1> appears relative to
+// when /heavy.js finishes loading. In playground A (no defer), the <h1>
+// only renders after the script completes — that is parsing being blocked.
+// In playground B (defer), the <h1> appears immediately and the script
+// runs after parsing — that is the difference defer makes.
+
+const start = Date.now();
+while (Date.now() - start < 1500) {
+  // synchronous busy-wait; demonstrates how a long-running script blocks parsing
+}
+console.log("heavy.js finished after " + (Date.now() - start) + "ms");`;
+
   return (
     <div className="space-y-8">
 
@@ -377,7 +453,7 @@ document.getElementById('btn-clear').addEventListener('click', () => {
       />
 
       {/* ──────────────────────────────────────────────────────────────────── */}
-      {/* Section 4: Live playground                                            */}
+      {/* Section 4: Playgrounds                                               */}
       {/* ──────────────────────────────────────────────────────────────────── */}
       <HTMLPlayground
         html={playgroundHtml}
@@ -385,6 +461,27 @@ document.getElementById('btn-clear').addEventListener('click', () => {
         js={playgroundJs}
         title="Rendering pipeline cost demo"
         description="Add boxes, toggle their width, and animate with transform. The log tells you which pipeline stages each operation triggers."
+      />
+
+      <p className="text-sm text-slate-600 dark:text-slate-400">
+        Below: the same busy-wait script in two configurations. Watch when the page content appears
+        relative to when the script finishes — that gap is parsing being blocked (or not).
+      </p>
+
+      <HTMLPlayground
+        html={blockingHtml}
+        css={blockingCss}
+        js={blockingJs}
+        title="Playground A: blocking script in <head> (no defer)"
+        description="The script tag has no defer attribute. The HTML parser halts at the <script> tag, fetches and executes the script (~1.5 s busy-wait), then resumes parsing the <body>. The page content does not appear until the script finishes."
+      />
+
+      <HTMLPlayground
+        html={deferHtml}
+        css={deferCss}
+        js={deferJs}
+        title="Playground B: same script, defer"
+        description="Adding defer tells the browser to download the script in parallel and execute it only after the HTML is fully parsed. The page content appears immediately; check the console to see when the script actually runs."
       />
 
       {/* ──────────────────────────────────────────────────────────────────── */}
