@@ -121,7 +121,7 @@ export function Challenge(props: ChallengeProps) {
             className="w-full"
             size="lg"
           >
-            Kiểm tra đáp án
+            Check answer
           </Button>
         )}
 
@@ -133,12 +133,12 @@ export function Challenge(props: ChallengeProps) {
               {isCorrect ? (
                 <Badge className="bg-green-500 hover:bg-green-600 text-lg py-2 px-4">
                   <CheckCircle2 className="w-5 h-5 mr-2" />
-                  Chính xác! 🎉
+                  Correct! 🎉
                 </Badge>
               ) : (
                 <Badge className="bg-red-500 hover:bg-red-600 text-lg py-2 px-4">
                   <XCircle className="w-5 h-5 mr-2" />
-                  Chưa đúng, thử lại nhé!
+                  Not quite — try again.
                 </Badge>
               )}
             </div>
@@ -146,14 +146,14 @@ export function Challenge(props: ChallengeProps) {
             {/* Explanation */}
             <div className="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
               <p className="font-semibold mb-2 text-blue-600 dark:text-blue-400">
-                💡 Giải thích:
+                💡 Explanation:
               </p>
               <p className="text-slate-700 dark:text-slate-300">{explanation}</p>
             </div>
 
             {/* Reset Button */}
             <Button onClick={handleReset} variant="outline" className="w-full">
-              Thử lại
+              Try again
             </Button>
           </div>
         )}

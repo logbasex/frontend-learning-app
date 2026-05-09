@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint && node scripts/check-no-vietnamese.mjs",
+    "lint:lang": "node scripts/check-no-vietnamese.mjs"
   },
   "dependencies": {
     "@codesandbox/sandpack-react": "^2.20.0",

@@ -194,7 +194,7 @@ export function BrowserRenderingPipeline() {
       initialNodes={nodes}
       initialEdges={edges}
       title="Browser Rendering Pipeline"
-      description="Quá trình browser xử lý HTML và CSS để hiển thị trang web"
+      description="How the browser turns HTML and CSS into pixels on screen"
       height={350}
       interactive={false}
     />
@@ -296,7 +296,7 @@ export function VirtualDOMFlow() {
       initialNodes={nodes}
       initialEdges={edges}
       title="Virtual DOM Reconciliation"
-      description="React's Virtual DOM diffing algorithm - chỉ update những phần thay đổi"
+      description="React's Virtual DOM diffing algorithm — only the changed parts hit the real DOM"
       height={350}
       interactive={false}
     />
@@ -413,7 +413,7 @@ export function ComponentTree() {
       initialNodes={nodes}
       initialEdges={edges}
       title="React Component Tree"
-      description="Component composition - Props flow từ trên xuống (unidirectional)"
+      description="Component composition — props flow top-down (unidirectional)"
       height={400}
       interactive={true}
     />
