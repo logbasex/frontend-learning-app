@@ -1,7 +1,13 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, extname } from "node:path";
 
-const VN_RE = /[àáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵđÀÁẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÈÉẺẼẸÊẾỀỂỄỆÌÍỈĨỊÒÓỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÙÚỦŨỤƯỨỪỬỮỰỲÝỶỸỴĐ]/;
+// Vietnamese-specific characters: the U+1E00–U+1EFF Latin Extended Additional block
+// (precomposed letter + tone-mark combinations only Vietnamese uses), plus đ/Đ and the
+// horned vowels ơ/Ơ/ư/Ư. Excludes basic-Latin diacritics (é, à, â, etc.) that appear in
+// legitimate English-adjacent words like "Pokémon" or "café".
+//
+// Limitation: matches NFC-normalized text. NFD-saved files (rare) would slip through.
+const VN_RE = /[ảạăắằẳẵặấầẩẫậẻẽẹếềểễệỉĩịỏõọốồổỗộơớờởỡợủũụưứừửữựỳỷỹỵđẢẠĂẮẰẲẴẶẤẦẨẪẬẺẼẸẾỀỂỄỆỈĨỊỎÕỌỐỒỔỖỘƠỚỜỞỠỢỦŨỤƯỨỪỬỮỰỲỶỸỴĐ]/;
 const ROOTS = ["components", "lib", "app"];
 const EXTS = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".md"]);
 
