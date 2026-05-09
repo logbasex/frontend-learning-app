@@ -1,12 +1,20 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, extname } from "node:path";
 
-// Vietnamese-specific characters: the U+1E00–U+1EFF Latin Extended Additional block
-// (precomposed letter + tone-mark combinations only Vietnamese uses), plus đ/Đ and the
-// horned vowels ơ/Ơ/ư/Ư. Excludes basic-Latin diacritics (é, à, â, etc.) that appear in
-// legitimate English-adjacent words like "Pokémon" or "café".
+// Vietnamese-specific characters. Three groups:
+//   1. The U+1E00–U+1EFF Latin Extended Additional block characters that Vietnamese uses
+//      (precomposed letter + tone-mark combinations: ạ ả ấ ầ ẩ ẫ ậ ắ ằ ẳ ẵ ặ etc.).
+//      Other orthographies use parts of this block too, but the Vietnamese subset here
+//      doesn't appear in English content.
+//   2. Vietnamese letters outside that block: ă/Ă, ĩ/Ĩ, ũ/Ũ, õ/Õ, ơ/Ơ, ư/Ư, đ/Đ.
+//      õ/Õ stays in despite being Latin-1 Supplement because `võ` (martial arts) is
+//      a real Vietnamese word; the Portuguese false-positive risk is from ã, not õ.
+//   3. Excluded: basic-Latin diacritics é à â ã è ê ì í ò ó ô ù ú ý (and uppercase),
+//      because they show up in legitimate English-adjacent words like Pokémon, café,
+//      résumé, façade, naïve.
 //
-// Limitation: matches NFC-normalized text. NFD-saved files (rare) would slip through.
+// Limitation: matches NFC-normalized text only. NFD-saved files (combining marks
+// applied to base letters) would slip through. NFD-saved .tsx is rare in practice.
 const VN_RE = /[ảạăắằẳẵặấầẩẫậẻẽẹếềểễệỉĩịỏõọốồổỗộơớờởỡợủũụưứừửữựỳỷỹỵđẢẠĂẮẰẲẴẶẤẦẨẪẬẺẼẸẾỀỂỄỆỈĨỊỎÕỌỐỒỔỖỘƠỚỜỞỠỢỦŨỤƯỨỪỬỮỰỲỶỸỴĐ]/;
 const ROOTS = ["components", "lib", "app"];
 const EXTS = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".md"]);
