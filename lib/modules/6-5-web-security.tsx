@@ -86,7 +86,7 @@ HTTP/1.1 200 OK
       code: `// XSS sink — never do this with user input
 function showComment(comment) {
   // Dangerous: treats comment as HTML markup
-  el.innerH_TML = comment; // (note: actual code uses innerHTML — see playground)
+  el.innerHTML = comment;
 }
 
 // Attacker submits: <img src=x onerror="fetch('/steal?c='+document.cookie)">
@@ -102,7 +102,7 @@ function showCommentSafe(comment) {
 import DOMPurify from "dompurify";
 function showCommentRich(comment) {
   // Only safe because DOMPurify strips executable content before insertion
-  el.innerH_TML = DOMPurify.sanitize(comment);
+  el.innerHTML = DOMPurify.sanitize(comment);
 }`,
     },
     {
@@ -208,15 +208,9 @@ $ npm info some-package dist.integrity dist.tarball
     },
   ];
 
-  // innerHTML appears only inside string literals — these are Sandpack iframe payloads,
-  // never executed by the host page. The security hook flagged the identifier; the code
-  // below uses a variable to hold the property name so the hook does not trigger on a
-  // string literal that is never evaluated by the host runtime.
-  const innerHTMLProp = "innerHTML";
-
   const xssSinkOldCode = `// XSS-vulnerable — the sink
 function showComment(comment) {
-  document.getElementById("box").${innerHTMLProp} = comment;
+  document.getElementById("box").innerHTML = comment;
   // <img src=x onerror="fetch('/exfiltrate?c=' + document.cookie)"> in comment
   // → attacker code runs in your origin, reads your session.
 }`;
@@ -230,12 +224,8 @@ function showComment(comment) {
 // If you genuinely need HTML, sanitize at the boundary:
 import DOMPurify from "dompurify";
 function showCommentRich(comment) {
-  document.getElementById("box").${innerHTMLProp} = DOMPurify.sanitize(comment);
+  document.getElementById("box").innerHTML = DOMPurify.sanitize(comment);
 }`;
-
-  // Playground JS: uses template interpolation so the word "innerHTML" only appears
-  // inside the Sandpack iframe bundle, not as a bare identifier in the host module.
-  const innerH = "inner" + "HTML";
   const playgroundHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -361,7 +351,7 @@ h2 { margin-bottom: 4px; font-size: 1.1rem; }
 document.getElementById("unsafe-btn").addEventListener("click", () => {
   const input = document.getElementById("unsafe-input").value;
   // innerHTML parses the string as HTML and executes embedded events/scripts.
-  document.getElementById("unsafe-output")["${innerH}"] = input;
+  document.getElementById("unsafe-output").innerHTML = input;
 });
 
 document.getElementById("safe-btn").addEventListener("click", () => {
