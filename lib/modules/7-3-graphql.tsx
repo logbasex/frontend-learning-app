@@ -571,13 +571,14 @@ buildPanel('response-panel', RESPONSE_LINES);
             ),
           },
           {
-            title: "GraphQL plus REST gateways is increasingly common",
+            title: "A GraphQL layer over REST microservices doubles your maintenance surface",
             body: (
               <>
-                The back-end pendulum swings; many teams build a GraphQL layer over REST
-                microservices. You get the client-query flexibility and normalized cache without
-                rewriting every service. The tradeoff is an extra network hop and the overhead of
-                maintaining the gateway schema alongside the underlying REST contracts.
+                The "gateway" pattern — GraphQL in front of existing REST services — looks like a
+                free upgrade: you keep the services and add a query layer. In practice you now
+                maintain two schemas (REST contracts plus the gateway types), pay an extra
+                network hop, and any REST change must be reflected in the gateway before clients
+                see it. Worth it for cross-team aggregation; rarely worth it inside one service.
               </>
             ),
           },

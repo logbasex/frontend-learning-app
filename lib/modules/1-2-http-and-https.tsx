@@ -315,10 +315,12 @@ document.getElementById('btn-delete').addEventListener('click', () => {
         <CardContent className="pt-6">
           <div className="prose dark:prose-invert max-w-none">
             <p>
-              Every API call you have ever made, every page that has ever loaded, every form that
-              has ever submitted — all of it is the same three-act conversation. Method, path,
-              headers, body. Method, path, headers, body. A few hundred billion times a day. The
-              words change; the shape never does.
+              You click Submit on a login form. The page sits there. No spinner, no error, no
+              redirect — just silence. Open DevTools → Network and you find a request you sent
+              with no response, or a 401 you never surfaced, or a 500 the server never logged.
+              Every API call, every page load, every form submit is the same three-act conversation
+              underneath: method, path, headers, body. Once you can read it, the silence tells you
+              exactly what went wrong.
             </p>
             <p>
               By the end of this module you will be able to read a raw HTTP exchange and know
