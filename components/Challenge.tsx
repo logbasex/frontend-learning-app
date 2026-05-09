@@ -28,7 +28,7 @@ export type ChallengeProps = {
 );
 
 export function Challenge(props: ChallengeProps) {
-  const { question, explanation, type = "single", title } = props;
+  const { question, explanation, title } = props;
 
   const options: ChallengeOption[] = props.answers
     ? props.answers.map(({ id, text }) => ({ id, text }))

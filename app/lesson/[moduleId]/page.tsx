@@ -9,14 +9,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, ArrowRight, Home, Check, BookMarked, Clock } from "lucide-react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 export default function LessonPage() {
   const params = useParams();
   const router = useRouter();
   const moduleId = params.moduleId as string;
 
-  const module = getModuleById(moduleId);
+  const moduleData = getModuleById(moduleId);
   const nextModule = getNextModule(moduleId);
   const previousModule = getPreviousModule(moduleId);
 
@@ -26,8 +26,7 @@ export default function LessonPage() {
   const isCompleted = completedModules.includes(moduleId);
   const isBookmarked = bookmarkedModules.includes(moduleId);
 
-  // Get module content component
-  const ModuleContentComponent = getModuleContent(moduleId);
+  const moduleContent = getModuleContent(moduleId);
 
   useEffect(() => {
     if (moduleId) {
@@ -35,7 +34,7 @@ export default function LessonPage() {
     }
   }, [moduleId, setCurrentModule]);
 
-  if (!module) {
+  if (!moduleData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Card>
@@ -97,22 +96,22 @@ export default function LessonPage() {
           <CardContent className="pt-6">
             <div className="mb-4">
               <Badge variant="secondary" className="mb-3">
-                Phase {module.phase}
+                Phase {moduleData.phase}
               </Badge>
-              <h1 className="text-4xl font-bold mb-3">{module.title}</h1>
+              <h1 className="text-4xl font-bold mb-3">{moduleData.title}</h1>
               <p className="text-lg text-slate-600 dark:text-slate-400 mb-4">
-                {module.description}
+                {moduleData.description}
               </p>
               <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-slate-400">
                 <div className="flex items-center gap-1">
                   <Clock className="w-4 h-4" />
-                  {module.duration}
+                  {moduleData.duration}
                 </div>
                 <div className="flex gap-1">
-                  {module.hasInteractiveDemo && <Badge variant="outline" className="text-xs">Live Code</Badge>}
-                  {module.hasDiagram && <Badge variant="outline" className="text-xs">Diagram</Badge>}
-                  {module.hasChallenge && <Badge variant="outline" className="text-xs">Challenge</Badge>}
-                  {module.hasCodeComparison && <Badge variant="outline" className="text-xs">Comparison</Badge>}
+                  {moduleData.hasInteractiveDemo && <Badge variant="outline" className="text-xs">Live Code</Badge>}
+                  {moduleData.hasDiagram && <Badge variant="outline" className="text-xs">Diagram</Badge>}
+                  {moduleData.hasChallenge && <Badge variant="outline" className="text-xs">Challenge</Badge>}
+                  {moduleData.hasCodeComparison && <Badge variant="outline" className="text-xs">Comparison</Badge>}
                 </div>
               </div>
             </div>
@@ -123,7 +122,7 @@ export default function LessonPage() {
             <div className="mb-4">
               <h3 className="font-semibold mb-2">🎯 After completing this lesson you will:</h3>
               <ul className="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300">
-                {module.learningObjectives.map((objective, index) => (
+                {moduleData.learningObjectives.map((objective, index) => (
                   <li key={index}>{objective}</li>
                 ))}
               </ul>
@@ -133,7 +132,7 @@ export default function LessonPage() {
             <div>
               <h3 className="font-semibold mb-2">🧠 Mental Models:</h3>
               <div className="flex flex-wrap gap-2">
-                {module.mentalModels.map((model, index) => (
+                {moduleData.mentalModels.map((model, index) => (
                   <Badge key={index} variant="secondary">
                     {model}
                   </Badge>
@@ -144,13 +143,13 @@ export default function LessonPage() {
         </Card>
 
         {/* Dynamic Module Content */}
-        {ModuleContentComponent ? (
-          <ModuleContentComponent />
+        {moduleContent ? (
+          React.createElement(moduleContent)
         ) : (
           <Card>
             <CardContent className="pt-6 text-center py-12">
               <p className="text-lg text-slate-600 dark:text-slate-400">
-                Detailed content for <strong>{module.title}</strong> is on the way.
+                Detailed content for <strong>{moduleData.title}</strong> is on the way.
               </p>
               <p className="text-sm text-slate-500 dark:text-slate-500 mt-2">
                 See the reference module <code>1-1-how-the-internet-works</code> for the full template.

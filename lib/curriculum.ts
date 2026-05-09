@@ -903,9 +903,9 @@ export function getPreviousModule(currentModuleId: string): Module | undefined {
 }
 
 export function isModuleUnlocked(moduleId: string, completedModules: string[]): boolean {
-  const module = getModuleById(moduleId);
-  if (!module) return false;
-  return module.prerequisites.every((p) => completedModules.includes(p));
+  const m = getModuleById(moduleId);
+  if (!m) return false;
+  return m.prerequisites.every((p) => completedModules.includes(p));
 }
 
 export function getPhaseProgress(phaseId: number, completedModules: string[]): number {
