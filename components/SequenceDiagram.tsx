@@ -23,7 +23,7 @@ export function SequenceDiagram({ title, description, actors, messages }: Sequen
   const rowHeight = 56;
   const headerHeight = 60;
   const sideMargin = 40;
-  const totalWidth = sideMargin * 2 + (actors.length - 1) * colWidth;
+  const totalWidth = Math.max(sideMargin * 2 + 120, sideMargin * 2 + (actors.length - 1) * colWidth);
   const totalHeight = headerHeight + messages.length * rowHeight + 20;
 
   return (
