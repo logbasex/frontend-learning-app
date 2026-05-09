@@ -365,7 +365,7 @@ document.getElementById('lookup-btn').click();`;
               after you make a change.
             </p>
             <blockquote className="border-l-4 border-blue-500 pl-4 italic">
-              &quot;Domain &rarr; DNS &rarr; IP &rarr; Server. A CDN is the same content, geographically
+              &quot;Domain → DNS → IP → Server. A CDN is the same content, geographically
               duplicated. TTL is how long the wrong answer stays cached.&quot;
             </blockquote>
           </div>

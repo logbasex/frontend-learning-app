@@ -413,7 +413,7 @@ deps.forEach(function(dep) {
       </Card>
 
       {/* ──────────────────────────────────────────────────────────────────── */}
-      {/* Section 2: Mental model                                               */}
+      {/* Section 2: Mental model first                                          */}
       {/* ──────────────────────────────────────────────────────────────────── */}
       <Card>
         <CardContent className="pt-6">

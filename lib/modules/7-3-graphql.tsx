@@ -15,7 +15,7 @@ export function Module_7_3_Content() {
       title: "Step 1: The schema is the contract",
       description: (
         <>
-          Everything in GraphQL flows from the <strong>schema</strong> — the contract that defines
+          Everything in GraphQL flows from the <em>schema</em> — the contract that defines
           available types, queries, mutations, and subscriptions. Both client and server agree on this
           shape before any request is made. A type is just a named set of fields; a query root lists
           the top-level things a client may ask for. Once the schema is published, a tool like GraphiQL
@@ -119,7 +119,7 @@ query GetAuthorAndEditor($authorId: ID!, $editorId: ID!) {
       title: "Step 4: Resolvers — fields, not endpoints",
       description: (
         <>
-          The server has a <strong>resolver</strong> — a function that produces the value for a
+          The server has a <em>resolver</em> — a function that produces the value for a
           single field in a GraphQL query — for every field in the schema. The engine calls each
           resolver independently and assembles the results into the final response shape. This means a
           single query can transparently pull <code>user.name</code> from a user-service database and

@@ -16,7 +16,7 @@ export function Module_7_1_Content() {
       title: "Step 1: Define a Custom Element",
       description: (
         <>
-          A <strong>Custom Element</strong> is a class extending <code>HTMLElement</code> and
+          A <em>Custom Element</em> is a class extending <code>HTMLElement</code> and
           registered via <code>customElements.define()</code>. The string name you pass must contain
           a hyphen — that rule exists so the browser can distinguish your elements from future
           built-in HTML elements that might share a short name. Once registered, you use it like any
@@ -81,7 +81,7 @@ customElements.define("my-counter", MyCounter);
       title: "Step 3: Shadow DOM for style encapsulation",
       description: (
         <>
-          <strong>Shadow DOM</strong> is a subtree attached to an element whose styles and IDs are
+          <em>Shadow DOM</em> is a subtree attached to an element whose styles and IDs are
           encapsulated from the outer document. You attach one by calling{" "}
           <code>{"this.attachShadow({ mode: 'open' })"}</code> in the constructor. Styles written
           inside the shadow root do not leak out to the page, and global page styles do not leak in.
@@ -152,7 +152,7 @@ connectedCallback() {
       title: "Step 5: Slots — projecting host content into the shadow tree",
       description: (
         <>
-          A <strong>slot</strong> is a <code>&lt;slot&gt;</code> element inside a Web Component
+          A <em>slot</em> is a <code>&lt;slot&gt;</code> element inside a Web Component
           template that fills with light-DOM children projected by the host. &quot;Light DOM&quot;
           is the normal children you write between the element&apos;s opening and closing tags. The
           shadow root receives those children through its named or default slot. Named slots let you
