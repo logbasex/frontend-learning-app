@@ -10,17 +10,20 @@ import { KeyTakeaways } from "@/components/KeyTakeaways";
 import { RoadmapLink } from "@/components/RoadmapLink";
 
 export function Module_1_1_Content() {
-  // ─────────────────────────────────────────────────────────────────────────────
-  // Section 3: Step-by-step — "From URL to pixels"
-  // ─────────────────────────────────────────────────────────────────────────────
+  // Data blocks hoisted out of JSX for readability — listed in render order.
   const urlToPixelsSteps: Step[] = [
     {
       title: "Step 1: You type a URL",
-      description:
-        "Before you even press Enter the browser parses the raw string you typed into distinct components: scheme, host, port, path, query string, and fragment. " +
-        "The scheme tells the browser which protocol to use — <code>https</code> means port 443 and TLS required. " +
-        "The host is the human-readable name the network does not yet understand — that is DNS's job next. " +
-        "The path, query, and fragment travel inside the HTTP request once the connection is open.",
+      description: (
+        <>
+          Before you even press Enter the browser parses the raw string you typed into distinct
+          components: scheme, host, port, path, query string, and fragment. The scheme tells the
+          browser which protocol to use — <code>https</code> means port 443 and TLS required. The
+          host is the human-readable name the network does not yet understand — that is DNS&apos;s
+          job next. The path, query, and fragment travel inside the HTTP request once the connection
+          is open.
+        </>
+      ),
       code: `# URL: https://roadmap.sh/frontend?tab=links#projects
 #
 # Parsed components:
@@ -33,11 +36,18 @@ export function Module_1_1_Content() {
     },
     {
       title: "Step 2: DNS resolution",
-      description:
-        "The host <code>roadmap.sh</code> is a human-readable alias; the network speaks only in IP addresses. " +
-        "<em>DNS</em> — a directory that maps human-readable names to IP addresses — walks a tree of servers to find the answer: root nameservers delegate to the <code>.sh</code> TLD, which delegates to roadmap.sh&apos;s authoritative nameservers, which return the A record. " +
-        "Results are cached at every hop for as long as the TTL allows, so most real-world lookups are answered in milliseconds by your ISP&apos;s recursive resolver. " +
-        "The <code>dig +trace</code> output shows every delegation step, letting you pinpoint exactly which level failed if a site won&apos;t load.",
+      description: (
+        <>
+          The host <code>roadmap.sh</code> is a human-readable alias; the network speaks only in IP
+          addresses. <em>DNS</em> — a directory that maps human-readable names to IP addresses —
+          walks a tree of servers to find the answer: root nameservers delegate to the{" "}
+          <code>.sh</code> TLD, which delegates to roadmap.sh&apos;s authoritative nameservers,
+          which return the A record. Results are cached at every hop for as long as the TTL allows,
+          so most real-world lookups are answered in milliseconds by your ISP&apos;s recursive
+          resolver. The <code>dig +trace</code> output shows every delegation step, letting you
+          pinpoint exactly which level failed if a site won&apos;t load.
+        </>
+      ),
       code: `# Quick answer
 $ dig roadmap.sh +short
 76.76.21.21
@@ -52,11 +62,16 @@ roadmap.sh.             60 IN A  76.76.21.21
     },
     {
       title: "Step 3: TCP handshake",
-      description:
-        "<em>TCP</em> — a reliable, ordered, connection-oriented transport protocol — requires both sides to agree before any data flows. " +
-        "The three-way handshake (SYN, SYN-ACK, ACK) costs exactly one round-trip time (RTT). " +
-        "That RTT is why physical distance to the server matters: a CDN edge 10 ms away is far cheaper for the first byte than a datacenter 150 ms away. " +
-        "HTTP keep-alive and HTTP/2 multiplexing exist precisely to avoid repeating this handshake for every resource.",
+      description: (
+        <>
+          <em>TCP</em> — a reliable, ordered, connection-oriented transport protocol — requires both
+          sides to agree before any data flows. The three-way handshake (SYN, SYN-ACK, ACK) costs
+          exactly one round-trip time (RTT). That RTT is why physical distance to the server
+          matters: a CDN edge 10 ms away is far cheaper for the first byte than a datacenter 150 ms
+          away. HTTP keep-alive and HTTP/2 multiplexing exist precisely to avoid repeating this
+          handshake for every resource.
+        </>
+      ),
       code: `# TCP three-way handshake
 Client                          Server
   |                               |
@@ -69,11 +84,17 @@ Client                          Server
     },
     {
       title: "Step 4: TLS handshake (HTTPS only)",
-      description:
-        "<em>TLS</em> — a protocol layered on top of TCP that encrypts the channel and verifies the server&apos;s identity — adds one more RTT on top of TCP. " +
-        "The client sends a ClientHello listing supported cipher suites; the server replies with a certificate signed by a trusted Certificate Authority. " +
-        "In TLS 1.3 the key exchange is folded into that same round-trip, so the total cost is TCP RTT + TLS RTT before any HTTP byte flows. " +
-        "After the handshake, all traffic is encrypted with a symmetric session key neither side ever transmitted — derived via elliptic-curve Diffie-Hellman.",
+      description: (
+        <>
+          <em>TLS</em> — a protocol layered on top of TCP that encrypts the channel and verifies the
+          server&apos;s identity — adds one more RTT on top of TCP. The client sends a ClientHello
+          listing supported cipher suites; the server replies with a certificate signed by a trusted
+          Certificate Authority. In TLS 1.3 the key exchange is folded into that same round-trip,
+          so the total cost is TCP RTT + TLS RTT before any HTTP byte flows. All traffic is then
+          encrypted with a symmetric session key derived via elliptic-curve Diffie-Hellman —
+          never transmitted directly.
+        </>
+      ),
       code: `$ openssl s_client -connect roadmap.sh:443 2>&1 | head -20
 
 Protocol  : TLSv1.3
@@ -91,10 +112,16 @@ Server Temp Key: X25519, 253 bits
     },
     {
       title: "Step 5: HTTP request",
-      description:
-        "<em>HTTP</em> — the application-layer protocol for client-server requests and responses on the web — uses a simple structure: a request line naming the method and path, then headers, then an optional body. " +
-        "The <code>Host</code> header is required in HTTP/1.1 so a single IP can serve many domains (virtual hosting). " +
-        "HTTP/2 and HTTP/3 use binary framing and multiplexing under the hood, but the semantics — methods, headers, status codes — are identical to HTTP/1.1, so what you read below applies to all three.",
+      description: (
+        <>
+          <em>HTTP</em> — the application-layer protocol for client-server requests and responses on
+          the web — uses a simple structure: a request line naming the method and path, then
+          headers, then an optional body. The <code>Host</code> header is required in HTTP/1.1 so a
+          single IP can serve many domains (virtual hosting). HTTP/2 and HTTP/3 use binary framing
+          and multiplexing under the hood, but the semantics — methods, headers, status codes — are
+          identical to HTTP/1.1, so what you read below applies to all three.
+        </>
+      ),
       code: `GET /frontend HTTP/1.1
 Host: roadmap.sh
 Accept: text/html,application/xhtml+xml;q=0.9,*/*;q=0.8
@@ -106,11 +133,16 @@ Cache-Control: max-age=0`,
     },
     {
       title: "Step 6: Server response and render",
-      description:
-        "The server returns a status line (<code>200 OK</code>), response headers, and a body. " +
-        "The browser starts parsing HTML as bytes arrive — it does not wait for the complete document. " +
-        "Each external resource (CSS, JS, fonts, images) discovered while parsing triggers its own DNS/TCP/TLS/HTTP cycle, though connections are reused via keep-alive and DNS results are cached. " +
-        "Once the render tree is assembled from the DOM and CSSOM, the browser lays out geometry and paints pixels — your 200 ms are complete.",
+      description: (
+        <>
+          The server returns a status line (<code>200 OK</code>), response headers, and a body. The
+          browser starts parsing HTML as bytes arrive — it does not wait for the complete document.
+          Each external resource (CSS, JS, fonts, images) discovered while parsing triggers its own
+          DNS/TCP/TLS/HTTP cycle, though connections are reused via keep-alive and DNS results are
+          cached. Once the render tree is assembled from the DOM and CSSOM, the browser lays out
+          geometry and paints pixels — your 200 ms are complete.
+        </>
+      ),
       code: `HTTP/1.1 200 OK
 Content-Type: text/html; charset=utf-8
 Content-Encoding: gzip
@@ -132,9 +164,6 @@ ETag: "xyz789"
     },
   ];
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // Section 4: HTMLPlayground
-  // ─────────────────────────────────────────────────────────────────────────────
   const playgroundHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -219,9 +248,6 @@ document.getElementById('btn-ip').addEventListener('click', () => {
   fetchEndpoint('https://httpbin.org/ip');
 });`;
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // Render
-  // ─────────────────────────────────────────────────────────────────────────────
   return (
     <div className="space-y-8">
 
@@ -297,9 +323,7 @@ document.getElementById('btn-ip').addEventListener('click', () => {
         description="Open DevTools → Network and click the buttons. Each click is one real HTTP request over DNS + TCP + TLS."
       />
 
-      {/* ──────────────────────────────────────────────────────────────────── */}
-      {/* Section 5: Sequence diagram                                           */}
-      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Optional: Sequence diagram (DNS resolution) */}
       <SequenceDiagram
         title="DNS resolution"
         description="From browser to authoritative nameserver and back"
@@ -318,7 +342,7 @@ document.getElementById('btn-ip').addEventListener('click', () => {
       />
 
       {/* ──────────────────────────────────────────────────────────────────── */}
-      {/* Section 6: Challenges                                                 */}
+      {/* Section 5: Challenges                                                 */}
       {/* ──────────────────────────────────────────────────────────────────── */}
       <Challenge
         question="What is DNS's job in one sentence?"
@@ -362,7 +386,7 @@ document.getElementById('btn-ip').addEventListener('click', () => {
       />
 
       {/* ──────────────────────────────────────────────────────────────────── */}
-      {/* Section 7: GotchaList                                                 */}
+      {/* Section 6: GotchaList                                                 */}
       {/* ──────────────────────────────────────────────────────────────────── */}
       <GotchaList
         items={[
@@ -412,7 +436,7 @@ document.getElementById('btn-ip').addEventListener('click', () => {
       />
 
       {/* ──────────────────────────────────────────────────────────────────── */}
-      {/* Section 8: KeyTakeaways                                               */}
+      {/* Section 7: KeyTakeaways                                               */}
       {/* ──────────────────────────────────────────────────────────────────── */}
       <KeyTakeaways
         points={[

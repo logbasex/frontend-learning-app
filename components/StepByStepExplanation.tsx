@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export interface Step {
   title: string;
-  description: string;
+  description: ReactNode;
   code?: string;
   highlight?: string; // Code snippet to highlight
   visual?: React.ReactNode; // Custom visual component
