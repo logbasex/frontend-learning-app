@@ -493,7 +493,7 @@ document.getElementById('lookup-btn').click();`;
             ),
           },
           {
-            title: "Free-tier hosting limits often surface as cryptic 503s, not error pages — read the platform&apos;s status before debugging your code",
+            title: "Free-tier hosting limits often surface as cryptic 503s, not error pages — read the platform's status before debugging your code",
             body: (
               <>
                 Vercel, Netlify, and Cloudflare Pages all have generous free tiers with bandwidth or
