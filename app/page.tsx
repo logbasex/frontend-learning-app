@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Globe, Zap, Sparkles, Server, Layers, Lock, Check, BookMarked, Clock, Code2, Palette, Wrench, Boxes, Shield } from "lucide-react";
+import { Globe, Zap, Sparkles, Server, Layers, Check, BookMarked, Clock, Code2, Palette, Wrench, Boxes, Shield } from "lucide-react";
 
 const ICONS = {
   Globe,
@@ -127,26 +127,26 @@ export default function DashboardPage() {
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {phase.modules.map((module) => {
                       const isCompleted = completedModules.includes(module.id);
-                      const isUnlocked = module.prerequisites.every((prereq) =>
-                        completedModules.includes(prereq)
-                      ) || module.prerequisites.length === 0;
+                      const recommendedPrereqs = module.prerequisites.filter(
+                        (p) => !completedModules.includes(p)
+                      );
+                      const hasRecommended = recommendedPrereqs.length > 0;
 
                       return (
                         <Link
                           key={module.id}
-                          href={isUnlocked ? `/lesson/${module.id}` : "#"}
-                          className={`block ${!isUnlocked && "pointer-events-none opacity-60"}`}
+                          href={`/lesson/${module.id}`}
+                          className="block"
                         >
-                          <Card className={`h-full transition-all hover:shadow-lg ${
+                          <Card className={`h-full transition-all hover:shadow-lg hover:border-blue-300 ${
                             isCompleted ? "border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-950/20" : ""
-                          } ${!isUnlocked ? "border-slate-200 dark:border-slate-800" : "hover:border-blue-300"}`}>
+                          }`}>
                             <CardHeader>
                               <div className="flex items-start justify-between mb-2">
                                 <div className="flex-1">
                                   <CardTitle className="text-base flex items-center gap-2">
                                     {isCompleted && <Check className="w-4 h-4 text-green-600" />}
-                                    {!isUnlocked && <Lock className="w-4 h-4 text-slate-400" />}
-                                    {module.title}
+                                      {module.title}
                                   </CardTitle>
                                 </div>
                               </div>
@@ -178,15 +178,13 @@ export default function DashboardPage() {
                                 )}
                               </div>
 
-                              {isUnlocked && (
-                                <Button className="w-full mt-4" variant={isCompleted ? "secondary" : "default"}>
-                                  {isCompleted ? "Review" : "Start Learning"}
-                                </Button>
-                              )}
+                              <Button className="w-full mt-4" variant={isCompleted ? "secondary" : "default"}>
+                                {isCompleted ? "Review" : "Start Learning"}
+                              </Button>
 
-                              {!isUnlocked && (
-                                <div className="mt-4 p-2 bg-slate-100 dark:bg-slate-800 rounded text-sm text-slate-600 dark:text-slate-400 text-center">
-                                  Complete previous module to unlock
+                              {hasRecommended && !isCompleted && (
+                                <div className="mt-3 text-xs text-slate-500 dark:text-slate-400 text-center">
+                                  Recommended first: {recommendedPrereqs.length} earlier module{recommendedPrereqs.length === 1 ? "" : "s"}
                                 </div>
                               )}
                             </CardContent>

@@ -314,8 +314,8 @@ export const curriculum: Phase[] = [
       },
       {
         id: "3-4-writing-css-modern",
-        title: "Writing CSS in 2026",
-        description: "Tailwind, CSS Modules, CSS-in-JS, styled-components — pick on purpose",
+        title: "Tailwind CSS",
+        description: "Utility-first CSS, in depth — alternatives mentioned at the end",
         phase: 3,
         order: 4,
         duration: "30 mins",
@@ -498,8 +498,8 @@ export const curriculum: Phase[] = [
       },
       {
         id: "5-3-pick-a-framework",
-        title: "Pick a Framework",
-        description: "React, Vue, Angular, Svelte, Solid, Qwik — picking on purpose",
+        title: "React Fundamentals",
+        description: "Components, state, JSX, hooks — alternatives mentioned at the end",
         phase: 5,
         order: 3,
         duration: "35 mins",
@@ -578,8 +578,8 @@ export const curriculum: Phase[] = [
       },
       {
         id: "6-2-module-bundlers",
-        title: "Module Bundlers (Vite, Webpack, esbuild, Rollup, Parcel, SWC)",
-        description: "Dev servers, HMR, what bundling really means in 2026",
+        title: "Vite & the Dev Loop",
+        description: "Modern dev server + bundler in depth — alternatives mentioned at the end",
         phase: 6,
         order: 2,
         duration: "30 mins",
@@ -902,10 +902,8 @@ export function getPreviousModule(currentModuleId: string): Module | undefined {
   return all[i - 1];
 }
 
-export function isModuleUnlocked(moduleId: string, completedModules: string[]): boolean {
-  const m = getModuleById(moduleId);
-  if (!m) return false;
-  return m.prerequisites.every((p) => completedModules.includes(p));
+export function isModuleUnlocked(_moduleId: string, _completedModules: string[]): boolean {
+  return true;
 }
 
 export function getPhaseProgress(phaseId: number, completedModules: string[]): number {
