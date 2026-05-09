@@ -1,211 +1,609 @@
 "use client";
-import { ScaffoldModule } from "./_template";
+
+import { Card, CardContent } from "@/components/ui/card";
 import { HTMLPlayground } from "@/components/CodePlayground";
+import { StepByStepExplanation, Step } from "@/components/StepByStepExplanation";
+import { Challenge } from "@/components/Challenge";
+import { GotchaList } from "@/components/GotchaList";
+import { KeyTakeaways } from "@/components/KeyTakeaways";
+import { RoadmapLink } from "@/components/RoadmapLink";
 
 export function Module_2_2_Content() {
-  return (
-    <ScaffoldModule
-      emoji="📝"
-      problemTitle="The browser ships a free validator — most apps reinvent it badly"
-      problem={
+  const nativeValidationSteps: Step[] = [
+    {
+      title: "Step 1: Three ways to associate a label",
+      description: (
         <>
-          <p>
-            Validating user input before sending it to a server is one of the
-            most repeated tasks in front-end development, yet most teams reach
-            for a JavaScript library on day one and skip the validation
-            primitives that every modern browser already ships for free. The
-            result is thousands of lines of custom validation logic, inconsistent
-            error messages, and accessibility bugs that the platform would have
-            solved automatically.
-          </p>
-          <p>
-            HTML5 introduced a <strong>Constraint Validation API</strong> backed
-            by built-in attributes. <code>required</code> blocks submission when
-            an input is empty. <code>type=&quot;email&quot;</code> rejects
-            strings without an <code>@</code> and a domain. <code>pattern</code>{" "}
-            accepts a regular expression the value must fully match.{" "}
-            <code>minlength</code> and <code>maxlength</code> constrain text
-            length; <code>min</code> and <code>max</code> constrain numeric or
-            date ranges. The browser validates all of these before the{" "}
-            <code>submit</code> event fires, surfacing errors with native UI
-            that is localised and accessible out of the box.
-          </p>
-          <p>
-            Every input has a live <code>validity</code> object with boolean
-            flags like <code>valueMissing</code>, <code>typeMismatch</code>, and{" "}
-            <code>patternMismatch</code>. You can read these in JavaScript to
-            style error states or build custom messages while still delegating
-            the underlying checks to the browser. Call{" "}
-            <code>input.setCustomValidity(&quot;message&quot;)</code> to inject
-            your own message into the native constraint system without
-            re-implementing the whole pipeline.
-          </p>
-          <p>
-            Accessibility matters here too. Every <code>&lt;input&gt;</code>{" "}
-            must be paired with a <code>&lt;label&gt;</code> &mdash; either by
-            wrapping the input inside the label element, or by pointing a
-            standalone label at the input with a matching <code>htmlFor</code> /
-            <code>for</code> attribute. Without this pairing, screen readers
-            announce the input as unlabelled and assistive technology users
-            cannot tell what they are filling in. Descriptive{" "}
-            <code>aria-describedby</code> attributes link an input to an error
-            message element so screen readers announce the error automatically
-            when the field receives focus.
-          </p>
-          <p>
-            The interactive example below demonstrates a small form with an
-            email field and a numeric quantity field. Click the button to inspect
-            the browser&apos;s built-in <code>validity</code> state in real time.
-          </p>
+          A screen reader announces an <em>input</em> — an <code>&lt;input&gt;</code>,{" "}
+          <code>&lt;textarea&gt;</code>, or <code>&lt;select&gt;</code> that captures user data —
+          by reading its associated label. There are exactly three programmatic ways to create that
+          association: the canonical <code>for</code>/<code>id</code> pair, the wrapping pattern,
+          and the ARIA fallback. Visual proximity alone — placing a <code>&lt;p&gt;</code> next to an
+          input — is invisible to assistive technology and does not count. All three patterns are
+          shown below; the <code>for</code>/<code>id</code> pair is the most common.
         </>
-      }
-      body={
-        <HTMLPlayground
-          title="Native form validation"
-          description="Try submitting empty or invalid values to see browser constraints in action."
-          html={`<!DOCTYPE html>
+      ),
+      code: `<!-- 1. Canonical: for= points at input's id -->
+<label for="email">Email</label>
+<input id="email" type="email" name="email">
+
+<!-- 2. Wrapping: the label implicitly owns its child input -->
+<label>
+  Password
+  <input type="password" name="password">
+</label>
+
+<!-- 3. ARIA fallback: when no <label> element is available -->
+<span id="country-label">Country</span>
+<input type="text" aria-labelledby="country-label" name="country">`,
+    },
+    {
+      title: "Step 2: required blocks submit until filled",
+      description: (
+        <>
+          Add <code>required</code> to any <em>input</em> and the browser refuses to fire the{" "}
+          <code>submit</code> event while that field is empty. The error message — &quot;Please fill in
+          this field&quot; or a locale-specific equivalent — is generated by the browser and announced by
+          screen readers automatically. You get input presence validation, a visible tooltip, and an
+          accessible announcement for free, without a single line of JavaScript. Note that the field
+          starts in an invalid state on first load: the user has not yet been given a chance to type
+          anything, which is why you should not style it red until the user has interacted with it
+          (more on that in Step 5).
+        </>
+      ),
+      code: `<form>
+  <label for="name">Full name</label>
+  <input id="name" type="text" name="name" required>
+
+  <label for="email">Email</label>
+  <input id="email" type="email" name="email" required>
+
+  <!-- Try clicking Submit with empty fields.
+       The browser blocks the request and shows an error tooltip. -->
+  <button type="submit">Submit</button>
+</form>`,
+    },
+    {
+      title: "Step 3: type does free format validation",
+      description: (
+        <>
+          The <code>type</code> attribute does more than change the on-screen keyboard on mobile.{" "}
+          <code>type=&quot;email&quot;</code> requires an <code>@</code> and at least one dot in the
+          domain segment. <code>type=&quot;url&quot;</code> requires a scheme like{" "}
+          <code>https://</code>. <code>type=&quot;number&quot;</code> rejects non-numeric characters.{" "}
+          <code>type=&quot;tel&quot;</code> changes the keyboard layout but applies no format
+          constraint (phone numbers vary too much globally). Each of these validations runs before the
+          form submits, and each is surfaced with the browser&apos;s native error UI — no JS required.
+        </>
+      ),
+      code: `<!-- type="email": must contain @ and a domain segment -->
+<input type="email" name="email" required>
+
+<!-- type="url": must start with a scheme (https://, ftp://, etc.) -->
+<input type="url" name="website">
+
+<!-- type="number": rejects letters; min/max add range constraints -->
+<input type="number" name="age" min="18" max="120">
+
+<!-- type="tel": keyboard hint on mobile; no format constraint -->
+<input type="tel" name="phone">
+
+<!-- type="date": browser date-picker; value is always YYYY-MM-DD -->
+<input type="date" name="birthday">`,
+    },
+    {
+      title: "Step 4: pattern for regex constraints",
+      description: (
+        <>
+          When a built-in <code>type</code> is not specific enough, <code>pattern</code> accepts a
+          JavaScript regular expression the value must fully match. The regex is anchored implicitly
+          — the browser treats it as if you wrote <code>^...$</code> — so partial matches are
+          rejected. Always pair <code>pattern</code> with a <code>title</code> attribute: the
+          browser uses the <code>title</code> text as the hint inside the error tooltip, which is the
+          only way to tell users what the expected format actually is. Without <code>title</code>, the
+          error reads only &quot;Please match the requested format&quot; — unhelpful.
+        </>
+      ),
+      code: `<!-- Postal code: two uppercase letters then four digits (e.g. AB1234) -->
+<label for="postal">Postal code</label>
+<input
+  id="postal"
+  type="text"
+  name="postal"
+  pattern="[A-Z]{2}\\d{4}"
+  title="Two uppercase letters followed by four digits (e.g. AB1234)"
+  required
+>
+
+<!-- Password: at least one letter and one digit, 8–20 characters -->
+<input
+  type="password"
+  name="password"
+  pattern="(?=.*[A-Za-z])(?=.*\\d).{8,20}"
+  title="8-20 characters, at least one letter and one digit"
+  required
+>`,
+    },
+    {
+      title: "Step 5: Styling the invalid state without false alarms",
+      description: (
+        <>
+          The CSS pseudo-class <code>:invalid</code> matches any input that currently fails
+          validation — including fields the user has never touched. Styling all invalid inputs red on
+          first paint makes the form look broken before anyone has typed a character. The classic
+          fix is to pair <code>:invalid</code> with <code>:not(:placeholder-shown)</code>: the red
+          border only appears once the placeholder is gone (i.e., the user has started typing). If
+          you need only modern browsers, <code>:user-invalid</code> is cleaner — it matches only
+          after the user has actually interacted with the field.
+        </>
+      ),
+      code: `/* Avoid: turns every empty required field red on load */
+input:invalid {
+  border-color: red;
+}
+
+/* Better: only show red after the user has typed something */
+input:not(:placeholder-shown):invalid {
+  border-color: #ef4444;
+  outline-color: #ef4444;
+}
+
+/* Even better where supported: :user-invalid fires only after interaction */
+input:user-invalid {
+  border-color: #ef4444;
+}
+
+/* Green confirmation when valid */
+input:not(:placeholder-shown):valid {
+  border-color: #22c55e;
+}`,
+    },
+    {
+      title: "Step 6: Custom messages with setCustomValidity",
+      description: (
+        <>
+          Sometimes the browser&apos;s generic message — &quot;Please fill in this field&quot; — is not
+          informative enough. <code>element.setCustomValidity(&quot;message&quot;)</code> injects
+          your own text into the browser&apos;s native constraint system without replacing the whole
+          validation pipeline. One critical rule: you must call{" "}
+          <code>setCustomValidity(&quot;&quot;)</code> with an empty string to clear the error once
+          the value is valid again — if you forget this, the field stays permanently invalid even
+          after the user fixes it. The right place to clear it is in the field&apos;s{" "}
+          <code>input</code> event handler, so the error disappears as the user types.
+        </>
+      ),
+      code: `const input = document.getElementById('username');
+
+input.addEventListener('input', () => {
+  // Clear any previous custom message first
+  input.setCustomValidity('');
+
+  const value = input.value.trim();
+  if (value.length < 3) {
+    input.setCustomValidity('Username must be at least 3 characters.');
+  } else if (/\\s/.test(value)) {
+    input.setCustomValidity('Username cannot contain spaces.');
+  }
+  // If neither branch fires, validity is clear — the field is valid.
+});`,
+    },
+  ];
+
+  const playgroundHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
+  <title>Signup form</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <form id="order-form" novalidate>
-    <h2>Place an order</h2>
+  <!-- Try this: submit with empty fields — watch the browser's native error UI. Then add \`novalidate\` to <form> and watch what changes. -->
+  <form id="signup-form">
+    <h2>Create an account</h2>
 
     <div class="field">
-      <label for="email">Email address *</label>
+      <label for="email">Email address</label>
       <input
         id="email"
         type="email"
         name="email"
-        required
         placeholder="you@example.com"
-      />
-      <span class="hint" id="email-hint"></span>
+        required
+        autocomplete="email"
+      >
     </div>
 
     <div class="field">
-      <label for="qty">Quantity (1–100) *</label>
+      <label for="password">
+        Password
+        <span class="hint-text">(min 8 chars, at least one digit)</span>
+      </label>
       <input
-        id="qty"
-        type="number"
-        name="qty"
+        id="password"
+        type="password"
+        name="password"
+        placeholder="••••••••"
+        pattern="(?=.*\\d).{8,}"
+        title="At least 8 characters and one digit"
         required
-        min="1"
-        max="100"
-        placeholder="e.g. 5"
-      />
-      <span class="hint" id="qty-hint"></span>
+        autocomplete="new-password"
+      >
     </div>
 
-    <button type="submit">Submit order</button>
-    <p id="success" style="display:none;color:#16a34a;font-weight:bold">
-      ✓ Order submitted!
-    </p>
+    <div class="field">
+      <label for="confirm">Confirm password</label>
+      <input
+        id="confirm"
+        type="password"
+        name="confirm"
+        placeholder="••••••••"
+        required
+        autocomplete="new-password"
+      >
+      <span class="error-msg" id="confirm-error"></span>
+    </div>
+
+    <button type="submit">Sign up</button>
+    <p id="success-msg" style="display:none">Account created!</p>
   </form>
-
-  <section id="validity-display">
-    <h3>Live validity state</h3>
-    <pre id="validity-out">Click an input or submit to see state…</pre>
-  </section>
-
   <script src="/script.js"></script>
 </body>
-</html>`}
-          css={`* { box-sizing: border-box; }
-body { font-family: sans-serif; margin: 24px; color: #111827; background: #f9fafb; }
-h2 { font-size: 1.25rem; margin-bottom: 16px; }
-h3 { font-size: 1rem; color: #374151; margin-bottom: 8px; }
-.field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; }
-label { font-size: 0.875rem; font-weight: 600; color: #374151; }
-input { padding: 8px 12px; border: 2px solid #d1d5db; border-radius: 6px;
-        font-size: 1rem; width: 100%; max-width: 320px; }
-input:focus { outline: none; border-color: #3b82f6; }
-input:invalid.touched { border-color: #ef4444; }
-input:valid.touched { border-color: #16a34a; }
-.hint { font-size: 0.75rem; color: #ef4444; min-height: 1rem; }
-button { padding: 10px 24px; background: #2563eb; color: white;
-         border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; }
-button:hover { background: #1d4ed8; }
-#validity-display { margin-top: 24px; }
-#validity-out { background: #1e293b; color: #7dd3fc; padding: 14px;
-                border-radius: 8px; font-size: 0.8rem; white-space: pre-wrap; }`}
-          js={`function showValidity(input, hintId) {
-  const v = input.validity;
-  const hint = document.getElementById(hintId);
-  const out = document.getElementById('validity-out');
+</html>`;
 
-  const state = {
-    value: input.value,
-    valid: v.valid,
-    valueMissing: v.valueMissing,
-    typeMismatch: v.typeMismatch,
-    rangeUnderflow: v.rangeUnderflow,
-    rangeOverflow: v.rangeOverflow,
-    patternMismatch: v.patternMismatch,
-  };
-  out.textContent = JSON.stringify(state, null, 2);
+  const playgroundCss = `* { box-sizing: border-box; }
+body {
+  font-family: system-ui, sans-serif;
+  background: #f8fafc;
+  margin: 0;
+  padding: 32px 16px;
+  color: #1e293b;
+}
+h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+form {
+  background: #fff;
+  padding: 28px;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  max-width: 380px;
+  margin: 0 auto;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 18px;
+}
+label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+.hint-text {
+  font-weight: 400;
+  color: #6b7280;
+  font-size: 0.78rem;
+}
+input {
+  padding: 9px 12px;
+  border: 2px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  width: 100%;
+  transition: border-color .15s;
+}
+input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+/* Only show red AFTER the user has typed (placeholder gone) */
+input:not(:placeholder-shown):invalid {
+  border-color: #ef4444;
+}
+input:not(:placeholder-shown):valid {
+  border-color: #22c55e;
+}
+.error-msg {
+  font-size: 0.78rem;
+  color: #ef4444;
+  min-height: 1em;
+}
+button[type="submit"] {
+  width: 100%;
+  padding: 11px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+button[type="submit"]:hover { background: #1d4ed8; }
+#success-msg {
+  margin-top: 12px;
+  text-align: center;
+  color: #16a34a;
+  font-weight: 600;
+}`;
 
-  input.classList.add('touched');
-  if (!v.valid) {
-    hint.textContent = input.validationMessage;
-  } else {
-    hint.textContent = '✓ looks good';
-    hint.style.color = '#16a34a';
+  const playgroundJs = `// Cross-field validation: native attributes can't compare two fields,
+// so we use setCustomValidity for the confirm-password check.
+
+const password = document.getElementById('password');
+const confirm  = document.getElementById('confirm');
+const confirmError = document.getElementById('confirm-error');
+
+function checkMatch() {
+  confirm.setCustomValidity('');
+  confirmError.textContent = '';
+  if (confirm.value && confirm.value !== password.value) {
+    confirm.setCustomValidity('Passwords do not match.');
+    confirmError.textContent = 'Passwords do not match.';
   }
 }
 
-document.getElementById('email').addEventListener('blur', function() {
-  showValidity(this, 'email-hint');
-});
+password.addEventListener('input', checkMatch);
+confirm.addEventListener('input', checkMatch);
 
-document.getElementById('qty').addEventListener('blur', function() {
-  showValidity(this, 'qty-hint');
-});
-
-document.getElementById('order-form').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const email = document.getElementById('email');
-  const qty = document.getElementById('qty');
-  email.classList.add('touched');
-  qty.classList.add('touched');
-  showValidity(email, 'email-hint');
-  showValidity(qty, 'qty-hint');
-  if (this.checkValidity()) {
-    document.getElementById('success').style.display = 'block';
+document.getElementById('signup-form').addEventListener('submit', (e) => {
+  checkMatch(); // re-run before submit fires reportValidity
+  if (!e.target.checkValidity()) {
+    e.preventDefault();
+    return;
   }
-});`}
-        />
-      }
-      challenge={{
-        question: "Which attribute makes a browser reject an email input that contains no '@' symbol before the form submits?",
-        options: [
-          { id: "a", text: "required" },
-          { id: "b", text: "pattern=\".*@.*\"" },
-          { id: "c", text: "type=\"email\"" },
-          { id: "d", text: "minlength=\"5\"" },
-        ],
-        correctAnswerId: "c",
-        explanation: (
+  e.preventDefault();
+  document.getElementById('success-msg').style.display = 'block';
+});`;
+
+  return (
+    <div className="space-y-8">
+
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 1: Hook                                                       */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="prose dark:prose-invert max-w-none">
+            <p>
+              Most JavaScript form-validation libraries reimplement what the browser already ships,
+              badly. They add kilobytes of code to enforce &quot;field must not be empty&quot; — a constraint
+              the browser has supported natively since HTML5. Then they compound the damage: leaking
+              inaccessible focus states that trap keyboard users, half-broken error announcements
+              that screen readers either miss or read twice, and an <code>aria-invalid</code> whose
+              value nobody verified against the actual state of the field.
+            </p>
+            <p>
+              The browser ships a complete validation engine. It knows what an email address looks
+              like. It knows how to announce an error to a screen reader. It knows not to submit the
+              form until every constraint passes. By the end of this module you will know exactly
+              what that engine can do, how to reach for it first, and — critically — when the one
+              thing it cannot handle (cross-field constraints) is the right moment to write
+              JavaScript yourself.
+            </p>
+          </div>
+          <div className="mt-4">
+            <RoadmapLink url="https://roadmap.sh/frontend" />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 2: Mental model first                                         */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="prose dark:prose-invert max-w-none">
+            <p>
+              A <em>form</em> — an <code>&lt;form&gt;</code> element wrapping inputs that submit
+              data via HTTP — is not just a container. It is the browser&apos;s primary surface for
+              structured user input, and the browser has strong opinions about how it should behave.
+              Every <em>native form validation</em> attribute you add — <code>required</code>,{" "}
+              <code>pattern</code>, <code>type=&quot;email&quot;</code> — plugs into an engine that
+              already runs before your JavaScript sees the submit event. That engine is localised
+              (error messages appear in the user&apos;s language), accessible (screen readers
+              announce errors without extra ARIA), and free. The mental model is simple:
+            </p>
+            <blockquote className="border-l-4 border-blue-500 pl-4 italic">
+              &quot;The browser ships a validation engine. Use it before reaching for
+              JavaScript.&quot;
+            </blockquote>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 3: Step-by-step                                               */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      <StepByStepExplanation
+        title="Native validation, end to end"
+        description="Six building blocks, from label wiring to custom JS messages"
+        steps={nativeValidationSteps}
+      />
+
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 4: Live playground                                            */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      <HTMLPlayground
+        html={playgroundHtml}
+        css={playgroundCss}
+        js={playgroundJs}
+        title="Signup form with native + custom validation"
+        description="Submit with empty fields to see native errors. Then try mismatched passwords — that is the one place we reach for JavaScript."
+      />
+
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 5: Challenges                                                 */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      <Challenge
+        question="Which of these is not a valid label-input association?"
+        options={[
+          {
+            id: "a",
+            text: '<label for="email">Email</label> with <input id="email">',
+          },
+          {
+            id: "b",
+            text: "Wrapping: <label>Email <input></label>",
+          },
+          {
+            id: "c",
+            text: '<input aria-labelledby="email-label"> with <span id="email-label">Email</span>',
+          },
+          {
+            id: "d",
+            text: "A <label> element placed visually next to the <input> without any for, wrapping, or aria-labelledby",
+          },
+        ]}
+        correctAnswerId="d"
+        explanation={
           <>
-            Setting <code>type=&quot;email&quot;</code> activates the browser&apos;s
-            built-in email format validation, which checks for a local part, an{" "}
-            <code>@</code> symbol, and a domain segment. <code>required</code>{" "}
-            only checks that the field is non-empty; it does not validate the
-            format. A custom <code>pattern</code> would work but is redundant
-            since <code>type=&quot;email&quot;</code> already handles this more
-            thoroughly.
+            Visual proximity is invisible to screen readers — they need a programmatic{" "}
+            <em>label association</em>: connecting an <code>&lt;input&gt;</code> to a{" "}
+            <code>&lt;label&gt;</code> via <code>for</code>/<code>id</code>, wrapping, or{" "}
+            <code>aria-labelledby</code> so assistive technology can announce the field&apos;s name.
+            Option (a) is the canonical pattern; (b) wraps the input inside the label creating an
+            implicit link; (c) is the ARIA fallback when no <code>&lt;label&gt;</code> element is
+            available. A label that is merely close to its input — no attribute link at all — looks
+            right to sighted users and is completely broken for screen-reader users.
           </>
-        ),
-      }}
-      takeaways={[
-        <>Use built-in attributes (required, type, min, max, pattern, minlength) to get free, accessible browser validation before writing any JavaScript.</>,
-        <>Always pair every input with a label using htmlFor / for, or by wrapping &mdash; unlabelled inputs are invisible to screen readers.</>,
-        <>Read the input.validity object in JS for fine-grained error messages without re-implementing the validation logic yourself.</>,
-      ]}
-      mentalModel="The browser&apos;s constraint validator is a free co-pilot &mdash; use it first, then layer JavaScript only for the edge cases it can&apos;t handle."
-      roadmapUrl="https://roadmap.sh/frontend"
-    />
+        }
+      />
+
+      <Challenge
+        question="When should you reach for JavaScript validation over native?"
+        options={[
+          {
+            id: "a",
+            text: "When you need to enforce that an email field is non-empty.",
+          },
+          {
+            id: "b",
+            text: "When the form must work without JavaScript enabled.",
+          },
+          {
+            id: "c",
+            text: "When you need cross-field constraints (e.g., password and confirm-password must match).",
+          },
+          {
+            id: "d",
+            text: "When you want a custom-styled error tooltip that always appears below the field.",
+          },
+        ]}
+        correctAnswerId="c"
+        explanation={
+          <>
+            Native validation handles per-field rules perfectly, but it has no built-in mechanism to
+            compare two fields against each other. Cross-field constraints — password confirmation,
+            &quot;end date after start date,&quot; &quot;at least one checkbox checked&quot; — are
+            exactly where you reach for <code>setCustomValidity</code> or a custom JS check before
+            the form submits. Option (a) is just <code>required</code>; option (b) describes when
+            server-side validation is needed, not a JS library; option (d) is solvable with{" "}
+            <code>:invalid</code> CSS styling without any JavaScript.
+          </>
+        }
+      />
+
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 6: GotchaList                                                 */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      <GotchaList
+        items={[
+          {
+            title:
+              "`required` only blocks submit — the field starts in a 'pristine invalid' state until the user touches it",
+            body: (
+              <>
+                The moment the page loads, an empty <code>required</code> field is already
+                technically invalid. The browser knows this, so <code>:invalid</code> matches it
+                immediately. That means a red border on load if you naively style{" "}
+                <code>input:invalid</code>. Guard against it with{" "}
+                <code>:not(:placeholder-shown)</code> or use <code>:user-invalid</code> (where
+                supported), which only fires after the user has interacted.
+              </>
+            ),
+          },
+          {
+            title: "`type=email` accepts `a@b` (no TLD required)",
+            body: (
+              <>
+                The HTML spec intentionally does not require a top-level domain. The string{" "}
+                <code>a@b</code> is a valid email per the spec, so the browser accepts it.
+                Real-world &quot;valid email&quot; checks almost always need a server-side uniqueness
+                verification anyway — use <code>type=&quot;email&quot;</code> to catch obvious
+                typos, not as a guarantee that the address is deliverable.
+              </>
+            ),
+          },
+          {
+            title:
+              "`:invalid` matches before any user input — pair with `:placeholder-shown` or use `:user-invalid` (where supported)",
+            body: (
+              <>
+                This is the same root cause as the <code>required</code> gotcha above, but it
+                affects every constrained input, not just required ones. The fix is the same:{" "}
+                <code>input:not(:placeholder-shown):invalid</code> suppresses styling until the
+                user has typed. Note that if you leave the <code>placeholder</code> attribute off
+                entirely, the <code>:placeholder-shown</code> trick does not work —{" "}
+                <code>:user-invalid</code> is the cleaner long-term solution.
+              </>
+            ),
+          },
+          {
+            title:
+              "`<input type=number>` discards values like `1.5e10` if the user types scientific notation in some locales",
+            body: (
+              <>
+                The browser&apos;s number input parses values according to the HTML spec, which
+                accepts <code>1.5e10</code> in source code but may not parse it from the text box
+                in all locale/browser combinations. If you need scientific notation input, use{" "}
+                <code>type=&quot;text&quot;</code> with a <code>pattern</code> and parse the number
+                yourself. Also note: <code>input.value</code> for a number input is always a string
+                — call <code>Number(input.value)</code> or <code>parseFloat</code> before doing
+                arithmetic.
+              </>
+            ),
+          },
+        ]}
+      />
+
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      {/* Section 7: KeyTakeaways                                               */}
+      {/* ──────────────────────────────────────────────────────────────────── */}
+      <KeyTakeaways
+        points={[
+          <>
+            The browser ships a validation engine. Use <code>required</code>, <code>type=</code>,{" "}
+            <code>pattern</code>, and <code>:invalid</code> before importing a library — you get
+            localised messages, accessible announcements, and submit blocking for free.
+          </>,
+          <>
+            <em>Label association</em> is non-negotiable. Visual proximity is invisible to assistive
+            technology — every input needs a programmatic link via <code>for</code>/<code>id</code>,
+            wrapping, or <code>aria-labelledby</code>.
+          </>,
+          <>
+            Reach for JavaScript when you need cross-field constraints (password confirmation, date
+            range checks), async server checks, or a custom UX that the native UI cannot produce.
+            Use <code>setCustomValidity</code> to plug back into the browser&apos;s engine rather
+            than bypassing it with <code>novalidate</code>.
+          </>,
+          <>
+            <code>:invalid</code> matches too eagerly — it fires on untouched fields. Pair it with{" "}
+            <code>:not(:placeholder-shown)</code> to suppress red borders on first paint, or use
+            the cleaner <code>:user-invalid</code> pseudo-class where browsers support it.
+          </>,
+          <>
+            Always call <code>setCustomValidity(&quot;&quot;)</code> (empty string) to clear a
+            custom error message once the value is valid again — failing to do so permanently
+            invalidates the field regardless of its content.
+          </>,
+        ]}
+        mentalModel="The browser ships a validation engine. Use it before reaching for JavaScript."
+      />
+    </div>
   );
 }
