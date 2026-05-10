@@ -61,7 +61,7 @@ export function CodeBlock({
               ) : (
                 <>
                   <Copy className="w-3.5 h-3.5" />
-                  <span>Copy</span>
+                  <span>Copy code</span>
                 </>
               )}
             </button>
