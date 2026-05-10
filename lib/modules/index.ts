@@ -12,6 +12,7 @@ import { Module_3_2_Content } from "./3-2-ship-it-and-version-it";
 import { Module_4_1_Content } from "./4-1-the-dom-is-a-footgun-at-scale";
 import { Module_4_2_Content } from "./4-2-types-and-the-editor-that-knows-them";
 import { Module_4_3_Content } from "./4-3-css-at-scale-collides";
+import { Module_5_1_Content } from "./5-1-routes-layouts-and-where-should-this-render";
 
 export const MODULE_CONTENTS: Record<string, React.ComponentType> = {
   "1-1-the-smallest-useful-thing": Module_1_1_Content,
@@ -25,7 +26,7 @@ export const MODULE_CONTENTS: Record<string, React.ComponentType> = {
   "4-1-the-dom-is-a-footgun-at-scale": Module_4_1_Content,
   "4-2-types-and-the-editor-that-knows-them": Module_4_2_Content,
   "4-3-css-at-scale-collides": Module_4_3_Content,
-  "5-1-routes-layouts-and-where-should-this-render": PlaceholderModuleContent,
+  "5-1-routes-layouts-and-where-should-this-render": Module_5_1_Content,
   "5-2-data-state-and-who-owns-the-truth": PlaceholderModuleContent,
   "5-3-identity-and-trust": PlaceholderModuleContent,
   "6-1-the-field-from-here": PlaceholderModuleContent,
