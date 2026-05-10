@@ -15,6 +15,16 @@ After the module the learner can:
 
 ---
 
+## Phase 0 — Orientation
+
+### `0-1-the-map`
+- [recall] Name the three lives of a modern frontend app (source, build, runtime) and one example file or artifact for each.
+- [recall] List the five stages on the architecture diagram (source → build → deploy → request → runtime) without looking.
+- [apply] Given a curriculum phase, point to which stage(s) of the diagram it teaches.
+- [judge] Identify what "modern" is adding compared to a 2010-style three-file site.
+
+---
+
 ## Phase 1 — Internet & Web Foundations
 
 ### `1-1-how-the-internet-works`
