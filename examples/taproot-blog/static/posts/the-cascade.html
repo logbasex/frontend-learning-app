@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>The cascade is the only CSS thing that matters — Taproot</title>
+  <meta name="description" content="Origin, specificity, source order. That's the whole game.">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <header><a href="/" class="brand">Taproot</a><nav><a href="/about.html">About</a></nav></header>
+  <main>
+    <article class="post-detail">
+      <div class="cover"><img src="../assets/cover-2.svg" alt=""></div>
+      <h1>The cascade is the only CSS thing that matters</h1>
+      <p class="meta">By Bob — 2026-04-15 — 6 min read</p>
+      <p>If you understand origin, specificity, and source order, you understand CSS.</p>
+      <p><strong>Origin</strong> is where the rule came from — browser default, user, or author. Author rules win, with one exception: a <code>!important</code> declaration in user CSS beats author CSS.</p>
+      <p><strong>Specificity</strong> is a four-tuple: inline styles, ID selectors, class/attribute/pseudo-class selectors, type/pseudo-element selectors. Compute each rule's tuple, compare component-wise, the higher tuple wins.</p>
+      <pre><code>/* Specificity (0,1,0) — class only */
+.button { color: blue; }
+
+/* Specificity (1,0,0) — id wins */
+#submit { color: red; }</code></pre>
+      <p><strong>Source order</strong> is the tiebreaker. When two rules have the same specificity, the one that appears later in the stylesheet wins.</p>
+      <div class="tags"><a class="tag" href="#">css</a></div>
+    </article>
+    <section class="muted-block"><strong>Comments are off in this version.</strong> The static build is read-only — no JavaScript, no server. The SPA and full-stack versions add comments.</section>
+  </main>
+  <footer><p>Taproot — a small blog by Alice and Bob.</p></footer>
+</body>
+</html>

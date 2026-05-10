@@ -256,6 +256,19 @@ Every promised area lands somewhere in the reference app:
 | Accessibility | Semantic markup, focus management on route change | 8-3 (referenced from 2-3) |
 | LCP/INP/CLS on a real page | Lighthouse run on home page | 8-3 (referenced from 7-8) |
 
+### 6.5. Pinned reference
+
+The reference app is tagged `taproot-blog-v1.0` at commit `ed27a44` in `https://github.com/logbasex/frontend-learning-app`. Capstone modules link to GitHub permalinks at this commit so module text never references moving code. **Vercel deployment is deferred** — the user will run `vercel link && vercel --prod` from `examples/taproot-blog/app/` themselves and update the modules' `BLOG_URL` references in a follow-up PR. Until then, capstone modules use the GitHub link as the canonical "live reference" and skip the live preview link.
+
+### 6.6. Implementation notes (post-build)
+
+Two deliberate departures from §5.3 / §5.4 emerged during implementation and are reflected in the shipped code:
+
+- The 8-2 playground is a prose "Try this" Card pointing the learner to the deployed/local Taproot blog and DevTools, rather than an in-page `SequenceDiagram` re-rendering. The `SequenceDiagram` still appears earlier as the optional diagram above the playground. Reading a real DevTools waterfall is the lesson; a sandboxed replica is not.
+- The 8-3 playground is a prose "Try this" Card pointing the learner to read `CommentForm.tsx` and `CommentList.tsx` on GitHub, rather than a `ReactPlayground` of a stripped post-page-with-comment-form. The boundary the lesson teaches is more legible in real source code than in a sandbox.
+
+Both substitutions are pedagogically stronger for these topics. Future authors should not feel obligated to rewrite to the original §5.3 / §5.4 shape.
+
 ## 7. Architecture changes
 
 ```

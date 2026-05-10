@@ -15,6 +15,16 @@ After the module the learner can:
 
 ---
 
+## Phase 0 — Orientation
+
+### `0-1-the-map`
+- [recall] Name the three lives of a modern frontend app (source, build, runtime) and one example file or artifact for each.
+- [recall] List the five stages on the architecture diagram (source → build → deploy → request → runtime) without looking.
+- [apply] Given a curriculum phase, point to which stage(s) of the diagram it teaches.
+- [judge] Identify what "modern" is adding compared to a 2010-style three-file site.
+
+---
+
 ## Phase 1 — Internet & Web Foundations
 
 ### `1-1-how-the-internet-works`
@@ -274,6 +284,32 @@ After the module the learner can:
 - [build] Add `loading="lazy"` to images and `preload` to a critical font.
 - [judge] Decide when to inline critical CSS vs. let it fetch.
 - [debug] Diagnose a high CLS using DevTools Performance and fix it.
+
+---
+
+## Phase 8 — Capstone (How a Modern Frontend App Works)
+
+### `8-1-the-build-pipeline`
+- [recall] State what the module graph is and how it differs in dev mode vs build mode.
+- [apply] Read a `next build` output and explain which routes share which chunks.
+- [judge] Decide between a barrel file and direct imports based on tree-shaking impact.
+- [debug] Given a "works in dev, broken in prod" report, list the three most likely build-time causes (env vars, dynamic imports, side-effect imports).
+- [build] Configure a project's env vars to split public from server-only correctly.
+
+### `8-2-the-request-lifecycle`
+- [recall] Name the eight machines a request passes through and one example of each.
+- [apply] Read a Lighthouse waterfall and identify which actor (DNS, server, network, parser, hydrator) is the bottleneck.
+- [judge] Given two routes, predict which has lower hydration cost and explain why.
+- [debug] Diagnose a "button does not work for the first second" report and name the most common cause.
+- [recall] Distinguish hydration mismatch from a normal render error.
+
+### `8-3-the-architecture-of-a-real-app`
+- [recall] Name the three flavors of state (URL, server, client) and one example of each from a real app.
+- [apply] Given a feature ("add a like button to posts"), name the three architectural decisions before writing code.
+- [judge] Choose between a server component and a client component for a given UI piece, with reasoning.
+- [debug] Spot the "fetch from your own API in a server component" antipattern and refactor it.
+- [build] Write a server action that performs a mutation, validates input with Zod, and revalidates the right paths.
+- [recall] Distinguish between authentication that runs in middleware (security) and client-side state (UX hint).
 
 ---
 

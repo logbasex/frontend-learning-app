@@ -70,7 +70,14 @@ docs/superpowers/
 scripts/
   check-no-vietnamese.mjs         # lint:lang guard — fails if any Vietnamese character appears
                                   # under components/, lib/, or app/
+
+examples/taproot-blog/            # reference app for Phase 8 capstone (separate workspace)
+  static/                         # Level 1 — hand-written HTML+CSS, no build
+  spa/                            # Level 2 — Vite + React + MSW
+  app/                            # Level 3 — Next.js + Prisma + NextAuth
 ```
+
+The `examples/taproot-blog/` directory is a separate workspace and is **not** part of the learning app's build, lint, or typecheck. It has its own CI workflow at `.github/workflows/examples-blog.yml`. The Vietnamese-character lint guard does not scan `examples/`.
 
 ## Tier-A module template
 
@@ -85,6 +92,8 @@ Every module has exactly 7 mandatory sections in this order. Authoritative refer
 7. **KeyTakeaways** — 4–6 bullets; `mentalModel` prop verbatim mirrors the §2 pull-quote.
 
 Optional sections (sequence diagram, layered flow, code comparison, alternatives card) may appear between mandatory sections; mark them with an unnumbered comment, e.g. `{/* Optional: Sequence diagram (DNS resolution) */}`.
+
+**Orientation modules (Phase 0) are an exception.** They follow a 5-section shape — Hook, Mental model, Map (a diagram), Curriculum preview, KeyTakeaways — and omit the playground and challenges, because the learner has not yet been introduced to the vocabulary the playground would exercise. This exception applies to Phase 0 only. All other modules — including Phase 8 capstone modules — follow the standard 7-section Tier-A template.
 
 ## Structural conventions (§4.1 of the spec)
 

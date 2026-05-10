@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Reference app — has its own workspace, lint, typecheck, and CI.
+    "examples/**",
+    ".worktrees/**",
   ]),
   {
     rules: {

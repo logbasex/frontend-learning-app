@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Globe, Zap, Sparkles, Server, Layers, Check, BookMarked, Clock, Code2, Palette, Wrench, Boxes, Shield } from "lucide-react";
+import { Globe, Zap, Sparkles, Server, Layers, Check, BookMarked, Clock, Code2, Palette, Wrench, Boxes, Shield, Map as MapIcon } from "lucide-react";
 
 const ICONS = {
   Globe,
@@ -20,6 +20,7 @@ const ICONS = {
   Wrench,
   Boxes,
   Shield,
+  Map: MapIcon,
 };
 
 export default function DashboardPage() {
@@ -86,9 +87,43 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
+        {/* Start here: Phase 0 orientation, surfaced above the regular grid */}
+        {curriculum
+          .filter((phase) => phase.id === 0)
+          .flatMap((phase) => phase.modules)
+          .map((orientationModule) => {
+            const isCompleted = completedModules.includes(orientationModule.id);
+            return (
+              <Card key={orientationModule.id} className="mb-8 border-violet-200 dark:border-violet-900 bg-gradient-to-br from-violet-50 to-blue-50 dark:from-violet-950 dark:to-blue-950">
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-violet-500 rounded-lg">
+                      <MapIcon className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Badge className="bg-violet-500 hover:bg-violet-600">Start here</Badge>
+                        <span className="text-xs text-slate-600 dark:text-slate-400">{orientationModule.duration}</span>
+                      </div>
+                      <h2 className="text-xl font-semibold mb-2">{orientationModule.title}</h2>
+                      <p className="text-slate-700 dark:text-slate-300 mb-4">{orientationModule.description}</p>
+                      <Link href={`/lesson/${orientationModule.id}`}>
+                        <Button variant={isCompleted ? "secondary" : "default"}>
+                          {isCompleted ? "Re-read the map" : "Read the map (10 min)"}
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+
         {/* Curriculum Phases */}
         <div className="space-y-6">
-          {curriculum.map((phase) => {
+          {curriculum
+            .filter((phase) => phase.id !== 0)
+            .map((phase) => {
             const IconComponent = ICONS[phase.icon as keyof typeof ICONS] || Globe;
             const phaseProgress = getPhaseProgress(phase.id, completedModules);
             const isPhaseComplete = phaseProgress === 100;
@@ -102,8 +137,11 @@ export default function DashboardPage() {
                         <IconComponent className="w-6 h-6 text-blue-600" />
                       </div>
                       <div>
-                        <CardTitle className="text-xl">
+                        <CardTitle className="text-xl flex items-center gap-2">
                           Phase {phase.id}: {phase.title}
+                          {phase.id === 8 && (
+                            <Badge className="bg-violet-500 hover:bg-violet-600 text-xs">Capstone</Badge>
+                          )}
                         </CardTitle>
                         <CardDescription className="mt-1">{phase.description}</CardDescription>
                       </div>

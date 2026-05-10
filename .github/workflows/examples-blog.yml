@@ -1,0 +1,74 @@
+name: examples-blog
+# Triggered only on changes to the reference app or this workflow file.
+# This workflow does NOT use any untrusted GitHub event inputs (no issue/PR
+# titles, comments, head refs, or commit messages are interpolated into shell
+# commands), so it is not exposed to workflow-injection vectors.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "examples/taproot-blog/**"
+      - ".github/workflows/examples-blog.yml"
+  pull_request:
+    paths:
+      - "examples/taproot-blog/**"
+      - ".github/workflows/examples-blog.yml"
+
+jobs:
+  spa:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: examples/taproot-blog/spa
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+          cache-dependency-path: examples/taproot-blog/spa/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+
+  app:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    defaults:
+      run:
+        working-directory: examples/taproot-blog/app
+    env:
+      DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/taproot?schema=public"
+      AUTH_SECRET: "ci-secret-not-real-but-long-enough-to-be-valid"
+      NEXTAUTH_URL: "http://localhost:3000"
+      NEXT_PUBLIC_SITE_URL: "http://localhost:3000"
+      NEXT_PUBLIC_SITE_NAME: "Taproot"
+      PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION: "ci runs against an ephemeral postgres service container; not production"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+          cache-dependency-path: examples/taproot-blog/app/package-lock.json
+      - run: npm ci
+      - run: psql "$DATABASE_URL" -c "create database taproot;" || true
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npx prisma migrate deploy
+      - run: npx tsx prisma/seed.ts
+      - run: npm run build
+      - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - run: npm run e2e

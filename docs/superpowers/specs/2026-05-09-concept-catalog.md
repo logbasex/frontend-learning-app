@@ -7,6 +7,12 @@ This catalog locks the canonical one-line definition of every term used across t
 
 Format: `Term — definition. (Owning module: <id>)`
 
+## Phase 0 — Orientation
+
+- **Source life** — The form of the app as files in the developer's editor: `.ts`, `.tsx`, `.css`, `.png`, `.env`. Not directly runnable in any browser. (Owning: `0-1`)
+- **Built life (bundle)** — The form of the app after the build step: hashed JavaScript chunks, purged CSS, optimized assets, the `.next/` or `dist/` directory. This is what the CDN serves. (Owning: `0-1`)
+- **Runtime life** — The form of the app while the user is using it: HTML in the document, JavaScript handlers attached to the DOM, requests in flight, state in React. (Owning: `0-1`)
+
 ## Phase 1 — Internet & Web Foundations
 
 - **Internet** — A global network of networks that uses the IP protocol to deliver packets between machines. (Owning: `1-1`)
@@ -217,6 +223,19 @@ Format: `Term — definition. (Owning module: <id>)`
 - **Lighthouse** — A Google tool that audits a page for performance, accessibility, SEO, and best practices. (Owning: `7-8`)
 - **PRPL** — A delivery pattern: Push critical resources, Render initial route, Pre-cache remaining routes, Lazy-load on demand. (Owning: `7-8`)
 - **RAIL** — A performance budget by interaction kind: Response < 100ms, Animation 16ms/frame, Idle 50ms chunks, Load < 1s key content. (Owning: `7-8`)
+
+## Phase 8 — Capstone (How a Modern Frontend App Works)
+
+- **Module graph** — The directed graph of all imports the bundler walks to discover what to ship; entry → imports → imports' imports → leaves. (Owning: `8-1`)
+- **Bundle** — The output of running the build: the set of files the CDN serves to a browser. Distinct from the source. (Owning: `8-1`)
+- **Chunk** — A single JavaScript file in the bundle, produced by code-splitting the module graph along route or dynamic-import boundaries. (Owning: `8-1`)
+- **Tree-shaking** — The bundler's removal of exports the module graph never reaches. Requires ESM and side-effect-free modules to work. (Owning: `8-1`)
+- **Hydration mismatch** — When the HTML produced on the server differs from what React renders on the client at hydration time. Causes a visible flash and a console error. (Owning: `8-2`)
+- **Server component** — A React component that runs only on the server (or at build time) and ships zero JavaScript to the browser. Default in the Next.js App Router. (Owning: `8-3`)
+- **Client component** — A React component opted into running in the browser via `"use client"`. Hydrated and interactive. (Owning: `8-3`)
+- **Server action** — A function annotated `"use server"` that runs on the server and is callable from the client like a remote procedure. The form-submission shape that replaces hand-written `fetch` calls. (Owning: `8-3`)
+- **Optimistic UI** — Updating the UI to reflect a user's action before the server confirms it; reconciling on response. Makes interactions feel instant at the cost of handling rollback. (Owning: `8-3`)
+- **Prefetch** — The framework fetching a route's code or data ahead of an explicit navigation, usually on hover or visibility, so the actual click resolves instantly. (Owning: `8-2`)
 
 ## Author rules
 
