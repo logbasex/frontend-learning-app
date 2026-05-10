@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Module_0_1_Content } from "./0-1-the-map";
 import { Module_1_1_Content } from "./1-1-how-the-internet-works";
 import { Module_1_2_Content } from "./1-2-http-and-https";
 import { Module_1_3_Content } from "./1-3-domain-dns-hosting";
@@ -35,6 +36,7 @@ import { Module_7_7_Content } from "./7-7-desktop-apps";
 import { Module_7_8_Content } from "./7-8-performance";
 
 export const MODULE_CONTENTS: Record<string, React.ComponentType> = {
+  "0-1-the-map": Module_0_1_Content,
   "1-1-how-the-internet-works": Module_1_1_Content,
   "1-2-http-and-https": Module_1_2_Content,
   "1-3-domain-dns-hosting": Module_1_3_Content,
