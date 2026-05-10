@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { getAllModules } from './curriculum';
 
 export interface ProgressState {
   completedModules: string[];
@@ -80,7 +81,7 @@ export const useProgress = create<ProgressState>()(
         }),
     }),
     {
-      name: 'frontend-learning-progress',
+      name: 'frontend-learning-progress-v2',
       storage: createJSONStorage(() => localStorage),
     }
   )
@@ -88,8 +89,8 @@ export const useProgress = create<ProgressState>()(
 
 export function useProgressStats() {
   const completedModules = useProgress((state) => state.completedModules);
-  const totalModules = 30;
+  const totalModules = getAllModules().length;
   const completedCount = completedModules.length;
-  const progressPercentage = Math.round((completedCount / totalModules) * 100);
+  const progressPercentage = totalModules === 0 ? 0 : Math.round((completedCount / totalModules) * 100);
   return { completedCount, totalModules, progressPercentage };
 }
