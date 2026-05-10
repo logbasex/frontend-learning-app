@@ -17,11 +17,12 @@ export function Module_0_1_Content() {
     { label: "Runtime", detail: "Components → state → fetch → re-render → navigation", color: "rose" },
   ];
 
-  const beforeAfter = {
+  const codeComparison = {
     title: "What 'modern' is adding",
-    leftTitle: "2010 frontend",
-    rightTitle: "2026 frontend",
-    leftCode: `<!-- index.html -->
+    oldCode: {
+      title: "2010 frontend",
+      language: "html" as const,
+      code: `<!-- index.html -->
 <!doctype html>
 <html>
   <head>
@@ -35,7 +36,11 @@ export function Module_0_1_Content() {
 
 <!-- That's it. Three files, no build,
      served as-is from a single server. -->`,
-    rightCode: `// You write this:
+    },
+    newCode: {
+      title: "2026 frontend",
+      language: "tsx" as const,
+      code: `// You write this:
 // app/page.tsx
 export default async function Home() {
   const posts = await db.post.findMany();
@@ -52,6 +57,7 @@ export default async function Home() {
 // All of which is built, bundled,
 // deployed, and stitched together
 // by the framework you chose.`,
+    },
   };
 
   const phasePreviews = [
@@ -111,17 +117,9 @@ export default async function Home() {
 
       {/* Optional: Before/after — what 'modern' is adding */}
       <CodeComparison
-        title={beforeAfter.title}
-        oldCode={{
-          title: beforeAfter.leftTitle,
-          code: beforeAfter.leftCode,
-          language: "html",
-        }}
-        newCode={{
-          title: beforeAfter.rightTitle,
-          code: beforeAfter.rightCode,
-          language: "tsx",
-        }}
+        title={codeComparison.title}
+        oldCode={codeComparison.oldCode}
+        newCode={codeComparison.newCode}
       />
 
       {/* 4. Curriculum preview */}
@@ -151,7 +149,9 @@ export default async function Home() {
               </li>
             ))}
           </ul>
-          <RoadmapLink url="https://roadmap.sh/frontend" />
+          <div className="mt-4">
+            <RoadmapLink url="https://roadmap.sh/frontend" />
+          </div>
         </CardContent>
       </Card>
 
