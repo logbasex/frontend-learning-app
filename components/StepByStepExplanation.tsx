@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -58,18 +58,13 @@ export function StepByStepExplanation({
     setIsPlaying(!isPlaying);
   };
 
-  // Auto-play effect
-  useState(() => {
-    let interval: NodeJS.Timeout;
-    if (isPlaying) {
-      interval = setInterval(() => {
-        handleNext();
-      }, autoPlayDelay);
-    }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  });
+  useEffect(() => {
+    if (!isPlaying) return;
+    const interval = setInterval(() => {
+      setCurrentStep((prev) => (prev < steps.length - 1 ? prev + 1 : 0));
+    }, autoPlayDelay);
+    return () => clearInterval(interval);
+  }, [isPlaying, autoPlayDelay, steps.length]);
 
   const currentStepData = steps[currentStep];
 
