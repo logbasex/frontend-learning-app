@@ -27,6 +27,38 @@ const ROADMAP = "https://roadmap.sh/frontend";
 
 export const curriculum: Phase[] = [
   {
+    id: 0,
+    title: "Orientation",
+    description: "A 10-minute map of what you're about to learn",
+    icon: "Map",
+    modules: [
+      {
+        id: "0-1-the-map",
+        title: "The Map: How Modern Frontend Apps Are Shaped",
+        description: "Three lives of an app: written, built, running",
+        phase: 0,
+        order: 1,
+        duration: "10 mins",
+        prerequisites: [],
+        learningObjectives: [
+          "Name the three lives of a modern frontend app (source, build, runtime)",
+          "Map each curriculum phase onto the architecture diagram",
+          "Recognize what 'modern' is adding on top of plain HTML+JS",
+        ],
+        mentalModels: [
+          "Source code, bundle, and running app are three different things",
+          "Each life has its own debugging surface",
+          "The build step is the hinge between writing and running",
+        ],
+        hasInteractiveDemo: false,
+        hasDiagram: true,
+        hasChallenge: false,
+        hasCodeComparison: true,
+        roadmapUrl: ROADMAP,
+      },
+    ],
+  },
+  {
     id: 1,
     title: "Internet & Web Foundations",
     description: "How the web actually works under the hood",
