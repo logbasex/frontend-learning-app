@@ -1,12 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import { Highlight, themes } from "prism-react-renderer";
+import { Check, Copy } from "lucide-react";
 
 export interface CodeBlockProps {
   code: string;
   language?: string;
   showLineNumbers?: boolean;
   fileName?: string;
+  className?: string;
 }
 
 export function CodeBlock({
@@ -14,33 +17,64 @@ export function CodeBlock({
   language = "javascript",
   showLineNumbers = true,
   fileName,
+  className,
 }: CodeBlockProps) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard write can fail in insecure contexts; the user sees no toggle.
+    }
+  };
+
   return (
     <Highlight theme={themes.vsDark} code={code.trim()} language={language}>
-      {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <div>
-          {fileName && (
-            <div className="bg-gray-800 text-gray-300 text-xs px-4 py-2 rounded-t-lg border-b border-gray-700">
-              {fileName}
-            </div>
-          )}
+      {({ className: prismClass, style, tokens, getLineProps, getTokenProps }) => (
+        <div className={`relative group ${className ?? ""}`}>
+          <div className="flex items-center justify-between bg-slate-800 text-slate-300 text-xs px-4 py-2 rounded-t-lg border-b border-slate-700">
+            <span className="font-mono lowercase tracking-wide">
+              {fileName ?? language}
+            </span>
+            <button
+              type="button"
+              onClick={handleCopy}
+              aria-label={copied ? "Copied" : "Copy code"}
+              className="inline-flex items-center gap-1 px-2 py-1 rounded text-slate-300 hover:text-white hover:bg-slate-700 transition-colors"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-3.5 h-3.5" />
+                  <span>Copied</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copy</span>
+                </>
+              )}
+            </button>
+          </div>
           <pre
-            className={`${className} overflow-x-auto ${fileName ? 'rounded-b-lg' : 'rounded-lg'} p-4 text-sm`}
+            className={`${prismClass} overflow-x-auto rounded-b-lg p-4 text-sm leading-relaxed`}
             style={style}
           >
-          {tokens.map((line, i) => (
-            <div key={i} {...getLineProps({ line })}>
-              {showLineNumbers && (
-                <span className="inline-block w-8 text-right mr-4 select-none opacity-50">
-                  {i + 1}
-                </span>
-              )}
-              {line.map((token, key) => (
-                <span key={key} {...getTokenProps({ token })} />
-              ))}
-            </div>
-          ))}
-        </pre>
+            {tokens.map((line, i) => (
+              <div key={i} {...getLineProps({ line })}>
+                {showLineNumbers && (
+                  <span className="inline-block w-8 text-right mr-4 select-none opacity-50">
+                    {i + 1}
+                  </span>
+                )}
+                {line.map((token, key) => (
+                  <span key={key} {...getTokenProps({ token })} />
+                ))}
+              </div>
+            ))}
+          </pre>
         </div>
       )}
     </Highlight>
