@@ -12,7 +12,9 @@
     "isolatedModules": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["vite/client"],
+    "noEmit": true
   },
   "include": ["src"]
 }
