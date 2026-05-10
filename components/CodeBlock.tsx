@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Highlight, themes } from "prism-react-renderer";
 import { Check, Copy } from "lucide-react";
 
@@ -20,14 +20,22 @@ export function CodeBlock({
   className,
 }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Clipboard write can fail in insecure contexts; the user sees no toggle.
+      // Clipboard write can fail when permission is denied or in insecure contexts.
     }
   };
 
@@ -43,7 +51,7 @@ export function CodeBlock({
               type="button"
               onClick={handleCopy}
               aria-label={copied ? "Copied" : "Copy code"}
-              className="inline-flex items-center gap-1 px-2 py-1 rounded text-slate-300 hover:text-white hover:bg-slate-700 transition-colors"
+              className="inline-flex items-center gap-1 px-2 py-1 rounded text-slate-300 hover:text-white hover:bg-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-800"
             >
               {copied ? (
                 <>
