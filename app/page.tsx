@@ -137,8 +137,11 @@ export default function DashboardPage() {
                         <IconComponent className="w-6 h-6 text-blue-600" />
                       </div>
                       <div>
-                        <CardTitle className="text-xl">
+                        <CardTitle className="text-xl flex items-center gap-2">
                           Phase {phase.id}: {phase.title}
+                          {phase.id === 8 && (
+                            <Badge className="bg-violet-500 hover:bg-violet-600 text-xs">Capstone</Badge>
+                          )}
                         </CardTitle>
                         <CardDescription className="mt-1">{phase.description}</CardDescription>
                       </div>
