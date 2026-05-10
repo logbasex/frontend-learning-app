@@ -1,6 +1,5 @@
 import React from "react";
 
-import { PlaceholderModuleContent } from "./_placeholder";
 import { Module_1_1_Content } from "./1-1-the-smallest-useful-thing";
 import { Module_1_2_Content } from "./1-2-meaning-before-appearance";
 import { Module_1_3_Content } from "./1-3-the-same-document-two-lives";
@@ -15,6 +14,7 @@ import { Module_4_3_Content } from "./4-3-css-at-scale-collides";
 import { Module_5_1_Content } from "./5-1-routes-layouts-and-where-should-this-render";
 import { Module_5_2_Content } from "./5-2-data-state-and-who-owns-the-truth";
 import { Module_5_3_Content } from "./5-3-identity-and-trust";
+import { Module_6_1_Content } from "./6-1-the-field-from-here";
 
 export const MODULE_CONTENTS: Record<string, React.ComponentType> = {
   "1-1-the-smallest-useful-thing": Module_1_1_Content,
@@ -31,7 +31,7 @@ export const MODULE_CONTENTS: Record<string, React.ComponentType> = {
   "5-1-routes-layouts-and-where-should-this-render": Module_5_1_Content,
   "5-2-data-state-and-who-owns-the-truth": Module_5_2_Content,
   "5-3-identity-and-trust": Module_5_3_Content,
-  "6-1-the-field-from-here": PlaceholderModuleContent,
+  "6-1-the-field-from-here": Module_6_1_Content,
 };
 
 export function getModuleContent(moduleId: string): React.ComponentType | null {
