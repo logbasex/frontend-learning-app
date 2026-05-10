@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ChevronRight, ChevronLeft, Play, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { CodeBlock } from "@/components/CodeBlock";
 
 export interface Step {
   title: string;
   description: ReactNode;
   code?: string;
+  language?: string; // Prism language id; defaults to "tsx"
   highlight?: string; // Code snippet to highlight
   visual?: React.ReactNode; // Custom visual component
 }
@@ -134,9 +136,11 @@ export function StepByStepExplanation({
             {/* Code snippet */}
             {currentStepData.code && (
               <div className="mb-4">
-                <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto text-sm">
-                  <code>{currentStepData.code}</code>
-                </pre>
+                <CodeBlock
+                  code={currentStepData.code}
+                  language={currentStepData.language ?? "tsx"}
+                  showLineNumbers={false}
+                />
               </div>
             )}
 
