@@ -9,6 +9,7 @@ import { Module_2_2_Content } from "./2-2-things-take-time";
 import { Module_2_3_Content } from "./2-3-talking-to-another-machine";
 import { Module_3_1_Content } from "./3-1-the-journey-of-a-url";
 import { Module_3_2_Content } from "./3-2-ship-it-and-version-it";
+import { Module_4_1_Content } from "./4-1-the-dom-is-a-footgun-at-scale";
 
 export const MODULE_CONTENTS: Record<string, React.ComponentType> = {
   "1-1-the-smallest-useful-thing": Module_1_1_Content,
@@ -19,7 +20,7 @@ export const MODULE_CONTENTS: Record<string, React.ComponentType> = {
   "2-3-talking-to-another-machine": Module_2_3_Content,
   "3-1-the-journey-of-a-url": Module_3_1_Content,
   "3-2-ship-it-and-version-it": Module_3_2_Content,
-  "4-1-the-dom-is-a-footgun-at-scale": PlaceholderModuleContent,
+  "4-1-the-dom-is-a-footgun-at-scale": Module_4_1_Content,
   "4-2-types-and-the-editor-that-knows-them": PlaceholderModuleContent,
   "4-3-css-at-scale-collides": PlaceholderModuleContent,
   "5-1-routes-layouts-and-where-should-this-render": PlaceholderModuleContent,
