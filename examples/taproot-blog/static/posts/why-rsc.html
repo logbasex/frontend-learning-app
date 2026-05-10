@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Why server components, in 500 words — Taproot</title>
+  <meta name="description" content="RSC is not magic. It is a deal.">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <header><a href="/" class="brand">Taproot</a><nav><a href="/about.html">About</a></nav></header>
+  <main>
+    <article class="post-detail">
+      <div class="cover"><img src="../assets/cover-3.svg" alt=""></div>
+      <h1>Why server components, in 500 words</h1>
+      <p class="meta">By Alice — 2026-05-02 — 5 min read</p>
+      <p>Some of your component tree runs on the server and never ships JavaScript to the browser. That is the whole idea of <strong>React Server Components</strong>. The browser receives the HTML those components produced, but never the components themselves.</p>
+      <p><strong>The deal:</strong> the server pays one extra render hop, and the user pays nothing for that subtree's JavaScript. If the component reads data and renders it once, this is a clear win — the database query happens close to the data, the bundle never grows, and the user sees a faster first paint.</p>
+      <p><strong>The cost:</strong> server components cannot use state, effects, or event handlers. The moment you need interactivity, you opt the relevant subtree into being a client component (`use client`). The boundary is one-way: a server component can render a client component, but not vice versa.</p>
+      <div class="tags"><a class="tag" href="#">react</a></div>
+    </article>
+    <section class="muted-block"><strong>Comments are off in this version.</strong> The static build is read-only — no JavaScript, no server. The SPA and full-stack versions add comments.</section>
+  </main>
+  <footer><p>Taproot — a small blog by Alice and Bob.</p></footer>
+</body>
+</html>
