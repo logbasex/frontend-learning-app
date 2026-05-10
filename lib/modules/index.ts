@@ -34,6 +34,9 @@ import { Module_7_5_Content } from "./7-5-pwas-and-browser-apis";
 import { Module_7_6_Content } from "./7-6-mobile-apps";
 import { Module_7_7_Content } from "./7-7-desktop-apps";
 import { Module_7_8_Content } from "./7-8-performance";
+import { Module_8_1_Content } from "./8-1-the-build-pipeline";
+import { Module_8_2_Content } from "./8-2-the-request-lifecycle";
+import { Module_8_3_Content } from "./8-3-the-architecture-of-a-real-app";
 
 export const MODULE_CONTENTS: Record<string, React.ComponentType> = {
   "0-1-the-map": Module_0_1_Content,
@@ -70,6 +73,9 @@ export const MODULE_CONTENTS: Record<string, React.ComponentType> = {
   "7-6-mobile-apps": Module_7_6_Content,
   "7-7-desktop-apps": Module_7_7_Content,
   "7-8-performance": Module_7_8_Content,
+  "8-1-the-build-pipeline": Module_8_1_Content,
+  "8-2-the-request-lifecycle": Module_8_2_Content,
+  "8-3-the-architecture-of-a-real-app": Module_8_3_Content,
 };
 
 export function getModuleContent(moduleId: string): React.ComponentType | null {
