@@ -256,6 +256,10 @@ Every promised area lands somewhere in the reference app:
 | Accessibility | Semantic markup, focus management on route change | 8-3 (referenced from 2-3) |
 | LCP/INP/CLS on a real page | Lighthouse run on home page | 8-3 (referenced from 7-8) |
 
+### 6.5. Pinned reference
+
+The reference app is tagged `taproot-blog-v1.0` at commit `fd9700e` in `https://github.com/logbasex/frontend-learning-app`. Capstone modules link to GitHub permalinks at this commit so module text never references moving code. **Vercel deployment is deferred** — the user will run `vercel link && vercel --prod` from `examples/taproot-blog/app/` themselves and update the modules' `BLOG_URL` references in a follow-up PR. Until then, capstone modules use the GitHub link as the canonical "live reference" and skip the live preview link.
+
 ## 7. Architecture changes
 
 ```
