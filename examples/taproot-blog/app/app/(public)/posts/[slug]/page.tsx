@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import PostBody from "@/components/PostBody";
 import AuthorCard from "@/components/AuthorCard";
+import CommentList from "@/components/CommentList";
+import CommentForm from "@/components/CommentForm";
 import type { Metadata } from "next";
 
 interface Params { params: Promise<{ slug: string }>; }
@@ -33,7 +35,11 @@ export default async function PostPage({ params }: Params) {
       </p>
       <PostBody source={post.body} />
       <AuthorCard author={post.author} />
-      {/* Comments island wired in Task 9 */}
+      <section className="mt-12">
+        <h2 className="text-2xl font-semibold">Comments</h2>
+        <CommentList postId={post.id} />
+        <CommentForm postId={post.id} />
+      </section>
     </article>
   );
 }
