@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Globe, Zap, Sparkles, Server, Layers, Check, BookMarked, Clock, Code2, Palette, Wrench, Boxes, Shield } from "lucide-react";
+import { Globe, Zap, Sparkles, Server, Layers, Check, BookMarked, Clock, Code2, Palette, Wrench, Boxes, Shield, Map as MapIcon } from "lucide-react";
 
 const ICONS = {
   Globe,
@@ -20,6 +20,7 @@ const ICONS = {
   Wrench,
   Boxes,
   Shield,
+  Map: MapIcon,
 };
 
 export default function DashboardPage() {
