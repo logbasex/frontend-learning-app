@@ -1,0 +1,11 @@
+{
+  "name": "taproot-blog",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Reference app for the Frontend Learning App's Phase 8 capstone",
+  "scripts": {
+    "dev:static": "cd static && python3 -m http.server 8000",
+    "dev:spa": "cd spa && npm run dev",
+    "dev:app": "cd app && npm run dev"
+  }
+}
