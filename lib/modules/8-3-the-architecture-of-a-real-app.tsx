@@ -463,7 +463,7 @@ Database (one region):
             ),
           },
           {
-            title: "&apos;use client&apos; is contagious downward, not upward",
+            title: "'use client' is contagious downward, not upward",
             body: (
               <>
                 Anything a client component imports also runs on the client. But a server
