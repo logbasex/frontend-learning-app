@@ -86,6 +86,8 @@ Every module has exactly 7 mandatory sections in this order. Authoritative refer
 
 Optional sections (sequence diagram, layered flow, code comparison, alternatives card) may appear between mandatory sections; mark them with an unnumbered comment, e.g. `{/* Optional: Sequence diagram (DNS resolution) */}`.
 
+**Orientation modules (Phase 0) are an exception.** They follow a 5-section shape — Hook, Mental model, Map (a diagram), Curriculum preview, KeyTakeaways — and omit the playground and challenges, because the learner has not yet been introduced to the vocabulary the playground would exercise. This exception applies to Phase 0 only. All other modules — including Phase 8 capstone modules — follow the standard 7-section Tier-A template.
+
 ## Structural conventions (§4.1 of the spec)
 
 These were codified after Wave 3 to prevent drift:
