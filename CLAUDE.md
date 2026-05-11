@@ -4,11 +4,11 @@ This file is guidance for Claude Code (claude.ai/code) working in this repo.
 
 ## What this is
 
-A **Frontend Learning App** following [roadmap.sh/frontend](https://roadmap.sh/frontend), fully re-authored to the Tier-A standard. Every one of the 30 modules is a comprehensive lesson with 7 mandatory pedagogical sections: Hook → Mental model → Step-by-step → Playground → Challenges → GotchaList → KeyTakeaways.
+A **Frontend Learning App** that teaches frontend from first principles. The curriculum is one continuous derivation: 5 stages of "the previous module's world hit a wall, here is what has to exist next" plus one closing module that uses the foundation to position every other roadmap topic. Every spine module is a comprehensive lesson with 7 mandatory pedagogical sections: Hook → Mental model → Step-by-step → Playground → Challenges → GotchaList → KeyTakeaways.
 
 **Audience:** anyone learning frontend from zero. No prior frontend knowledge assumed.
 
-**Curriculum:** 7 phases, 30 modules, covering every yellow node in the official roadmap PDF (read 2026-05-09).
+**Curriculum:** 5 stages + 1 closing module, 15 modules total. The reference app `examples/taproot-blog` is the spine — every module ships working code on it (static → SPA → Next.js, climbed one rung at a time). Every roadmap.sh yellow node is named at least once; spine modules are taught in depth, non-spine topics are positioned in the closing module. Source-of-truth spec: `docs/superpowers/specs/2026-05-10-first-principles-curriculum-design.md`.
 
 ## Dev commands
 
@@ -24,19 +24,19 @@ npm start         # Run production build
 
 ```
 app/
-  page.tsx                        # Dashboard: 7 phase cards, 30 module tiles (soft-prereq UI)
+  page.tsx                        # Dashboard: 6 stage cards (Stage 1-5 + Closing), 15 module tiles (soft-prereq UI)
   lesson/[moduleId]/page.tsx      # Lesson viewer: dynamically loads module content
   layout.tsx                      # Root metadata
 
 lib/
-  curriculum.ts                   # All 30 modules' metadata + helpers (single source of truth)
+  curriculum.ts                   # All 15 modules' metadata + helpers (single source of truth, organized by Stage)
                                   # isModuleUnlocked() always returns true (soft prereqs)
+                                  # Each module has drivingFailure and shipsInReferenceApp fields
   progress.ts                     # Zustand store; localStorage key 'frontend-learning-progress'
   modules/
-    _template.tsx                 # ScaffoldModule helper — deprecated for new authoring; kept for reference
-    _demos/                       # Primitive smoke-test pages (not registered, manual verification only)
+    _placeholder.tsx              # Used only during multi-task module authoring; do not register in production
     index.ts                      # Module-id → component registry
-    <module-id>.tsx               # One file per module (e.g. 1-1-how-the-internet-works.tsx)
+    <module-id>.tsx               # One file per module (e.g. 1-1-the-smallest-useful-thing.tsx)
 
 components/
   Challenge.tsx                   # Multiple-choice with feedback
@@ -93,7 +93,7 @@ Every module has exactly 7 mandatory sections in this order. Authoritative refer
 
 Optional sections (sequence diagram, layered flow, code comparison, alternatives card) may appear between mandatory sections; mark them with an unnumbered comment, e.g. `{/* Optional: Sequence diagram (DNS resolution) */}`.
 
-**Orientation modules (Phase 0) are an exception.** They follow a 5-section shape — Hook, Mental model, Map (a diagram), Curriculum preview, KeyTakeaways — and omit the playground and challenges, because the learner has not yet been introduced to the vocabulary the playground would exercise. This exception applies to Phase 0 only. All other modules — including Phase 8 capstone modules — follow the standard 7-section Tier-A template.
+**The closing module (`6-1-the-field-from-here`) is an exception.** It does not introduce a new derivation; instead it uses the foundation the learner already has to position every roadmap.sh topic the spine did not cover. It has a Hook (an explicit framing of why this module is different), a "field map" diagram in place of a Step-by-step, and a Challenges section that asks the learner to position a tool against the foundation — but it does not have a Playground or a Driving Failure, because nothing is being derived. This exception applies to module 6-1 only. All other modules follow the standard 7-section Tier-A template.
 
 ## Structural conventions (§4.1 of the spec)
 
@@ -125,9 +125,9 @@ Do not use `ScaffoldModule` for new modules — it is deprecated. Write the 7 se
 
 ## Module content ID convention
 
-`{phase}-{order}-{slug}` — e.g. `1-1-how-the-internet-works`, `5-3-pick-a-framework`, `7-8-performance`.
+`{stage}-{order}-{slug}` — e.g. `1-1-the-smallest-useful-thing`, `5-3-identity-and-trust`, `6-1-the-field-from-here`.
 
-The corresponding component export is `Module_<phase>_<order>_Content` — e.g. `Module_5_3_Content`.
+The corresponding component export is `Module_<stage>_<order>_Content` — e.g. `Module_5_3_Content`.
 
 ## Progress system
 
@@ -161,7 +161,7 @@ Lint rules to watch for:
 
 ## Source of truth for the curriculum
 
-The roadmap PDF was read on 2026-05-09 at `https://roadmap.sh/pdfs/roadmaps/frontend.pdf`. The `§1` coverage table in `docs/superpowers/plans/2026-05-09-tier-a-curriculum-plan.md` (and the original `2026-05-09-frontend-roadmap-learning-app.md`) maps every yellow node to a module ID.
+The first-principles spec is `docs/superpowers/specs/2026-05-10-first-principles-curriculum-design.md`. §3 defines the spine module-by-module; §7 maps every roadmap.sh yellow node to a spine module (taught in depth) or to module 6-1 (positioned). The roadmap PDF was last read on 2026-05-09 at `https://roadmap.sh/pdfs/roadmaps/frontend.pdf`.
 
 ## Style
 

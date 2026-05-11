@@ -96,7 +96,7 @@ export default function LessonPage() {
           <CardContent className="pt-6">
             <div className="mb-4">
               <Badge variant="secondary" className="mb-3">
-                Phase {moduleData.phase}
+                Stage {moduleData.stage}
               </Badge>
               <h1 className="text-4xl font-bold mb-3">{moduleData.title}</h1>
               <p className="text-lg text-slate-600 dark:text-slate-400 mb-4">

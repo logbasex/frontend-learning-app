@@ -1,25 +1,30 @@
 "use client";
 
-import { curriculum, getPhaseProgress, getTotalProgress } from "@/lib/curriculum";
+import { curriculum, getStageProgress, getTotalProgress } from "@/lib/curriculum";
 import { useProgress } from "@/lib/progress";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Globe, Zap, Sparkles, Server, Layers, Check, BookMarked, Clock, Code2, Palette, Wrench, Boxes, Shield, Map as MapIcon } from "lucide-react";
-
-const ICONS = {
+import {
   Globe,
   Zap,
-  Sparkles,
-  Server,
-  Layers,
-  Code2,
-  Palette,
   Wrench,
-  Boxes,
-  Shield,
+  Layers,
+  Check,
+  BookMarked,
+  Clock,
+  FileText,
+  Map as MapIcon,
+} from "lucide-react";
+
+const ICONS = {
+  FileText,
+  Zap,
+  Globe,
+  Wrench,
+  Layers,
   Map: MapIcon,
 };
 
@@ -35,10 +40,10 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
-                Frontend Learning Journey
+                Frontend, From First Principles
               </h1>
               <p className="text-slate-600 dark:text-slate-400 mt-1">
-                Following <a href="https://roadmap.sh/frontend" target="_blank" rel="noreferrer" className="underline hover:text-blue-600">roadmap.sh/frontend</a> — story-driven, with live code
+                One real app, derived step by step. Each module exists because the previous one hit a wall.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -62,24 +67,21 @@ export default function DashboardPage() {
                 <BookMarked className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
-                <h2 className="text-xl font-semibold mb-2">Welcome to the Frontend Learning Path 🌐</h2>
+                <h2 className="text-xl font-semibold mb-2">How this curriculum works</h2>
                 <p className="text-slate-700 dark:text-slate-300 mb-4">
-                  This app walks the <strong>roadmap.sh/frontend</strong> path with a story-driven lens.
-                  Each module starts with the problem the technology solves, then teaches the mental model, then drops you into live code.
-                  The goal: understand <em>why</em>, not just <em>how</em>.
+                  Most frontend courses are catalogs: HTML, CSS, JavaScript, React, Next.js &mdash; one topic after another.
+                  This one is a single derivation. You start with a text file, hit a wall, and every module exists because the previous module&apos;s world couldn&apos;t solve a real problem.
+                  By the end you have built one real modern blog &mdash; the same app shows up in module 1 (broken), and grows one rung at a time.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="secondary" className="gap-1">
-                    <Check className="w-3 h-3" /> Story-driven curriculum
+                    <Check className="w-3 h-3" /> First-principles derivation
                   </Badge>
                   <Badge variant="secondary" className="gap-1">
-                    <Check className="w-3 h-3" /> Interactive demos
+                    <Check className="w-3 h-3" /> One reference app, three rungs
                   </Badge>
                   <Badge variant="secondary" className="gap-1">
-                    <Check className="w-3 h-3" /> Mental models
-                  </Badge>
-                  <Badge variant="secondary" className="gap-1">
-                    <Check className="w-3 h-3" /> Real-world examples
+                    <Check className="w-3 h-3" /> Every module ships working code
                   </Badge>
                 </div>
               </div>
@@ -87,49 +89,16 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Start here: Phase 0 orientation, surfaced above the regular grid */}
-        {curriculum
-          .filter((phase) => phase.id === 0)
-          .flatMap((phase) => phase.modules)
-          .map((orientationModule) => {
-            const isCompleted = completedModules.includes(orientationModule.id);
-            return (
-              <Card key={orientationModule.id} className="mb-8 border-violet-200 dark:border-violet-900 bg-gradient-to-br from-violet-50 to-blue-50 dark:from-violet-950 dark:to-blue-950">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 bg-violet-500 rounded-lg">
-                      <MapIcon className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Badge className="bg-violet-500 hover:bg-violet-600">Start here</Badge>
-                        <span className="text-xs text-slate-600 dark:text-slate-400">{orientationModule.duration}</span>
-                      </div>
-                      <h2 className="text-xl font-semibold mb-2">{orientationModule.title}</h2>
-                      <p className="text-slate-700 dark:text-slate-300 mb-4">{orientationModule.description}</p>
-                      <Link href={`/lesson/${orientationModule.id}`}>
-                        <Button variant={isCompleted ? "secondary" : "default"}>
-                          {isCompleted ? "Re-read the map" : "Read the map (10 min)"}
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-
-        {/* Curriculum Phases */}
+        {/* Stages */}
         <div className="space-y-6">
-          {curriculum
-            .filter((phase) => phase.id !== 0)
-            .map((phase) => {
-            const IconComponent = ICONS[phase.icon as keyof typeof ICONS] || Globe;
-            const phaseProgress = getPhaseProgress(phase.id, completedModules);
-            const isPhaseComplete = phaseProgress === 100;
+          {curriculum.map((stage) => {
+            const IconComponent = ICONS[stage.icon as keyof typeof ICONS] || Globe;
+            const stageProgress = getStageProgress(stage.id, completedModules);
+            const isStageComplete = stageProgress === 100;
+            const isClosing = stage.id === 6;
 
             return (
-              <Card key={phase.id} className="overflow-hidden">
+              <Card key={stage.id} className="overflow-hidden">
                 <CardHeader className="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
@@ -138,42 +107,42 @@ export default function DashboardPage() {
                       </div>
                       <div>
                         <CardTitle className="text-xl flex items-center gap-2">
-                          Phase {phase.id}: {phase.title}
-                          {phase.id === 8 && (
-                            <Badge className="bg-violet-500 hover:bg-violet-600 text-xs">Capstone</Badge>
+                          Stage {stage.id}: {stage.title}
+                          {isClosing && (
+                            <Badge className="bg-violet-500 hover:bg-violet-600 text-xs">Closing</Badge>
                           )}
                         </CardTitle>
-                        <CardDescription className="mt-1">{phase.description}</CardDescription>
+                        <CardDescription className="mt-1">{stage.description}</CardDescription>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      {isPhaseComplete && (
+                      {isStageComplete && (
                         <Badge className="bg-green-500 hover:bg-green-600">
                           <Check className="w-3 h-3 mr-1" /> Completed
                         </Badge>
                       )}
                       <div className="text-right">
                         <p className="text-sm text-slate-600 dark:text-slate-400">Progress</p>
-                        <p className="text-lg font-bold text-blue-600">{phaseProgress}%</p>
+                        <p className="text-lg font-bold text-blue-600">{stageProgress}%</p>
                       </div>
                     </div>
                   </div>
-                  <Progress value={phaseProgress} className="mt-4" />
+                  <Progress value={stageProgress} className="mt-4" />
                 </CardHeader>
 
                 <CardContent className="p-6">
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {phase.modules.map((module) => {
-                      const isCompleted = completedModules.includes(module.id);
-                      const recommendedPrereqs = module.prerequisites.filter(
+                    {stage.modules.map((moduleData) => {
+                      const isCompleted = completedModules.includes(moduleData.id);
+                      const recommendedPrereqs = moduleData.prerequisites.filter(
                         (p) => !completedModules.includes(p)
                       );
                       const hasRecommended = recommendedPrereqs.length > 0;
 
                       return (
                         <Link
-                          key={module.id}
-                          href={`/lesson/${module.id}`}
+                          key={moduleData.id}
+                          href={`/lesson/${moduleData.id}`}
                           className="block"
                         >
                           <Card className={`h-full transition-all hover:shadow-lg hover:border-blue-300 ${
@@ -184,12 +153,12 @@ export default function DashboardPage() {
                                 <div className="flex-1">
                                   <CardTitle className="text-base flex items-center gap-2">
                                     {isCompleted && <Check className="w-4 h-4 text-green-600" />}
-                                      {module.title}
+                                    {moduleData.title}
                                   </CardTitle>
                                 </div>
                               </div>
                               <CardDescription className="text-sm line-clamp-2">
-                                {module.description}
+                                {moduleData.description}
                               </CardDescription>
                             </CardHeader>
 
@@ -197,21 +166,21 @@ export default function DashboardPage() {
                               <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-slate-400">
                                 <div className="flex items-center gap-1">
                                   <Clock className="w-4 h-4" />
-                                  {module.duration}
+                                  {moduleData.duration}
                                 </div>
                               </div>
 
                               <div className="flex flex-wrap gap-1 mt-3">
-                                {module.hasInteractiveDemo && (
+                                {moduleData.hasInteractiveDemo && (
                                   <Badge variant="outline" className="text-xs">Live Code</Badge>
                                 )}
-                                {module.hasDiagram && (
+                                {moduleData.hasDiagram && (
                                   <Badge variant="outline" className="text-xs">Diagram</Badge>
                                 )}
-                                {module.hasChallenge && (
+                                {moduleData.hasChallenge && (
                                   <Badge variant="outline" className="text-xs">Challenge</Badge>
                                 )}
-                                {module.hasCodeComparison && (
+                                {moduleData.hasCodeComparison && (
                                   <Badge variant="outline" className="text-xs">Comparison</Badge>
                                 )}
                               </div>
@@ -241,8 +210,8 @@ export default function DashboardPage() {
       {/* Footer */}
       <footer className="border-t mt-16 py-8 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 text-center text-slate-600 dark:text-slate-400">
-          <p>🌐 Frontend Learning App — learn to understand, not just to do</p>
-          <p className="text-sm mt-2">Following <a href="https://roadmap.sh/frontend" className="underline" target="_blank" rel="noreferrer">roadmap.sh/frontend</a>. Built with Next.js, React, Sandpack, and Tailwind.</p>
+          <p>Frontend, From First Principles &mdash; understand, then build</p>
+          <p className="text-sm mt-2">Reference app: <code className="text-xs bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded">examples/taproot-blog</code>. Built with Next.js, React, Sandpack, and Tailwind.</p>
         </div>
       </footer>
     </div>
